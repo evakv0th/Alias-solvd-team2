@@ -14,7 +14,7 @@ app.get('/', (req: Request, res: Response) => {
   res.status(200).send('Alias project!');
 });
 
-const startServer = async () => {
+const startServer = async (): Promise<void> => {
   app.listen(port, () => {
     console.log(`Server started at Port ${port}`);
   });
