@@ -1,7 +1,7 @@
 # API documentatin for "Alias game"
 
 ## Description
-This project is a multiplayer game build with Node.js.
+This project is a multiplayer game build with Node.js
 Alias is a word-guessing game where players form teams. Each team takes turns where one member describes a word and others guess it. The game includes a chat for players to communicate and a system to check for similar words.
 
 ### Objective
