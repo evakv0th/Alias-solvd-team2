@@ -22,7 +22,7 @@ The game concludes after a predetermined number of rounds, with the highest-scor
 
 ## System Requirements
 - **Backend**: Node.js
-- **Database**: MongoDB
+- **Database**: CouchDB
 
 ## Setup and Installation
 Details on installing Node.js, setting up the database, cloning the repository, and installing dependencies.
@@ -48,20 +48,196 @@ Outline of the server setup, API endpoints, and database schema.
    - Word validation
 
 ## APIs
+
 Documentation for each API endpoint including authentication, game control, and chat functionalities.
 
 ## Database Schema
-- **User Model**: Username, password, stats.
-- **Game Model**: Players, scores, words.
-- **Chat Model**: Messages, timestamps, users.
+
+Database schema is represented by JSON examples in `schema` folder.
+
+### User
+
+```json
+{
+   "id": "userId",
+   "username": "bob@example.com",
+   "password": "$2a$10$wSPtqqd5pujQ/1bYolF8qO.WDnSOcJ7IJt1YDvRO.U51LUfzxSHbm",
+   "createdAt": "2023-11-22'T'12:30:00.000",
+   "stats": {
+      "roundsPlayed": 5,
+      "wordsGuessed": 4
+   }
+}
+```
+
+| Property             | Type      | Description                                  |
+|----------------------|-----------|----------------------------------------------|
+| `id`                 | ObjectID  | ID of user                                   |
+| `username`           | String    | Username                                     |
+| `password`           | String    | Encrypted password                           |
+| `createdAt`          | Timestamp | Timestamp when user was created              |
+| `stats`              | Object    | Statistics object                            |
+| `stats.gamesPlayed`  | Number    | Amount of rounds which user has been hosting |
+| `stats.wordsGuessed` | Number    | Amount of words user guessed                 |
+
+### Team
+
+```json
+{
+   "id": "teamId1",
+   "hostId": "userId",
+   "name": "Curious bears",
+   "members": [
+      "userId1",
+      "userId2",
+      "userId3"
+   ]
+}
+```
+
+| Property  | Type       | Description               |
+|-----------|------------|---------------------------|
+| `id`      | ObjectID   | ID of team                |
+| `hostId`  | ObjectID   | ID of team creator user   |
+| `name`    | String     | Name of team              |
+| `members` | ObjectID[] | Array of team members IDs |
+
+### Vocabulary
+
+```json
+{
+   "id": "vocabularyId",
+   "words": [
+      "bear",
+      "motorbike",
+      "air baloon"
+   ]
+}
+```
+
+| Property | Type     | Description                  |
+|----------|----------|------------------------------|
+| `id`     | ObjectID | ID of vocabulary             |
+| `words`  | String[] | Array of words of vocabulary |
+
+### Round
+
+```json
+{
+   "id": "roundId",
+   "startedAt": "2023-11-22'T'10:38:00.000",
+   "finishedAt": "2023-11-22'T'10:39:00.000",
+   "teamId": "teamId1",
+   "hostId": "hostId1",
+   "chatId": "chatId",
+   "words": [
+      {
+         "word": "motorbike",
+         "guessed": true
+      },
+      {
+         "word": "air balloon",
+         "guessed": false
+      }
+   ]
+}
+```
+
+| Property        | Type      | Description                                       |
+|-----------------|-----------|---------------------------------------------------|
+| `id`            | ObjectID  | ID of game round                                  |
+| `startedAt`     | Timestamp | Timestamp when game was started                   |
+| `finishedAt`    | Timestamp | Timestamp when game was finished                  |
+| `teamId`        | ObjectID  | ID of team, which member is host of this round    |
+| `hostId`        | ObjectID  | ID of user, which is host of this round           |
+| `chatId`        | ObjectID  | ID of chat, where words of this round are guessed |
+| `words`         | Object[]  | Array of words of this round                      |
+| `words.word`    | String    | Word to be guessed                                |
+| `words.guessed` | Boolean   | Flag of word was guessed                          |
+
+### Chat
+
+```json
+{
+   "id": "chatId",
+   "messages": [
+      {
+         "createdAt": "2022-11-22'T'10:37:45.123",
+         "userId": "userId",
+         "message": "message"
+      },
+      {
+         "createdAt": "2022-11-22'T'10:37:45.869",
+         "userId": "userId",
+         "message": "message"
+      }
+   ]
+}
+```
+
+| Property             | Type      | Description                     |
+|----------------------|-----------|---------------------------------|
+| `id`                 | ObjectID  | ID of chat                      |
+| `messages`           | Object[]  | Array of messages of chat       |
+| `messages.createdAt` | Timestamp | Timestamp when message was sent |
+| `userId`             | ObjectID  | ID of user sent this message    |
+| `message`            | String    | Text of message                 |
+
+### Game
+
+```json
+{
+   "id": "gameId",
+   "hostId": "userId",
+   "createdAt": "2023-11-22'T'10:37:15.000",
+   "teams": [
+      {
+         "teamId": "teamId1",
+         "score": 5
+      },
+      {
+         "teamId": "teamId2",
+         "score": 7
+      }
+   ],
+   "currentTeam": "teamId1",
+   "rounds": [
+      "roundId1",
+      "roundId2"
+   ],
+   "options": {
+      "goal": 100,
+      "roundTime": 60,
+      "vocabularyId": "vocabularyId"
+   }
+}
+```
+
+| Property               | Type       | Description                     |
+|------------------------|------------|---------------------------------|
+| `id`                   | ObjectID   | ID of game                      |
+| `hostId`               | ObjectID   | ID of user created game         |
+| `createdAt`            | Timestamp  | Timestamp when game was created |
+| `teams`                | Object[]   | Array of teams playing in game  |
+| `teams.teamId`         | ObjectID   | ID of team                      |
+| `teams.score`          | Number     | Amount of points of team        |
+| `currentTeam`          | ObjectID   | ID of team to be hosting game   |
+| `rounds`               | ObjectID[] | Array of game rounds IDs        |
+| `options`              | Object     | Options of game                 |
+| `options.goal`         | Number     | Amount of points to win game    |
+| `options.roundTime`    | Number     | Amount of time for round        |
+| `options.vocabularyId` | ObjectID   | ID of vocabulary for game       |
 
 ## Security
+
 Overview of implemented security measures.
 
 ## Testing
+
 Guide on unit and integration testing.
 
 ## Deployment
+
 Instructions for deploying the application.
 
 ## Future Enhancements
