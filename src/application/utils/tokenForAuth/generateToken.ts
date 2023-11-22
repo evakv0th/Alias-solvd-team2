@@ -1,8 +1,11 @@
+import dotenv from 'dotenv';
 import * as jwt from 'jsonwebtoken';
 import { IUser } from '../../../interfaces/user.interface';
 
-export const secretKey = 'temporary-secret-key';
-export const refreshTokenSecretKey = 'temporary-refresh-token-secret-key';
+dotenv.config();
+
+export const secretKey = process.env.SECRET_KEY as string;
+export const refreshTokenSecretKey = process.env.REFRESH_SECRET_KEY as string;
 
 export function generateAccessToken(user: IUser): string {
   const token = jwt.sign(
