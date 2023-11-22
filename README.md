@@ -32,7 +32,7 @@ Outline of the server setup, API endpoints, and database schema.
 
 ## Core Modules
 1. **User Authentication**
-   - Login and registration
+   - [**Login and registration**](#login-and-registartion)
    - Session management
 2. **Game Lobby**
    - Room creation and joining
@@ -227,6 +227,163 @@ Database schema is represented by JSON examples in `schema` folder.
 | `options.goal`         | Number     | Amount of points to win game    |
 | `options.roundTime`    | Number     | Amount of time for round        |
 | `options.vocabularyId` | ObjectID   | ID of vocabulary for game       |
+
+
+## User Authentication
+
+### Login and registration
+
+### POST Register
+```POST /api/v1/auth/register```: 
+
+ - ### Request Body
+
+| Parameter    | Type     | Description                   |
+| ------------ | ------   | -------------------           |
+| `username`   | string   | Name of the user (required)   |
+| `password`   | string   | password       (required)     |
+
+- response 201 Created:
+```json
+{
+    "message": "User registered successfully",
+    "user": {
+        "username": "anton",
+        "password": "123"
+    }
+}
+```
+
+- response 400 Bad Request:
+```json
+{
+    "error": "Please provide username and password"
+}
+```
+- response 500 Internal Server Error:
+```json
+{
+"message": "Internal Server Error"
+}
+```
+### GET Login
+
+```POST /api/v1/auth/login```: 
+ - ### Request Body
+
+| Parameter    | Type     | Description                   |
+| ------------ | ------   | -------------------           |
+| `username`   | string   | Name of the user (required)   |
+| `password`   | string   | password       (required)     |
+
+- response 200 OK:
+```json
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwidXNlcm5hbWUiOiJ0ZXN0IiwiaWF0IjoxNzAwNjgxNjczLCJleHAiOjE3MDA2ODUyNzN9.WXlUiQll8nEGFLvc28rje-r6RUOUnywpmF3UfC-yZrE",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwidXNlcm5hbWUiOiJ0ZXN0IiwiaWF0IjoxNzAwNjgxNjczLCJleHAiOjE3MDEyODY0NzN9.XpeVcwISzCsjnB55cZTjb6XpP5Tnt6X1JVVpuc4D4bc"
+}
+```
+
+- response 400 Bad Request:
+```json
+{
+"message": "Please provide username and password"
+}
+```
+
+ - response 401 Unauthorized:
+```json
+{
+    "error": "Wrong username or password"
+}
+```
+- response 500 Internal Server Error:
+```json
+{
+"message": "Internal Server Error"
+}
+```
+### POST Refresh
+```POST /api/v1/auth/refresh```: 
+
+ - ### Request Body
+
+| Parameter      | Type     | Description                 |
+| ------------   | ------   | -------------------         |
+| `refreshToken` | string   | Refresh token (required)    |
+
+- response 200 OK:
+```json
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFudG9uIiwiaWF0IjoxNzAwNjc0NTk4LCJleHAiOjE3MDA2NzQ2Mjh9.cMoTwYaQnIRvhvHfa_kTZzFCTaeO1pmPiGAi_xrxsUM"
+}
+```
+
+- response 400 Bad Request:
+```json
+{
+    "error": "Refresh token is missing"
+}
+```
+ - response 401 Unauthorized:
+```json
+{
+    "error": "Invalid token"
+}
+```
+OR
+```json
+{
+    "error": "Token has expired"
+}
+```
+- response 500 Internal Server Error:
+```json
+{
+"message": "Internal Server Error"
+}
+```
+### GET Protected Route
+
+```POST /api/v1/auth/protectedRoute```: 
+- ### Request Header
+
+| Parameter       | Type     | Description                          |
+| --------------- | ------   | ------------------------------------ |
+| `Authorization` | string   | JWT token in the format `Bearer <token>` or `<token>`(required) |
+
+- response 200 OK:
+```json
+{
+    "msg": "Test for authenticate Token"
+}
+```
+
+- response 400 Bad Request:
+```json
+{
+"message": "Please provide username and password"
+}
+```
+
+ - response 401 Unauthorized:
+```json
+{
+    "error": "Unauthorized - Invalid token"
+}
+```
+OR
+```json
+{
+    "error": "Unauthorized - Token missing"
+}
+```
+- response 500 Internal Server Error:
+```json
+{
+"message": "Internal Server Error"
+}
+```
 
 ## Security
 
