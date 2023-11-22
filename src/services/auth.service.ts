@@ -37,6 +37,12 @@ export async function login(
 ): Promise<{ accessToken: string; refreshToken: string }> {
   const { username, password } = credentials;
 
+  if (!username || !password) {
+    throw new HttpException(
+      HttpStatusCode.BAD_REQUEST,
+      `Please provide username and password`,
+    );
+  }
   const user = tempUserArr.find(
     (u) => u.username === username && u.password === password,
   );
