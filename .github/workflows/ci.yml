@@ -1,4 +1,4 @@
-name: ALIAS-SOLVD-TEAM2  Node.js CI
+name: ALIAS-SOLVD-TEAM2 Node.js CI
 
 on:
   push:
@@ -14,6 +14,17 @@ jobs:
         node-version: [18.x]
     steps:
     - uses: actions/checkout@v3
+    - name: Cache node modules
+      uses: actions/cache@v3
+      with:
+        # the path where the npm dependencies will be cached
+        path: ~/.npm
+        # key := platform + node-version + hash of the package-lock.json
+        key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+        # the exact key is not found => use the one that matches the node version
+        restore-keys: |
+          ${{ runner.os }}-node-${{ matrix.node-version }}-
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
