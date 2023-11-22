@@ -32,7 +32,7 @@ Outline of the server setup, API endpoints, and database schema.
 
 ## Core Modules
 1. **User Authentication**
-   - [**Login and registration**](#login-and-registartion)
+   - [**Login and registration**](#login-and-registration)
    - Session management
 2. **Game Lobby**
    - Room creation and joining
