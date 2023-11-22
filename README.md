@@ -231,7 +231,7 @@ Database schema is represented by JSON examples in `schema` folder.
 
 ## User Authentication
 
-### Login and registration
+## Login and registration
 
 ### POST Register
 ```POST /api/v1/auth/register```: 
