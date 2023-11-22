@@ -343,48 +343,6 @@ OR
 "message": "Internal Server Error"
 }
 ```
-### GET Protected Route
-
-```POST /api/v1/auth/protectedRoute```: 
-- ### Request Header
-
-| Parameter       | Type     | Description                          |
-| --------------- | ------   | ------------------------------------ |
-| `Authorization` | string   | JWT token in the format `Bearer <token>` or `<token>`(required) |
-
-- response 200 OK:
-```json
-{
-    "msg": "Test for authenticate Token"
-}
-```
-
-- response 400 Bad Request:
-```json
-{
-"message": "Please provide username and password"
-}
-```
-
- - response 401 Unauthorized:
-```json
-{
-    "error": "Unauthorized - Invalid token"
-}
-```
-OR
-```json
-{
-    "error": "Unauthorized - Token missing"
-}
-```
-- response 500 Internal Server Error:
-```json
-{
-"message": "Internal Server Error"
-}
-```
-
 ## Security
 
 Overview of implemented security measures.
