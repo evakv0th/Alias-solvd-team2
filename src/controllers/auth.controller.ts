@@ -84,16 +84,3 @@ export async function refresh(req: Request, res: Response): Promise<Response> {
     }
   }
 }
-
-export async function protectedRoute(
-  req: Request,
-  res: Response,
-): Promise<Response> {
-  try {
-    return res.status(200).json({ msg: 'Test for authenticate Token' });
-  } catch (error) {
-    return res
-      .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      .json({ error: 'Internal Server Error' });
-  }
-}
