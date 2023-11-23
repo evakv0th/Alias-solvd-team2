@@ -1,7 +1,8 @@
 import dotenv from 'dotenv';
-import express, { Request, Response } from 'express';
+import express, {Request, Response} from 'express';
 import bodyParser from 'body-parser';
 import authRouter from './routes/auth.router';
+import {couchdbInit} from "./couchdb.init";
 
 dotenv.config();
 
@@ -21,5 +22,7 @@ const startServer = async (): Promise<void> => {
     console.log(`Server started at Port ${port}`);
   });
 };
+
+couchdbInit();
 
 startServer();
