@@ -22,7 +22,7 @@ export async function couchdbInit() {
     const port = process.env.DATABASE_PORT!;
     const user = process.env.COUCHDB_USER!
     const password = process.env.COUCHDB_PASSWORD!
-    let config = `http://${user}:${password}@${host}:${port}`
+    const config = `http://${user}:${password}@${host}:${port}`
     couch = nano(config);
     databases.forEach(async (name) =>
         await couch?.db.get(name, async (err) => {
