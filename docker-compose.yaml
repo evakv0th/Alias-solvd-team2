@@ -1,0 +1,22 @@
+version: '3.0'
+
+networks:
+  app:
+    driver: bridge
+
+volumes:
+  couchdb-data:
+    driver: local
+
+services:
+  couchdb:
+    image: couchdb:3.3.2
+    networks:
+      - app
+    environment:
+      - COUCHDB_USER=${COUCHDB_USER}
+      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
+    ports:
+      - '5984:5984'
+    volumes:
+      - couchdb-data:/opt/couchdb/data
