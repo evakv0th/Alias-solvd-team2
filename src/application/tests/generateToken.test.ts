@@ -6,7 +6,7 @@ jest.mock('jsonwebtoken');
 
 describe('Token Generation', () => {
     const user: IUser = {
-        id: '1',
+        _id: '1',
         username: 'test',
         password: 'test',
         createdAt: new Date(),
@@ -40,21 +40,21 @@ describe('Token Generation', () => {
         const token = generateAccessToken(user);
         generateAccessToken(user);
         expect(jwt.sign).toHaveBeenCalledWith(
-          { userId: user.id, username: user.username },
+          { userId: user._id, username: user.username },
           process.env.SECRET_KEY,
           { expiresIn: process.env.ACCESS_TOKEN_EXP },
         );
-        expect(token).toBe(`mocked_token_for_${user.id}_with_secret_${ process.env.SECRET_KEY}`); 
+        expect(token).toBe(`mocked_token_for_${user._id}_with_secret_${ process.env.SECRET_KEY}`); 
     });
     
     it('should generate a refresh token', () => {
       const refreshToken = generateRefreshToken(user);
       expect(jwt.sign).toHaveBeenCalledWith(
-        { userId: user.id, username: user.username },
+        { userId: user._id, username: user.username },
         process.env.REFRESH_SECRET_KEY,
         { expiresIn: process.env.REFRESH_TOKEN_EXP },
       );
-      expect(refreshToken).toBe(`mocked_token_for_${user.id}_with_secret_${process.env.REFRESH_SECRET_KEY}`);
+      expect(refreshToken).toBe(`mocked_token_for_${user._id}_with_secret_${process.env.REFRESH_SECRET_KEY}`);
   });
   
 });
