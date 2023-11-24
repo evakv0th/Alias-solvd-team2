@@ -4,7 +4,7 @@ import HttpStatusCode from '../application/utils/exceptions/statusCode';
 import HttpException from '../application/utils/exceptions/http-exceptions';
 
 class LobbyController {
-  async createLobby(req: Request, res: Response) 
+  async createLobby(req: Request, res: Response) : Promise<void>
   {
     try 
     {
@@ -28,7 +28,7 @@ class LobbyController {
     }
   }
 
-  async joinLobby(req: Request, res: Response) 
+  async joinLobby(req: Request, res: Response) : Promise<void>
   {
     try 
     {
@@ -50,7 +50,7 @@ class LobbyController {
     }
   }
 
-  async selectTeam(req: Request, res: Response) 
+  async selectTeam(req: Request, res: Response) : Promise<void>
   {
     try 
     {
@@ -73,7 +73,7 @@ class LobbyController {
     }
   }
 
-  async leaveLobby(req: Request, res: Response) 
+  async leaveLobby(req: Request, res: Response) : Promise<void>
   {
     try 
     {
