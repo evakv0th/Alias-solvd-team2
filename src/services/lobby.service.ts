@@ -6,7 +6,7 @@ export function createLobby(hostId: string, lobbyName: string, maxPlayers: numbe
     id: generateUniqueLobbyId(),
     hostId,
     name: lobbyName,
-    teams: [], // Initialize with no teams
+    teams: [],
     gameStarted: false,
     createdAt: new Date().toISOString(),
     maxPlayers,
@@ -49,7 +49,7 @@ export function selectTeam(userId: string, lobbyId: string, teamId: string): ITe
   if (team.members.includes(userId)) {
     throw new Error('User already in the team');
   }
-  
+
   team.members.push(userId);
   return team;
 }

@@ -16,7 +16,28 @@ export const tempLobbyArr: ILobby[] = [
     id: 'lobby1',
     hostId: '1',
     name: 'First Lobby',
-    teams: [],
+    teams: [
+      {
+        "id": "teamId1",
+        "hostId": "userId",
+        "name": "Curious bears",
+        "members": [
+          "userId1",
+          "userId2",
+          "userId3"
+        ]
+      },
+      {
+        "id": "teamId2",
+        "hostId": "userId",
+        "name": "Probabilistic SuBsPaCe",
+        "members": [
+          "userId4",
+          "userId5",
+          "userId6"
+        ]
+      }
+    ],
     gameStarted: false,
     createdAt: new Date().toISOString(),
     maxPlayers: 10,
