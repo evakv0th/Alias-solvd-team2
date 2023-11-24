@@ -56,5 +56,4 @@ describe('Token Generation', () => {
       );
       expect(refreshToken).toBe(`mocked_token_for_${user._id}_with_secret_${process.env.REFRESH_SECRET_KEY}`);
   });
-  
 });
