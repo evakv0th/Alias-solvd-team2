@@ -1,10 +1,9 @@
 import { ILobby, tempLobbyArr } from '../interfaces/lobby.interface';
 
-// Function to create a lobby
 export function createLobby(hostId: string, lobbyName: string): ILobby {
   const newLobby: ILobby = {
-    // TODO: ...
-    id: generateUniqueId(), 
+    // TODO: is the additional util need?
+    id: generateUniqueLobbyId(), 
     hostId,
     name: lobbyName,
     members: [hostId],
@@ -13,7 +12,6 @@ export function createLobby(hostId: string, lobbyName: string): ILobby {
   tempLobbyArr.push(newLobby);
   return newLobby;
 }
-
 
 export function joinLobby(userId: string, lobbyId: string): ILobby {
   const lobby = tempLobbyArr.find(lobby => lobby.id === lobbyId);
