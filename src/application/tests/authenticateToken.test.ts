@@ -2,13 +2,13 @@ import { NextFunction, Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { authenticateToken } from '../middlewares/authenticateToken';
 import { secretKey } from '../utils/tokenForAuth/generateToken'; 
+import HttpStatusCode from '../utils/exceptions/statusCode';
 
 jest.mock('jsonwebtoken', () => ({
   verify: jest.fn(),
 }));
 
 describe('authenticateToken', () => {
-
     const mockRequest = () => {
       const req = {} as Request;
       req.header = jest.fn().mockReturnValue('Bearer token');
@@ -27,6 +27,7 @@ describe('authenticateToken', () => {
     it('should call next when token is valid', () => {
       const req = mockRequest();
       const res = mockResponse();
+      // No token provided
       (jwt.verify as jest.Mock).mockReturnValue({ userId: '123' }); 
   
       authenticateToken(req, res, mockNextFunction);
@@ -35,4 +36,17 @@ describe('authenticateToken', () => {
       expect(mockNextFunction).toHaveBeenCalled();
     });
 
+    it('should return an error when token is missing', async () => {
+        const req = mockRequest();
+        // No token provided
+        req.header = jest.fn().mockReturnValue(undefined); 
+        const res = mockResponse();
+    
+        await authenticateToken(req, res, mockNextFunction);
+    
+        expect(res.status).toHaveBeenCalledWith(HttpStatusCode.UNAUTHORIZED);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Unauthorized - Token missing' });
+    });
+    
+   
 });
