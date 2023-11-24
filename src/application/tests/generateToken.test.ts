@@ -17,21 +17,18 @@ describe('Token Generation', () => {
       };
     
     beforeEach(() => {
-        // Clear mock calls between tests
         (jwt.sign as jest.Mock).mockClear();
     
-        // Set environment variables for the tests
         process.env.SECRET_KEY = 'secret';
         process.env.REFRESH_SECRET_KEY = 'refresh-secret';
         process.env.ACCESS_TOKEN_EXP = '1h';
         process.env.REFRESH_TOKEN_EXP = '7d';
     
-        // Provide a mock implementation
         (jwt.sign as jest.Mock).mockImplementation((payload, secretOrPrivateKey, options) => {
           if (typeof secretOrPrivateKey !== 'string') {
             throw new Error('The secret or private key must be a string');
           }
-          // Simulate JWT generation by returning a string that includes the userId to ensure uniqueness
+
           return `mocked_token_for_${payload.userId}_with_secret_${secretOrPrivateKey}`;
         });
       });
