@@ -19,7 +19,7 @@ describe('ChatRepository', () => {
   });
 
   it('should create a new chat and return the id', async () => {
-    const mockId = '12345';
+    const mockId = '31415';
     (chatsDb.insert as jest.Mock).mockResolvedValue({ id: mockId });
 
     const chatId = await chatRepository.create();
@@ -29,7 +29,7 @@ describe('ChatRepository', () => {
   });
 
   it('should return true if a chat exists', async () => {
-    const chatId = '12345';
+    const chatId = '31415';
     (chatsDb.get as jest.Mock).mockResolvedValue({ _id: chatId });
 
     const exists = await chatRepository.exists(chatId);
@@ -49,7 +49,7 @@ describe('ChatRepository', () => {
   });
 
   it('should update a chat and return the updated chat', async () => {
-    const chatId = '12345';
+    const chatId = '31415';
     const messages = [{
         message: 'Test message', 
         senderId: 'user1',
@@ -67,7 +67,7 @@ describe('ChatRepository', () => {
   });
 
   it('should delete a chat by id', async () => {
-    const chatId = '12345';
+    const chatId = '31415';
     const rev = 'rev1';
 
     (chatsDb.get as jest.Mock).mockImplementation((id, callback) => {
