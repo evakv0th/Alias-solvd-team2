@@ -20,11 +20,11 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/api/v1/auth', authRouter);
 app.use('/api/lobby', lobbyRouter);
 const startServer = async (): Promise<void> => {
-  app.listen(port, () => {
-    console.log(`Server started at Port ${port}`);
+  couchdbInit().then(() => {
+    app.listen(port, () => {
+      console.log(`Server started at Port ${port}`);
+    });
   });
 };
-
-couchdbInit();
 
 startServer();

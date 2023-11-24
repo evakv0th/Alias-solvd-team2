@@ -1,5 +1,5 @@
 {
-  "id": "chatId",
+  "_id": "chatId",
   "messages": [
     {
       "createdAt": "2022-11-22'T'10:37:45.123",

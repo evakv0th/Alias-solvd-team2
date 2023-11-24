@@ -1,5 +1,5 @@
 {
-  "id": "userId",
+  "_id": "userId",
   "username": "bob@example.com",
   "password": "$2a$10$wSPtqqd5pujQ/1bYolF8qO.WDnSOcJ7IJt1YDvRO.U51LUfzxSHbm",
   "createdAt": "2023-11-22'T'12:30:00.000",

@@ -1,5 +1,5 @@
 {
-  "id": "roundId",
+  "_id": "roundId",
   "startedAt": "2023-11-22'T'10:38:00.000",
   "finishedAt": "2023-11-22'T'10:39:00.000",
   "teamId": "teamId1",

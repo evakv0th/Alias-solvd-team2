@@ -1,7 +1,11 @@
 export interface ITeam {
-    id: string;
-    hostId: string;
-    name: string;
-    members: string[];
+  _id: string | undefined;
+  hostId: string;
+  name: string;
+  members: string[];
 }
-  
+
+export interface ITeamCreateSchema {
+  name: string;
+  hostId: string;
+}
