@@ -3,6 +3,7 @@ import express, {Request, Response} from 'express';
 import bodyParser from 'body-parser';
 import authRouter from './routes/auth.router';
 import {couchdbInit} from "./couchdb.init";
+import lobbyRouter from './routes/lobby.router';
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/api/v1/auth', authRouter);
+app.use('/api/lobby', lobbyRouter);
 const startServer = async (): Promise<void> => {
   app.listen(port, () => {
     console.log(`Server started at Port ${port}`);

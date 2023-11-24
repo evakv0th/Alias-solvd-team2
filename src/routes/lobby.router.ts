@@ -1,9 +1,9 @@
 import express from 'express';
 import { createLobby, joinLobby } from '../controllers/lobby.controller';
 
-const router = express.Router();
+const lobbyRouter = express.Router();
 
-router.post('/create', createLobby);
-router.post('/join', joinLobby);
+lobbyRouter.post('/create', createLobby);
+lobbyRouter.post('/join', joinLobby);
 
-export default router;
+export default lobbyRouter;
