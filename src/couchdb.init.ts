@@ -1,8 +1,18 @@
 import nano from "nano";
 import {IUser} from "./interfaces/user.interface";
+import {IVocabulary} from "./interfaces/vocabulary.interface";
+import {IGame} from "./interfaces/game.interface";
+import {IChat} from "./interfaces/chat.interface";
+import {ITeam} from "./interfaces/team.interface";
+import {IRound} from "./interfaces/round.interface";
 
 export let couch: nano.ServerScope;
 export let usersDb: nano.DocumentScope<IUser>;
+export let teamsDb: nano.DocumentScope<ITeam>;
+export let vocabulariesDb: nano.DocumentScope<IVocabulary>;
+export let roundsDb: nano.DocumentScope<IRound>;
+export let gamesDb: nano.DocumentScope<IGame>;
+export let chatsDb: nano.DocumentScope<IChat>;
 
 export const chats_database = "chats";
 export const games_database = "games";
@@ -49,6 +59,11 @@ export async function couchdbInit() {
     );
   }
   usersDb = couch.use(users_database);
+  teamsDb = couch.use(teams_database);
+  vocabulariesDb = couch.use(vocabularies_database);
+  roundsDb = couch.use(rounds_database);
+  gamesDb = couch.use(games_database);
+  chatsDb = couch.use(chats_database);
 
   const userViews = {
     _id: '_design/views',
@@ -63,7 +78,6 @@ export async function couchdbInit() {
     },
   };
   await initViews(usersDb, userViews);
-
 }
 
 async function initViews(database: nano.DocumentScope<any>, view: any) {

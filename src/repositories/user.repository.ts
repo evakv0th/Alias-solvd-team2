@@ -53,7 +53,8 @@ class UserRepository {
     oldUser.username = user.username;
     oldUser.password = user.password;
     oldUser.stats = user.stats;
-    return {} as IUser;
+    await usersDb.insert(oldUser);
+    return oldUser;
   }
 
   async delete(id: string) {
