@@ -1,7 +1,7 @@
 import { ITeam } from "./team.interface";
 
 export interface ILobby {
-    id: string;
+    _id: string | undefined;
     hostId: string;
     name: string;
     teams: ITeam[];
@@ -13,12 +13,12 @@ export interface ILobby {
 
 export const tempLobbyArr: ILobby[] = [
   {
-    id: 'lobby1',
+    _id: 'lobby1',
     hostId: '1',
     name: 'First Lobby',
     teams: [
       {
-        "id": "teamId1",
+        "_id": "teamId1",
         "hostId": "userId",
         "name": "Curious bears",
         "members": [
@@ -28,7 +28,7 @@ export const tempLobbyArr: ILobby[] = [
         ]
       },
       {
-        "id": "teamId2",
+        "_id": "teamId2",
         "hostId": "userId",
         "name": "Probabilistic SuBsPaCe",
         "members": [
