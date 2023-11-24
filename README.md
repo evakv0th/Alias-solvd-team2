@@ -1,311 +1,409 @@
-# API documentatin for "Alias game"
+# Alias game
 
-## Description
-This project is a multiplayer game build with Node.js.
-Alias is a word-guessing game where players form teams. Each team takes turns where one member describes a word and others guess it. The game includes a chat for players to communicate and a system to check for similar words.
-
-### Objective
-Teams try to guess as many words as possible from their teammates' descriptions.
-
-### Turns
-Each turn is timed. Describers cannot use the word or its derivatives.
-
-### Scoring
-Points are awarded for each correct guess. Similar words are checked for validation.
-
-### End Game
-The game concludes after a predetermined number of rounds, with the highest-scoring team winning.
+Node.js-Based Game "Alias" with Chat and Word Checking
 
 ## Content:
 
-1. [Technologies](#technologies)
-2. [Endpoints:](#endpoints)
-   - [Endpoints: auth/signUp](#signUp)
-   - [Endpoints: auth/signIn](#signIn)
-   - [Endpoints: game/rooms](#listOfRooms)
-   - [Endpoints: game/rooms](#createRoom)
-   - [Endpoints: game/rooms/:roomId](#deleteGame)
-   - [Endpoints: game/rooms/:roomId/join](#joinGame)
-   - [Endpoints: game/words](#getWords)
-   - [Endpoints: game/turns](#guessWord)
-   - [Endpoints: chat/:roomId/messages](#chatHistory)
-   - [Endpoints: chat/:roomId/messages](#sendMessage)
-   - [Endpoints: word/check](#wordCheck)
-3. [Database:](#database)
-   - [Database: userModel](#userModel)
-   - [Database: gameModel](#gameModel)
-   - [Database: chatModel](#chatModel)
-4. [Security](#security)
-5. [Testing](#testing)
-6. [Deployment](#deployment)
-7. [Future Enhancements](#futureEnhancements)
-8. [FAQ](#faq)
-9. [Conclusion](#conclusion)
+* [Description](#description)
+* [System requirements](#system-requirements)
+* [Architecture](#architecture)
+* [Core modules](#core-modules)
+* [Security](#security)
+* [Testing](#testing)
+* [Deployment](#deployment)
+* [Future Enhancements](#future-enhancements)
+* [FAQ](#faq)
+* [Conclusion](#conclusion)
+* [Database schema](#database-schema)
+* [API:](#apis)
+    - [Authorization](#authorization)
+    - [User](#user)
+    - [Team](#team)
+    - [Game](#game)
+    - [Round](#round)
+    - [Chat](#chat)
+    - [Vocabulary](#vocabulary)
+* [Objects](#objects)
 
-## Technologies <a name="Technologies"></a>
-- Backend: NodeJs (Express)
-- Database: CouchDB
-- Testing: Jest
-- Containerization: Docker
+## Description
 
-## Endpoints <a name="endpoints">
+This project is a multiplayer game build with Node.js.
+Alias is a word-guessing game where players form teams. Each team takes turns where one member describes a word and
+others guess it. The game includes a chat for players to communicate and a system to check for similar words.
 
-### Endpoint `app/auth/signUp`: <a name="signUp"></a>
-- Request: `POST app/auth/signUp` - Create new user.
-   - No parameters required.
+### Objective
 
-   - Body:
-   ```
-   {
-      "userName": "userName",
-      "password": "password"
-   }
-   ```
+Teams try to guess as many words as possible from their teammates' descriptions.
 
-- Response:
-   - Status: 201 Created
-   -Body:
-   ```
-   { 
-      "message": 'User registered successfully' 
-   }
-   ```
+### Turns
 
+Each turn is timed. Describers cannot use the word or its derivatives.
 
-### Endpoint `app/auth/signIn`: <a name="signIn"></a>
-- Request: `POST app/auth/signIn` - Authenticates user.
-   - No parameters required.
+### Scoring
 
-- Response:
-   - Status: 200 OK
-   - Body:
-   ```
-   { 
-      "message":  accessToken, refreshToken 
-   }   
-   ```
+Points are awarded for each correct guess. Similar words are checked for validation.
 
-### Endpoint `app/game/rooms`: <a name="listOfRooms"></a>
-- Request: `GET /app/rooms` - Get a list of available game rooms.
-   - No parameters required.
+### End Game
 
-   - Response:
-    - Status: 200 OK
-    - Body:
-      ```
-      {
-        "rooms": [
-          {
-            "roomId": "12345",
-            "players": ["user1", "user2"],
-            "maxPlayers": 4
-          },
-          {
-            "roomId": "67890",
-            "players": ["user3"],
-            "maxPlayers": 2
-          }
-        ]
-      }
-      ```
+The game concludes after a predetermined number of rounds, with the highest-scoring team winning.
 
-### Endpoint `app/game/rooms`: <a name="createRoom"></a>
-- Request: `POST app/game/rooms` - Create room.
-   - No parameters required.
+## System Requirements
 
-  - Response:
-    - Status: 201 Created
-    - Body:
-      ```
-      {
-        "roomId": "12345",
-        "message": "Game room created successfully"
-      }
-      ```
+- **Backend**: Node.js
+- **Database**: CouchDB
+- `.env` file from `.env.example`
 
+## Architecture
 
-### Endpoint `app/game/rooms/:roomId/join`: <a name="joinGame"></a>  
-- Request: `POST /api/rooms/:roomId/join` - Join a specific game room.
+Outline of the server setup, API endpoints, and database schema.
 
-   - Parameters:
+## Core Modules
 
-   | Parameter      |   Type     | Required | Description                        |
-   |----------------|------------|----------|------------------------------------|
-   | `roomId`       |   UUID     | Yes      | The ID of the game room to join.   |
+1. **User Authentication**
+    - Login and registration
+    - Session management
+2. **Game Lobby**
+    - Room creation and joining
+    - Team selection
+3. **Game Mechanics**
+    - Word generation
+    - Turn management
+4. **Chat System**
+    - Real-time messaging
+    - Chat history
+5. **Word Checking**
+    - Similarity algorithm
+    - Word validation
 
-   - Body:
-      ```
-      { 
-         "username": "user3"
-      }
-      ```
-      
-  - Response:
-    - Status: 200 OK
-    - Body:
-      ```
-      {
-        "roomId": "12345",
-        "message": "User user3 joined the game room"
-      }
-      ```
+## Security
 
-### Endpoint `app/game/rooms/:roomId`: <a name="deleteGame"></a>  
-- Request: `DELETE /api/rooms/:roomId` - Delete a game room.
+Overview of implemented security measures.
 
-   - Parameters:
+## Testing
 
-   | Parameter      |   Type     | Required | Description                        |
-   |----------------|------------|----------|------------------------------------|
-   | `roomId`       |   UUID     | Yes      | The ID of the game room to delete. |
+Guide on unit and integration testing.
 
-  - Response:
-    - Status: 200 OK
-    - Body:
-      ```
-      {
-        "roomId": "12345",
-        "message": "Game room deleted successfully"
-      }
-      ```
+## Deployment
 
-### Endpoint `app/game/words`: <a name="getWords"></a>
-- Request: `GET /app/game/words` - Get a randomly generated word for each turn.
-   - No parameters required.
+Run `docker compose up`.
 
-  - Response:
-    - Status: 200 OK
-    - Body:
-      ```
-      {
-        "word": "apple",
-        "message": "Word generated successfully"
-      }
-      ```
+## Future Enhancements
 
-### Endpoint `app/game/turns`: <a name="guessWord"></a>
--  Request: `POST /app/game/turns` - Submit a guess for the current turn.
-   - No parameters required.
-
-    - Body:
-      ```
-      {
-        "guess": "banana"
-      }
-      ```
-
-  - Response:
-    - Status: 200 OK
-    - Body:
-      ```
-      {
-        "isCorrect": false,
-        "message": "Incorrect guess, please try again"
-      }
-      ```
-
-
-### Endpoint `app/chat/:roomId/messages`: <a name="chatHistory"></a>
--  Request: `GET /app/chat/:roomId/messages` - Get the chat history for a specific game room.
-
-   - Parameters:
-
-   | Parameter      |   Type     | Required | Description                        |
-   |----------------|------------|----------|------------------------------------|
-   | `roomId`       |   UUID     | Yes      | The ID of the game room.           |
-
-  - Response:
-    - Status: 200 OK
-    - Body:
-      ```
-      {
-        "roomId": "123456",
-        "messages": [
-          {
-            "id": "1",
-            "sender": "John",
-            "message": "Hello everyone"
-          },
-          {
-            "id": "2",
-            "sender": "Bob",
-            "message": "Hi !!!"
-          }
-        ]
-      }
-      ```
-
-### Endpoint `app/chat/:roomId/messages`: <a name="sendMessage"></a>
-- Request: `POST /app/chat/:roomId/messages` - Send a message to the chat in a specific game room.
-
-   - Parameters:
-
-   | Parameter      |   Type     | Required | Description                        |
-   |----------------|------------|----------|------------------------------------|
-   | `roomId`       |   UUID     | Yes      | The ID of the game room.           | 
-
-   - Body:
-      ```
-      {
-        "sender": "Bob",
-        "message": "Message from Bob"
-      }
-      ```
-
-  - Response:
-    - Status: 201 Created
-    - Body:
-      ```
-      {
-        "messageId": "3",
-        "sender": "Bob",
-        "message": "Message from Bob"
-      }
-      ```
-
-### Endpoint `app/word/check`: <a name="wordCheck"></a>
--  Request: `POST /app/word/check` - Check if a word is similar to the target word.
-   - No parameters required.
-
-   - Body:
-      ```
-      {
-        "word": "apple",
-        "targetWord": "apple"
-      }
-      ```
-   - Response:
-    - Status: 200 OK
-    - Body:
-      ```
-      {
-        "word": "apple",
-        "targetWord": "apple",
-        "isSimilar": true
-      }
-      ```
-
-## Database<a name="database"></a>
-
-### userModel <a name="userModel"></a>
-
-### gameModel <a name="gameModel"></a>
-
-### chatModel <a name="chatModel"></a>
-
-## Security <a name="security"></a>
-
-## Testing <a name="testing"></a>
-
-## Deployment <a name="deployment"></a>
-Instructions for deploying the application.
-
-## Future Enhancements <a name="futureEnhancements"></a>
 Suggestions for additional features or improvements.
 
-## FAQ <a name="faq"></a>
+## FAQ
+
 Common questions and troubleshooting tips.
 
-## Conclusion <a name="conclusion"></a>
+## Conclusion
+
 Final remarks and encouragement for further exploration.
 
+## Database Schema
+
+Database schema is represented by JSON examples in `schema` folder.
+
+### User
+
+```json
+{
+  "_id": "userId",
+  "username": "bob@example.com",
+  "password": "$2a$10$wSPtqqd5pujQ/1bYolF8qO.WDnSOcJ7IJt1YDvRO.U51LUfzxSHbm",
+  "createdAt": "2023-11-22'T'12:30:00.000",
+  "stats": {
+    "roundsPlayed": 5,
+    "wordsGuessed": 4
+  }
+}
+```
+
+| Property             | Type      | Description                                  |
+|----------------------|-----------|----------------------------------------------|
+| `_id`                | ObjectID  | ID of user                                   |
+| `username`           | String    | Username                                     |
+| `password`           | String    | Encrypted password                           |
+| `createdAt`          | Timestamp | Timestamp when user was created              |
+| `stats`              | Object    | Statistics object                            |
+| `stats.gamesPlayed`  | Number    | Amount of rounds which user has been hosting |
+| `stats.wordsGuessed` | Number    | Amount of words user guessed                 |
+
+### Team
+
+```json
+{
+  "_id": "teamId1",
+  "hostId": "userId",
+  "name": "Curious bears",
+  "members": [
+    "userId1",
+    "userId2",
+    "userId3"
+  ]
+}
+```
+
+| Property  | Type       | Description               |
+|-----------|------------|---------------------------|
+| `_id`     | ObjectID   | ID of team                |
+| `hostId`  | ObjectID   | ID of team creator user   |
+| `name`    | String     | Name of team              |
+| `members` | ObjectID[] | Array of team members IDs |
+
+### Vocabulary
+
+```json
+{
+  "_id": "vocabularyId",
+  "words": [
+    "bear",
+    "motorbike",
+    "air balloon"
+  ]
+}
+```
+
+| Property | Type     | Description                  |
+|----------|----------|------------------------------|
+| `_id`    | ObjectID | ID of vocabulary             |
+| `words`  | String[] | Array of words of vocabulary |
+
+### Round
+
+```json
+{
+  "_id": "roundId",
+  "startedAt": "2023-11-22'T'10:38:00.000",
+  "finishedAt": "2023-11-22'T'10:39:00.000",
+  "teamId": "teamId1",
+  "hostId": "hostId1",
+  "chatId": "chatId",
+  "words": [
+    {
+      "word": "motorbike",
+      "guessed": true
+    },
+    {
+      "word": "air balloon",
+      "guessed": false
+    }
+  ]
+}
+```
+
+| Property        | Type      | Description                                       |
+|-----------------|-----------|---------------------------------------------------|
+| `_id`           | ObjectID  | ID of game round                                  |
+| `startedAt`     | Timestamp | Timestamp when game was started                   |
+| `finishedAt`    | Timestamp | Timestamp when game was finished                  |
+| `teamId`        | ObjectID  | ID of team, which member is host of this round    |
+| `hostId`        | ObjectID  | ID of user, which is host of this round           |
+| `chatId`        | ObjectID  | ID of chat, where words of this round are guessed |
+| `words`         | Object[]  | Array of words of this round                      |
+| `words.word`    | String    | Word to be guessed                                |
+| `words.guessed` | Boolean   | Flag of word was guessed                          |
+
+### Chat
+
+```json
+{
+  "_id": "chatId",
+  "messages": [
+    {
+      "createdAt": "2022-11-22'T'10:37:45.123",
+      "userId": "userId",
+      "message": "message"
+    },
+    {
+      "createdAt": "2022-11-22'T'10:37:45.869",
+      "userId": "userId",
+      "message": "message"
+    }
+  ]
+}
+```
+
+| Property             | Type      | Description                     |
+|----------------------|-----------|---------------------------------|
+| `_id`                | ObjectID  | ID of chat                      |
+| `messages`           | Object[]  | Array of messages of chat       |
+| `messages.createdAt` | Timestamp | Timestamp when message was sent |
+| `userId`             | ObjectID  | ID of user sent this message    |
+| `message`            | String    | Text of message                 |
+
+### Game
+
+```json
+{
+  "_id": "gameId",
+  "hostId": "userId",
+  "createdAt": "2023-11-22'T'10:37:15.000",
+  "teams": [
+    {
+      "teamId": "teamId1",
+      "score": 5
+    },
+    {
+      "teamId": "teamId2",
+      "score": 7
+    }
+  ],
+  "currentTeam": "teamId1",
+  "rounds": [
+    "roundId1",
+    "roundId2"
+  ],
+  "options": {
+    "goal": 100,
+    "roundTime": 60,
+    "vocabularyId": "vocabularyId"
+  }
+}
+```
+
+| Property               | Type       | Description                     |
+|------------------------|------------|---------------------------------|
+| `_id`                  | ObjectID   | ID of game                      |
+| `hostId`               | ObjectID   | ID of user created game         |
+| `createdAt`            | Timestamp  | Timestamp when game was created |
+| `teams`                | Object[]   | Array of teams playing in game  |
+| `teams.teamId`         | ObjectID   | ID of team                      |
+| `teams.score`          | Number     | Amount of points of team        |
+| `currentTeam`          | ObjectID   | ID of team to be hosting game   |
+| `rounds`               | ObjectID[] | Array of game rounds IDs        |
+| `options`              | Object     | Options of game                 |
+| `options.goal`         | Number     | Amount of points to win game    |
+| `options.roundTime`    | Number     | Amount of time for round        |
+| `options.vocabularyId` | ObjectID   | ID of vocabulary for game       |
+
+## APIs
+
+### Authorization
+
+#### POST `/api/v1/auth/register`
+
+Creates new user.
+
+**Request:** [`IUserCreateSchema`](#iusercreateschema).
+
+**Response:**
+
+| Code              | Body                                    | Condition                        |
+|-------------------|-----------------------------------------|----------------------------------|
+| `201 Created`     | none                                    | If user successfully registered. |
+| `400 Bad Request` | [`ExceptionMessage`](#exceptionmessage) | If registration failed.          |
+
+### `POST /api/v1/auth/login`
+
+Authenticates user.
+
+**Request:** [`LoginRequest`](#loginrequest).
+
+**Response:**
+
+| Code              | Body                                    | Condition                       |
+|-------------------|-----------------------------------------|---------------------------------|
+| `200 OK`          | [`LoginResponse`](#loginresponse)       | Correct credentials are used.   |
+| `400 Bad Request` | [`ExceptionMessage`](#exceptionmessage) | Incorrect credentials are used. |
+
+### `POST /api/v1/auth/refresh`
+
+Refreshes a pair of tokens.
+
+**Request:** Object with `token` field.
+
+**Response:**
+
+| Code              | Body                                    | Condition                |
+|-------------------|-----------------------------------------|--------------------------|
+| `200 OK`          | [`LoginResponse`](#loginresponse)       | Correct token is used.   |
+| `400 Bad Request` | [`ExceptionMessage`](#exceptionmessage) | Incorrect token is used. |
+
+#### GET `/api/v1/auth/login`
+
+#### POST `/api/v1/auth/refresh`
+
+### User
+
+#### GET `/api/v1/users/:id`
+
+#### PUT `/api/v1/users/:id`
+
+### Team
+
+#### POST `/api/v1/teams`
+
+#### GET `/api/v1/teams/:id`
+
+#### GET `/api/v1/teams/:id/members`
+
+#### PUT `/api/v1/teams/:id/members`
+
+### Game
+
+#### POST `/api/v1/games`
+
+#### GET `/api/v1/games/:id`
+
+#### GET `/api/v1/games/:id`
+
+### Round
+
+### Chat
+
+### Vocabulary
+
+#### GET `/api/v1/vocabularies`
+
+#### POST `/api/v1/vocabularies`
+
+#### GET `/api/v1/vocabularies/:id`
+
+#### PUT `/api/v1/vocabularies/:id`
+
+## Objects
+
+### `IUserCreateSchema`
+
+```json
+{
+  "username": "bob",
+  "password": "bob"
+}
+```
+
+### `LoginRequest`
+
+```json
+{
+  "username": "example",
+  "password": "12345678"
+}
+```
+
+| Field      | Type   | Required | Description      |
+|------------|--------|----------|------------------|
+| `username` | string | Yes      | User`s username. |
+| `password` | string | Yes      | User`s password. |
+
+### `LoginResponse`
+
+```json
+{
+  "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcm5hbWUiOiJleGFtcGxlQGV4YW1wbGUuY29tIiwiaWF0IjoxNTE2MjM5MDIyfQ.tCvBDCHd_VjUZ2SaGFdyxKkLYbjq-W0rH6SYHoayU_w",
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcm5hbWUiOiJleGFtcGxlQGV4YW1wbGUuY29tIiwiaWF0IjoxNTE2MjM5MDIyfQ.tCvBDCHd_VjUZ2SaGFdyxKkLYbjq-W0rH6SYHoayU_w"
+}
+```
+
+| Field     | Type   | Required | Description        |
+|-----------|--------|----------|--------------------|
+| `access`  | string | Yes      | Access JWT token.  |
+| `refresh` | string | Yes      | Refresh JWT token. |
+
+### `ExceptionMessage`
+
+```json
+{
+  "message": "Something bad happened."
+}
+```
