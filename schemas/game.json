@@ -1,5 +1,5 @@
 {
-  "id": "gameId",
+  "_id": "gameId",
   "hostId": "userId",
   "createdAt": "2023-11-22'T'10:37:15.000",
   "teams": [

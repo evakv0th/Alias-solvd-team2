@@ -59,7 +59,7 @@ Database schema is represented by JSON examples in `schema` folder.
 
 ```json
 {
-   "id": "userId",
+   "_id": "userId",
    "username": "bob@example.com",
    "password": "$2a$10$wSPtqqd5pujQ/1bYolF8qO.WDnSOcJ7IJt1YDvRO.U51LUfzxSHbm",
    "createdAt": "2023-11-22'T'12:30:00.000",
@@ -72,7 +72,7 @@ Database schema is represented by JSON examples in `schema` folder.
 
 | Property             | Type      | Description                                  |
 |----------------------|-----------|----------------------------------------------|
-| `id`                 | ObjectID  | ID of user                                   |
+| `_id`                | ObjectID  | ID of user                                   |
 | `username`           | String    | Username                                     |
 | `password`           | String    | Encrypted password                           |
 | `createdAt`          | Timestamp | Timestamp when user was created              |
@@ -84,7 +84,7 @@ Database schema is represented by JSON examples in `schema` folder.
 
 ```json
 {
-   "id": "teamId1",
+   "_id": "teamId1",
    "hostId": "userId",
    "name": "Curious bears",
    "members": [
@@ -97,7 +97,7 @@ Database schema is represented by JSON examples in `schema` folder.
 
 | Property  | Type       | Description               |
 |-----------|------------|---------------------------|
-| `id`      | ObjectID   | ID of team                |
+| `_id`     | ObjectID   | ID of team                |
 | `hostId`  | ObjectID   | ID of team creator user   |
 | `name`    | String     | Name of team              |
 | `members` | ObjectID[] | Array of team members IDs |
@@ -106,7 +106,7 @@ Database schema is represented by JSON examples in `schema` folder.
 
 ```json
 {
-   "id": "vocabularyId",
+   "_id": "vocabularyId",
    "words": [
       "bear",
       "motorbike",
@@ -117,14 +117,14 @@ Database schema is represented by JSON examples in `schema` folder.
 
 | Property | Type     | Description                  |
 |----------|----------|------------------------------|
-| `id`     | ObjectID | ID of vocabulary             |
+| `_id`    | ObjectID | ID of vocabulary             |
 | `words`  | String[] | Array of words of vocabulary |
 
 ### Round
 
 ```json
 {
-   "id": "roundId",
+   "_id": "roundId",
    "startedAt": "2023-11-22'T'10:38:00.000",
    "finishedAt": "2023-11-22'T'10:39:00.000",
    "teamId": "teamId1",
@@ -145,7 +145,7 @@ Database schema is represented by JSON examples in `schema` folder.
 
 | Property        | Type      | Description                                       |
 |-----------------|-----------|---------------------------------------------------|
-| `id`            | ObjectID  | ID of game round                                  |
+| `_id`           | ObjectID  | ID of game round                                  |
 | `startedAt`     | Timestamp | Timestamp when game was started                   |
 | `finishedAt`    | Timestamp | Timestamp when game was finished                  |
 | `teamId`        | ObjectID  | ID of team, which member is host of this round    |
@@ -159,7 +159,7 @@ Database schema is represented by JSON examples in `schema` folder.
 
 ```json
 {
-   "id": "chatId",
+   "_id": "chatId",
    "messages": [
       {
          "createdAt": "2022-11-22'T'10:37:45.123",
@@ -177,7 +177,7 @@ Database schema is represented by JSON examples in `schema` folder.
 
 | Property             | Type      | Description                     |
 |----------------------|-----------|---------------------------------|
-| `id`                 | ObjectID  | ID of chat                      |
+| `_id`                | ObjectID  | ID of chat                      |
 | `messages`           | Object[]  | Array of messages of chat       |
 | `messages.createdAt` | Timestamp | Timestamp when message was sent |
 | `userId`             | ObjectID  | ID of user sent this message    |
@@ -187,7 +187,7 @@ Database schema is represented by JSON examples in `schema` folder.
 
 ```json
 {
-   "id": "gameId",
+   "_id": "gameId",
    "hostId": "userId",
    "createdAt": "2023-11-22'T'10:37:15.000",
    "teams": [
@@ -215,7 +215,7 @@ Database schema is represented by JSON examples in `schema` folder.
 
 | Property               | Type       | Description                     |
 |------------------------|------------|---------------------------------|
-| `id`                   | ObjectID   | ID of game                      |
+| `_id`                  | ObjectID   | ID of game                      |
 | `hostId`               | ObjectID   | ID of user created game         |
 | `createdAt`            | Timestamp  | Timestamp when game was created |
 | `teams`                | Object[]   | Array of teams playing in game  |

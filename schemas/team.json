@@ -1,5 +1,5 @@
 {
-  "id": "teamId1",
+  "_id": "teamId1",
   "hostId": "userId",
   "name": "Curious bears",
   "members": [
