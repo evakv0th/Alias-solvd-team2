@@ -61,6 +61,4 @@ describe('authenticateToken', () => {
         expect(res.status).toHaveBeenCalledWith(HttpStatusCode.UNAUTHORIZED);
         expect(res.json).toHaveBeenCalledWith({ error: 'Unauthorized - Invalid token' });
     });
-    
-   
 });
