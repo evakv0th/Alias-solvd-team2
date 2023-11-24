@@ -4,6 +4,7 @@ export interface ILobby {
     name: string;
     members: string[];
     gameStarted: boolean;
+    createdAt: string;
   }
 
 export const tempLobbyArr: ILobby[] = [];

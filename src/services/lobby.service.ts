@@ -8,6 +8,7 @@ export function createLobby(hostId: string, lobbyName: string): ILobby {
     name: lobbyName,
     members: [hostId],
     gameStarted: false,
+    createdAt: new Date().toISOString(),
   };
   tempLobbyArr.push(newLobby);
   return newLobby;
