@@ -12,4 +12,5 @@ export interface IRoundCreateSchema {
   teamId: string;
   hostId: string;
   chatId: string;
+  finishedAt: Date;
 }

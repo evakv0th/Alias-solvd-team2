@@ -13,6 +13,7 @@ class Round implements IRound {
 
   constructor(round: IRoundCreateSchema) {
     this.startedAt = new Date();
+    this.finishedAt = round.finishedAt
     this.teamId = round.teamId;
     this.hostId = round.hostId;
     this.chatId = round.chatId;
@@ -44,7 +45,6 @@ class RoundRepository {
 
   async update(round: IRound): Promise<IRound> {
     const oldRound = await this.getById(round._id!);
-    oldRound.finishedAt = round.finishedAt;
     oldRound.words = round.words;
     await roundsDb.insert(oldRound);
     return oldRound;
