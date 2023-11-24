@@ -47,6 +47,20 @@ describe('authenticateToken', () => {
         expect(res.status).toHaveBeenCalledWith(HttpStatusCode.UNAUTHORIZED);
         expect(res.json).toHaveBeenCalledWith({ error: 'Unauthorized - Token missing' });
     });
+
+    it('should return an error when token is invalid', async () => {
+        const req = mockRequest();
+        const res = mockResponse();
+        const error = new Error('invalid token');
+        (jwt.verify as jest.Mock).mockImplementation(() => {
+          throw error;
+        });
+    
+        await authenticateToken(req, res, mockNextFunction);
+    
+        expect(res.status).toHaveBeenCalledWith(HttpStatusCode.UNAUTHORIZED);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Unauthorized - Invalid token' });
+    });
     
    
 });
