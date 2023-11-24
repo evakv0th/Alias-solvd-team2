@@ -1,35 +1,99 @@
 import { Request, Response } from 'express';
-import * as lobbyService from '../services/lobby.service';
+import { lobbyService } from '../services/lobby.service';
+import HttpStatusCode from '../application/utils/exceptions/statusCode';
+import HttpException from '../application/utils/exceptions/http-exceptions';
 
-export async function createLobby(req: Request, res: Response): Promise<Response> {
-  try {
-    const { hostId, name, maxPlayers, isPrivate } = req.body;
-    const lobby = lobbyService.createLobby(hostId, name, maxPlayers, isPrivate);
-    return res.status(201).json(lobby);
-  } catch (error) {
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
-}
-
-export async function joinLobby(req: Request, res: Response): Promise<Response> {
-  try {
-    const { userId, lobbyId, teamId } = req.body;
-    const lobby = lobbyService.joinLobby(userId, lobbyId, teamId);
-    return res.status(200).json(lobby);
-  } catch (error) {
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
-}
-
-export async function selectTeam(req: Request, res: Response): Promise<Response> {
-  try {
-    const { userId, lobbyId, teamId } = req.body;
-    const team = lobbyService.selectTeam(userId, lobbyId, teamId);
-    return res.status(200).json(team);
-  } catch (error) {
-    if (error instanceof Error) {
-      return res.status(400).json({ error: error.message });
+class LobbyController {
+  async createLobby(req: Request, res: Response) 
+  {
+    try 
+    {
+      // assuming hostId is sent in the request body
+      const hostId = req.body.hostId; 
+      // game options are sent in the request body
+      const options = req.body.options;
+      const gameId = await lobbyService.createLobby(hostId, options);
+      res.status(HttpStatusCode.CREATED).json({ gameId });
+    } 
+    catch (error ) 
+    {
+      if (error instanceof HttpException) 
+      {
+        res.status(error.status).json({ message: error.message });
+      } 
+      else 
+      {
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Internal server error' });
+      }
     }
-    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+  async joinLobby(req: Request, res: Response) 
+  {
+    try 
+    {
+      const userId = req.body.userId;
+      const gameId = req.params.gameId; // assuming gameId is sent as a URL parameter
+      const game = await lobbyService.joinLobby(userId, gameId);
+      res.status(HttpStatusCode.OK).json(game);
+    } 
+    catch (error) 
+    {
+      if (error instanceof HttpException) 
+      {
+        res.status(error.status).json({ message: error.message });
+      } 
+      else 
+      {
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Internal server error' });
+      }
+    }
+  }
+
+  async selectTeam(req: Request, res: Response) 
+  {
+    try 
+    {
+      const userId = req.body.userId;
+      const gameId = req.params.gameId;
+      const teamId = req.body.teamId;
+      const game = await lobbyService.selectTeam(userId, gameId, teamId);
+      res.status(HttpStatusCode.OK).json(game);
+    } 
+    catch (error) 
+    {
+      if (error instanceof HttpException) 
+      {
+        res.status(error.status).json({ message: error.message });
+      } 
+      else 
+      {
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Internal server error' });
+      }
+    }
+  }
+
+  async leaveLobby(req: Request, res: Response) 
+  {
+    try 
+    {
+      const userId = req.body.userId;
+      const gameId = req.params.gameId;
+      const game = await lobbyService.leaveLobby(userId, gameId);
+      res.status(HttpStatusCode.OK).json(game);
+    } 
+    catch (error) 
+    {
+      if (error instanceof HttpException) 
+      {
+        res.status(error.status).json({ message: error.message });
+      } 
+      else 
+      {
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Internal server error' });
+      }
+    }
   }
 }
+
+export const lobbyController = new LobbyController();

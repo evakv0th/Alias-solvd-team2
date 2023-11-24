@@ -1,10 +1,11 @@
 import express from 'express';
-import { createLobby, joinLobby, selectTeam } from '../controllers/lobby.controller';
+import { lobbyController } from '../controllers/lobby.controller';
 
 const lobbyRouter = express.Router();
 
-lobbyRouter.post('/create', createLobby);
-lobbyRouter.post('/join', joinLobby);
-lobbyRouter.post('/team/select', selectTeam );
+lobbyRouter.post('/create', lobbyController.createLobby);
+lobbyRouter.post('/join/:gameId', lobbyController.joinLobby);
+lobbyRouter.put('/selectTeam/:gameId', lobbyController.selectTeam);
+lobbyRouter.post('/leave/:gameId', lobbyController.leaveLobby);
 
 export default lobbyRouter;
