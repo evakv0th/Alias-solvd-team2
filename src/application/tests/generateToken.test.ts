@@ -22,7 +22,7 @@ describe('Token Generation', () => {
     
         // Set environment variables for the tests
         process.env.SECRET_KEY = 'secret';
-        process.env.REFRESH_SECRET_KEY = 'test-refresh-secret-key';
+        process.env.REFRESH_SECRET_KEY = 'refresh-secret';
         process.env.ACCESS_TOKEN_EXP = '1h';
         process.env.REFRESH_TOKEN_EXP = '7d';
     
@@ -48,13 +48,13 @@ describe('Token Generation', () => {
     });
     
     it('should generate a refresh token', () => {
-        const refreshToken = generateRefreshToken(user);
-        generateRefreshToken(user);
-        expect(jwt.sign).toHaveBeenCalledWith(
-          { userId: user.id, username: user.username },
-          process.env.REFRESH_SECRET_KEY,
-          { expiresIn: process.env.REFRESH_TOKEN_EXP },
-        );
-        expect(refreshToken).toBe('mocked_token'); 
-    });
+      const refreshToken = generateRefreshToken(user);
+      expect(jwt.sign).toHaveBeenCalledWith(
+        { userId: user.id, username: user.username },
+        process.env.REFRESH_SECRET_KEY,
+        { expiresIn: process.env.REFRESH_TOKEN_EXP },
+      );
+      expect(refreshToken).toBe(`mocked_token_for_${user.id}_with_secret_${process.env.REFRESH_SECRET_KEY}`);
+  });
+  
 });
