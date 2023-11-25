@@ -1,18 +1,26 @@
 import request from 'supertest';
-import app from '../../index'; 
+import {app, closeServer, startServer} from '../../index'; 
 import * as authService from '../../services/auth.service';
 import HttpStatusCode from '../../application/utils/exceptions/statusCode';
 import HttpException from '../../application/utils/exceptions/http-exceptions';
-import jwt from 'jsonwebtoken';
-import { generateAccessToken } from '../../application/utils/tokenForAuth/generateToken';
-import * as tokenForAuth from '../../application/utils/tokenForAuth/generateToken';
-
 
 jest.mock('../../services/auth.service');
 jest.mock('jsonwebtoken');
 
 describe('Auth Controller', () => {
     describe('register function', () => {
+
+
+        beforeAll(async () => {
+            await startServer(); 
+        });
+
+              
+        afterAll(async () => {
+            await closeServer(); 
+        });
+        
+        
         it('should register a new user successfully', async () => {
             const mockUser = { username: 'testuser', password: 'password' };
             (authService.register as jest.Mock).mockResolvedValue(mockUser);
@@ -63,9 +71,19 @@ describe('Auth Controller', () => {
             expect(response.status).toBe(HttpStatusCode.INTERNAL_SERVER_ERROR);
             expect(response.body.error).toBe(errorMessage);
         });
+  
     });
 
     describe('Auth Controller - login function', () => {
+
+        beforeAll(async () => {
+            await startServer(); 
+        });
+
+        afterAll(async () => {
+            await closeServer(); 
+        });
+          
         const mockUserCredentials = { username: 'testuser', password: 'password' };
         const mockAuthResponse = { accessToken: 'access-token', refreshToken: 'refresh-token' };
     
@@ -104,6 +122,7 @@ describe('Auth Controller', () => {
             expect(response.status).toBe(HttpStatusCode.INTERNAL_SERVER_ERROR);
             expect(response.body.error).toBe(errorMessage);
         });
+
     });
 });
 

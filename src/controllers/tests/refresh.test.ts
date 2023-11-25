@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../../index'; // Assuming this is the correct path to your Express app
+import { app, closeServer, startServer }from '../../index'; // Assuming this is the correct path to your Express app
 import jwt, { Secret, VerifyOptions } from 'jsonwebtoken';
 import HttpStatusCode from '../../application/utils/exceptions/statusCode';
 import HttpException from '../../application/utils/exceptions/http-exceptions';
@@ -23,12 +23,14 @@ describe('Auth Controller - refresh token function', () => {
     const invalidRefreshToken = 'invalid_refresh_token';
     const userPayload = { id: '1', username: 'testuser' };
   
+    beforeAll(async () => {
+        await startServer(); 
+    });
     
     beforeEach(() => {
-    // Reset the mocks before each test
+    
         jest.clearAllMocks();
 
-        // Mock implementations for jwt.verify
         (jwt.verify as jest.Mock).mockImplementation((token, secret) => {
             if (token === validRefreshToken && secret === refreshTokenSecretKey) {
             return userPayload;
@@ -40,59 +42,62 @@ describe('Auth Controller - refresh token function', () => {
             throw new Error('Token cannot be verified');
         });
 
-        // Mock implementation for generateAccessToken
-        (generateAccessToken as jest.Mock).mockReturnValue('new_access_token');
-        });
+    (generateAccessToken as jest.Mock).mockReturnValue('new_access_token');
+    });
 
-        it('should refresh an access token successfully', async () => {
-            const response = await request(app)
-                .post('/api/v1/auth/refresh')
-                .send({ refreshToken: validRefreshToken });
+    
+    it('should refresh an access token successfully', async () => {
+        const response = await request(app)
+            .post('/api/v1/auth/refresh')
+            .send({ refreshToken: validRefreshToken });
 
-            expect(response.status).toBe(HttpStatusCode.OK);
-            expect(response.body.accessToken).toBeDefined();
-            expect(generateAccessToken).toHaveBeenCalledWith(userPayload);
-        });
+        expect(response.status).toBe(HttpStatusCode.OK);
+        expect(response.body.accessToken).toBeDefined();
+        expect(generateAccessToken).toHaveBeenCalledWith(userPayload);
+    });
 
-        it('should return a 400 status if the refresh token is missing', async () => {
-            const response = await request(app)
-                .post('/api/v1/auth/refresh')
-                .send({}); // No refreshToken provided
+    it('should return a 400 status if the refresh token is missing', async () => {
+        const response = await request(app)
+            .post('/api/v1/auth/refresh')
+            .send({}); // No refreshToken provided
 
-            expect(response.status).toBe(HttpStatusCode.BAD_REQUEST);
-            expect(response.body.error).toBe('Refresh token is missing');
-        });
+        expect(response.status).toBe(HttpStatusCode.BAD_REQUEST);
+        expect(response.body.error).toBe('Refresh token is missing');
+    });
 
-        it('should return a 401 status if the refresh token has expired', async () => {
-            const response = await request(app)
-                .post('/api/v1/auth/refresh')
-                .send({ refreshToken: expiredRefreshToken });
+    it('should return a 401 status if the refresh token has expired', async () => {
+        const response = await request(app)
+            .post('/api/v1/auth/refresh')
+            .send({ refreshToken: expiredRefreshToken });
 
-            expect(response.status).toBe(HttpStatusCode.UNAUTHORIZED);
-            expect(response.body.error).toBe('Token has expired');
-        });
+        expect(response.status).toBe(HttpStatusCode.UNAUTHORIZED);
+        expect(response.body.error).toBe('Token has expired');
+    });
 
-        it('should return a 401 status if the refresh token is invalid', async () => {
-            const response = await request(app)
-                .post('/api/v1/auth/refresh')
-                .send({ refreshToken: invalidRefreshToken });
+    it('should return a 401 status if the refresh token is invalid', async () => {
+        const response = await request(app)
+            .post('/api/v1/auth/refresh')
+            .send({ refreshToken: invalidRefreshToken });
 
-            expect(response.status).toBe(HttpStatusCode.UNAUTHORIZED);
-            expect(response.body.error).toBe('Invalid token');
-        });
+        expect(response.status).toBe(HttpStatusCode.UNAUTHORIZED);
+        expect(response.body.error).toBe('Invalid token');
+    });
 
-        it('should return a 500 status if there is an internal server error', async () => {
-            // Simulate a server error
-            (jwt.verify as jest.Mock).mockImplementationOnce(() => {
-                throw new Error('Internal Server Error');
-                });
+    it('should return a 500 status if there is an internal server error', async () => {
+        // Simulate a server error
+        (jwt.verify as jest.Mock).mockImplementationOnce(() => {
+            throw new Error('Internal Server Error');
+            });
 
-            const response = await request(app)
-                .post('/api/v1/auth/refresh')
-                .send({ refreshToken: validRefreshToken });
+        const response = await request(app)
+            .post('/api/v1/auth/refresh')
+            .send({ refreshToken: validRefreshToken });
 
-            expect(response.status).toBe(HttpStatusCode.INTERNAL_SERVER_ERROR);
-            expect(response.body.error).toBe('Internal Server Error');
-        });
+        expect(response.status).toBe(HttpStatusCode.INTERNAL_SERVER_ERROR);
+        expect(response.body.error).toBe('Internal Server Error');
+    });
 
+    afterAll(async () => {
+        await closeServer(); 
+    });
 });
