@@ -13,8 +13,11 @@ export async function authenticateToken(
   res: Response,
   next: NextFunction,
 ): Promise<Response | void> {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
+  let token = req.header('Authorization')?.replace('Bearer ', '');
 
+  if (!token) {
+    token = req.cookies['access_token'];
+  }
   if (!token) {
     return res
       .status(HttpStatusCode.UNAUTHORIZED)

@@ -64,6 +64,7 @@ export async function refresh(req: Request, res: Response): Promise<Response> {
 
     const accessToken = generateAccessToken(decoded as IUser);
 
+    res.cookie('access_token', accessToken, { httpOnly: true });
     return res.status(200).json({ accessToken });
   } catch (error) {
     if ((error as HttpException).status) {
