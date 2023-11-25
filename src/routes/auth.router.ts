@@ -4,11 +4,16 @@ import {
   refresh,
   register,
 } from '../controllers/auth.controller';
+import { 
+  validateRegisterRequest,
+  validateLoginRequest,
+  validateRefreshRequest 
+} from '../security/requestValidators'
 
 const authRouter = express.Router();
 
-authRouter.post('/register', register);
-authRouter.get('/login', login);
-authRouter.post('/refresh', refresh);
+authRouter.post('/register', validateRegisterRequest(), register);
+authRouter.post('/login', validateLoginRequest(), login);
+authRouter.post('/refresh', validateRefreshRequest(), refresh);
 
 export default authRouter;
