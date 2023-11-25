@@ -2,7 +2,6 @@ import request from 'supertest';
 import { app, closeServer, startServer }from '../../index'; // Assuming this is the correct path to your Express app
 import jwt from 'jsonwebtoken';
 import HttpStatusCode from '../../application/utils/exceptions/statusCode';
-import HttpException from '../../application/utils/exceptions/http-exceptions';
 import { generateAccessToken } from '../../application/utils/tokenForAuth/generateToken';
 
 jest.mock('jsonwebtoken', () => ({
