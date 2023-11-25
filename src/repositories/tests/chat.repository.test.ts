@@ -1,7 +1,6 @@
 import { chatRepository } from '../chat.repository'; 
 import { chatsDb } from '../../couchdb.init';
 
-// Mock the couchdb.init module
 jest.mock('../../couchdb.init', () => ({
   chatsDb: {
     get: jest.fn(),
@@ -15,7 +14,6 @@ describe('ChatRepository', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    // ChatRepository = new chatRepository();
   });
 
   it('should create a new chat and return the id', async () => {

@@ -10,16 +10,13 @@ jest.mock('jsonwebtoken');
 describe('Auth Controller', () => {
     describe('register function', () => {
 
-
         beforeAll(async () => {
             await startServer(); 
         });
-
-              
+  
         afterAll(async () => {
             await closeServer(); 
         });
-        
         
         it('should register a new user successfully', async () => {
             const mockUser = { username: 'testuser', password: 'password' };
@@ -53,7 +50,7 @@ describe('Auth Controller', () => {
 
             const response = await request(app)
                 .post('/api/v1/auth/register')
-                .send({ username: '', password: 'password' }); // Invalid data example
+                .send({ username: '', password: 'password' }); 
 
             expect(response.status).toBe(HttpStatusCode.BAD_REQUEST);
             expect(response.body.error).toBe(errorMessage);

@@ -1,7 +1,6 @@
 import { VocabularyRepository } from '../../repositories/vocabulary.repository';
 import { IVocabularyCreateSchema } from '../../interfaces/vocabulary.interface';
 
-// Mock the vocabulariesDb module
 const mockedVocabulariesDb = {
   get: jest.fn(),
   insert: jest.fn(),

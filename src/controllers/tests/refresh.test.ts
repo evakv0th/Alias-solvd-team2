@@ -6,7 +6,7 @@ import HttpException from '../../application/utils/exceptions/http-exceptions';
 import { generateAccessToken } from '../../application/utils/tokenForAuth/generateToken';
 
 jest.mock('jsonwebtoken', () => ({
-    ...jest.requireActual('jsonwebtoken'), // If you need to use other functions from jsonwebtoken
+    ...jest.requireActual('jsonwebtoken'), 
     verify: jest.fn(),
   }));
   
@@ -17,7 +17,7 @@ jest.mock('jsonwebtoken', () => ({
 
 describe('Auth Controller - refresh token function', () => {
 
-    const refreshTokenSecretKey = 'test_refresh_secret_key'; // Use a test key
+    const refreshTokenSecretKey = 'test_refresh_secret_key'; 
     const validRefreshToken = 'mock_valid_refresh_token';
     const expiredRefreshToken = 'mock_expired_refresh_token';
     const invalidRefreshToken = 'invalid_refresh_token';
@@ -84,7 +84,6 @@ describe('Auth Controller - refresh token function', () => {
     });
 
     it('should return a 500 status if there is an internal server error', async () => {
-        // Simulate a server error
         (jwt.verify as jest.Mock).mockImplementationOnce(() => {
             throw new Error('Internal Server Error');
             });

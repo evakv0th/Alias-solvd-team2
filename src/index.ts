@@ -24,9 +24,12 @@ let server: http.Server;
 
 const startServer = async (): Promise<void> => {
   couchdbInit().then(() => {
-    app.listen(port, () => {
-      console.log(`Server started at Port ${port}`);
-    });
+    // app.listen(port, () => {
+    //   console.log(`Server started at Port ${port}`);
+    // });
+    if (process.env.NODE_ENV !== 'test') {
+      app.listen(port, () => console.log(`Server started at Port ${port}`))
+    }
   });
 };
 

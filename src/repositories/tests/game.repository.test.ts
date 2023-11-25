@@ -2,7 +2,6 @@ import { GameRepository, gameRepository } from '../../repositories/game.reposito
 import { IGameCreateSchema } from '../../interfaces/game.interface';
 import { IGame } from '../../interfaces/game.interface';
 
-// Mock the gamesDb module
 const mockedGamesDb = {
   get: jest.fn(),
   insert: jest.fn(),

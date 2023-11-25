@@ -1,7 +1,6 @@
 import { TeamRepository } from '../../repositories/team.repository';
 import { ITeamCreateSchema } from '../../interfaces/team.interface';
 
-// Mock the teamsDb module
 const mockedTeamsDb = {
   get: jest.fn(),
   insert: jest.fn(),

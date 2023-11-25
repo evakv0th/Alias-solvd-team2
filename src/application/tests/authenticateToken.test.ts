@@ -38,7 +38,6 @@ describe('authenticateToken', () => {
 
   it('should return an error when token is missing', async () => {
     const req = mockRequest();
-    // No token provided
     req.header = jest.fn().mockReturnValue(undefined); 
     const res = mockResponse();
 
