@@ -30,14 +30,12 @@ class LobbyService
     {
       throw new HttpException(HttpStatusCode.NOT_FOUND, 'Lobby not found.');
     }
-    // Check if the user is already in the lobby
-    // Check if the user is already in the lobby
+  
     const isUserInLobby = game.teams.some(team => team.members.includes(userId));
     if (isUserInLobby) {
       throw new HttpException(HttpStatusCode.BAD_REQUEST, 'User already in the lobby.');
     }
 
-    // Assign the user to a team
     let assigned = false;
     for (const team of game.teams) {
       if (team.members.length < game.options.maxPlayersPerTeam) {
@@ -47,7 +45,6 @@ class LobbyService
       }
     }
     
-    // If not assigned, create a new team if possible
     if (!assigned) {
       if (game.teams.length < MAX_TEAMS) {
         const newTeam = {
@@ -72,7 +69,7 @@ class LobbyService
     {
       throw new HttpException(HttpStatusCode.NOT_FOUND, 'Lobby not found.');
     }
-    // Check if the selected team exists and if there's room
+    
     const team = game.teams.find(t => t.teamId === teamId);
     if (!team) {
       throw new HttpException(HttpStatusCode.BAD_REQUEST, 'Team does not exist.');
@@ -82,7 +79,6 @@ class LobbyService
       throw new HttpException(HttpStatusCode.BAD_REQUEST, 'Team is full.');
     }
     
-    // Remove user from any other team they might be on
     game.teams.forEach(t => {
       const index = t.members.indexOf(userId);
       if (index !== -1) {
@@ -90,7 +86,6 @@ class LobbyService
       }
     });
 
-    // Add the user to the new team
     team.members.push(userId);
 
     return gameRepository.update(game);
@@ -105,7 +100,6 @@ class LobbyService
       throw new HttpException(HttpStatusCode.NOT_FOUND, 'Lobby not found.');
     }
 
-    // Remove the user from their team
     game.teams.forEach(team => {
       const index = team.members.indexOf(userId);
       if (index !== -1) {
@@ -113,7 +107,6 @@ class LobbyService
       }
     });
 
-    // Optional: Remove any empty teams
     game.teams = game.teams.filter(team => team.members.length > 0);
     
     return gameRepository.update(game);

@@ -8,9 +8,7 @@ class LobbyController {
   {
     try 
     {
-      // assuming hostId is sent in the request body
       const hostId = req.body.hostId; 
-      // game options are sent in the request body
       const options = req.body.options;
       const gameId = await lobbyService.createLobby(hostId, options);
       res.status(HttpStatusCode.CREATED).json({ gameId });
@@ -33,7 +31,7 @@ class LobbyController {
     try 
     {
       const userId = req.body.userId;
-      const gameId = req.params.gameId; // assuming gameId is sent as a URL parameter
+      const gameId = req.params.gameId;
       const game = await lobbyService.joinLobby(userId, gameId);
       res.status(HttpStatusCode.OK).json(game);
     } 
