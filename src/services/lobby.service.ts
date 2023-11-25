@@ -39,7 +39,7 @@ class LobbyService
 
     // Assign the user to a team
     let assigned = false;
-    for (let team of game.teams) {
+    for (const team of game.teams) {
       if (team.members.length < game.options.maxPlayersPerTeam) {
         team.members.push(userId);
         assigned = true;
