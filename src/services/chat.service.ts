@@ -1,8 +1,7 @@
-import {chatRepository} from "../repositories/chat.repository";
-import {IChat} from "../interfaces/chat.interface";
+import { chatRepository } from '../repositories/chat.repository';
+import { IChat } from '../interfaces/chat.interface';
 
 class ChatService {
-
   async getById(id: string): Promise<IChat> {
     return chatRepository.getById(id);
   }
@@ -22,7 +21,6 @@ class ChatService {
   async delete(id: string) {
     await chatRepository.delete(id);
   }
-
 }
 
 export const chatService = new ChatService();

@@ -5,6 +5,7 @@ import authRouter from './routes/auth.router';
 import { couchdbInit } from './couchdb.init';
 import http from 'http';
 import { Server } from 'socket.io';
+import chatRouter from './routes/chat.router';
 
 dotenv.config();
 
@@ -45,6 +46,7 @@ io.on('connection', (socket) => {
 });
 
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/chats', chatRouter);
 const startServer = async (): Promise<void> => {
   couchdbInit().then(() => {
     server.listen(port, () => {

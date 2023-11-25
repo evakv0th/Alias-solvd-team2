@@ -1,3 +1,5 @@
+import HttpException from "../application/utils/exceptions/http-exceptions";
+import HttpStatusCode from "../application/utils/exceptions/statusCode";
 import {chatsDb} from "../couchdb.init";
 import {ChatMessage, IChat} from "../interfaces/chat.interface";
 
@@ -15,7 +17,12 @@ class Chat implements IChat {
 class ChatRepository {
 
   async getById(id: string): Promise<IChat> {
-    return await chatsDb.get(id);
+    try {
+      const chat = await chatsDb.get(id)
+      return chat
+    } catch (err) {
+      throw new HttpException(HttpStatusCode.NOT_FOUND, 'chat not found!')
+    }
   }
 
   async exists(id: string): Promise<boolean> {
