@@ -1,9 +1,7 @@
 import * as authService from '../auth.service';
 import { userService } from '../user.service';
 import HttpException from '../../application/utils/exceptions/http-exceptions';
-import HttpStatusCode from '../../application/utils/exceptions/statusCode';
 
-// Mock the userService
 jest.mock('../user.service', () => ({
     userService: {
         exists: jest.fn(),

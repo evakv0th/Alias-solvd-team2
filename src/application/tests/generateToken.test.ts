@@ -24,7 +24,7 @@ describe('Token Generation', () => {
         process.env.ACCESS_TOKEN_EXP = '1h';
         process.env.REFRESH_TOKEN_EXP = '7d';
     
-        (jwt.sign as jest.Mock).mockImplementation((payload, secretOrPrivateKey, options) => {
+        (jwt.sign as jest.Mock).mockImplementation((payload, secretOrPrivateKey) => {
           if (typeof secretOrPrivateKey !== 'string') {
             throw new Error('The secret or private key must be a string');
           }

@@ -1,4 +1,3 @@
-// chat.service.test.ts
 import { chatService } from '../chat.service';
 import { chatRepository } from '../../repositories/chat.repository';
 import { IChat, ChatMessage } from '../../interfaces/chat.interface';

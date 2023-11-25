@@ -1,4 +1,4 @@
-import { GameRepository, gameRepository } from '../../repositories/game.repository';
+import { GameRepository } from '../../repositories/game.repository';
 import { IGameCreateSchema } from '../../interfaces/game.interface';
 import { IGame } from '../../interfaces/game.interface';
 

@@ -2,7 +2,6 @@ import { gameRepository } from "../../repositories/game.repository";
 import { gameService } from "../game.service";
 
 
-// Mock the gameRepository.getById function
 jest.mock("../../repositories/game.repository", () => ({
   gameRepository: {
     getById: jest.fn(),
@@ -12,10 +11,9 @@ jest.mock("../../repositories/game.repository", () => ({
 describe("GameService", () => {
   describe("getById", () => {
     it("should return a game when a valid id is provided", async () => {
-      // Arrange
-      const gameId = "some-game-id";
-      const expectedGame = {
-        _id: gameId,
+        const gameId = "some-game-id";
+        const expectedGame = {
+          _id: gameId,
       };
       (gameRepository.getById as jest.Mock).mockResolvedValue(expectedGame);
 

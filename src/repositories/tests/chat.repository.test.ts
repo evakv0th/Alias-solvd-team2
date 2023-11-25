@@ -10,7 +10,6 @@ jest.mock('../../couchdb.init', () => ({
 }));
 
 describe('ChatRepository', () => {
-  let ChatRepository: typeof chatRepository;
 
   beforeEach(() => {
     jest.clearAllMocks();
