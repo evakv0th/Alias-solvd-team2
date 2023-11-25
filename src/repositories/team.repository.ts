@@ -16,7 +16,7 @@ class Team implements ITeam {
 
 }
 
-class TeamRepository {
+export class TeamRepository {
 
   async getById(id: string): Promise<ITeam> {
     return await teamsDb.get(id);

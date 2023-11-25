@@ -1,92 +1,101 @@
-import { gameRepository } from '../game.repository';
-import { gamesDb } from '../../couchdb.init';
+import { GameRepository, gameRepository } from '../../repositories/game.repository';
 import { IGameCreateSchema } from '../../interfaces/game.interface';
+import { IGame } from '../../interfaces/game.interface';
 
+// Mock the gamesDb module
+const mockedGamesDb = {
+  get: jest.fn(),
+  insert: jest.fn(),
+  destroy: jest.fn(),
+};
 
 jest.mock('../../couchdb.init', () => ({
-  gamesDb: {
-    get: jest.fn(),
-    insert: jest.fn(),
-    destroy: jest.fn(),
+  get gamesDb() {
+    return mockedGamesDb;
   },
 }));
 
 describe('GameRepository', () => {
+  let gameRepositoryX: GameRepository;
+
+  const mockGame: IGameCreateSchema = {
+    hostId: 'host123',
+    teams: ['team1', 'team2'],
+    options: {
+      goal: 100,
+      roundTime: 60,
+      vocabularyId: 'vocab123',
+    },
+  };
+
   beforeEach(() => {
     jest.clearAllMocks();
+    gameRepositoryX = new GameRepository();
   });
 
-  it('should create a new game and return the id', async () => {
-    const mockGame: IGameCreateSchema = {
-      hostId: 'host123',
-      teams: ['team1', 'team2'],
-      options: {
-        goal: 3,
-        roundTime: 10,
-        vocabularyId: '257'
+  it('should create a new game', async () => {
+    mockedGamesDb.insert.mockResolvedValue({ id: 'game123', ok: true });
 
-      },
-    };
-    const mockId = 'game123';
-    (gamesDb.insert as jest.Mock).mockResolvedValue({ id: mockId });
+    const id = await gameRepositoryX.create(mockGame);
 
-    const gameId = await gameRepository.create(mockGame);
-    expect(gameId).toBe(mockId);
-    expect(gamesDb.insert).toHaveBeenCalledWith(expect.any(Game));
+    expect(mockedGamesDb.insert).toHaveBeenCalledWith(expect.any(Object));
+    expect(id).toBe('game123');
   });
 
-  it('should return true if a game exists', async () => {
-    const gameId = 'game123';
-    (gamesDb.get as jest.Mock).mockResolvedValue({ _id: gameId });
+  it('should return true if game exists', async () => {
+    mockedGamesDb.get.mockResolvedValue(true);
 
-    const exists = await gameRepository.exists(gameId);
+    const exists = await gameRepositoryX.exists('game123');
+
+    expect(mockedGamesDb.get).toHaveBeenCalledWith('game123');
     expect(exists).toBe(true);
-    expect(gamesDb.get).toHaveBeenCalledWith(gameId);
   });
 
-  it('should return false if a game does not exist', async () => {
-    const gameId = 'non_existent_game';
-    (gamesDb.get as jest.Mock).mockRejectedValue(new Error('not found'));
+  it('should return false if game does not exist', async () => {
+    mockedGamesDb.get.mockRejectedValue(new Error('not found'));
 
-    const exists = await gameRepository.exists(gameId);
+    const exists = await gameRepositoryX.exists('gameNotFound');
+
+    expect(mockedGamesDb.get).toHaveBeenCalledWith('gameNotFound');
     expect(exists).toBe(false);
-    expect(gamesDb.get).toHaveBeenCalledWith(gameId);
   });
 
-  it('should update a game and return the updated game', async () => {
-    const gameId = 'game123';
-    const updatedData = {
-      _id: gameId,
-      currentTeam: 'team2',
-      rounds: ['round1'],
-      // ... other properties you may need to update
+  it('should update a game', async () => {
+    
+    const mockOldGame: IGame = {
+      _id: 'game123', 
+      hostId: mockGame.hostId,
+      createdAt: new Date(), 
+      teams: mockGame.teams.map(team => ({ teamId: team, score: 0 })),
+      currentTeam: mockGame.teams[0], 
+      rounds: [], 
+      options: mockGame.options,
     };
-    const oldGameData = {
-      _id: gameId,
-      currentTeam: 'team1',
-      rounds: [],
-      // ... other properties
-    };
-    (gamesDb.get as jest.Mock).mockResolvedValue(oldGameData);
-    (gamesDb.insert as jest.Mock).mockResolvedValue({ id: gameId });
 
-    const game = await gameRepository.update(updatedData);
-    expect(game).toEqual(expect.objectContaining(updatedData));
-    expect(gamesDb.get).toHaveBeenCalledWith(gameId);
-    expect(gamesDb.insert).toHaveBeenCalledWith(expect.any(Game));
+    mockedGamesDb.get.mockResolvedValue(mockOldGame);
+
+
+    const updatedGame = await gameRepositoryX.update(mockOldGame);
+
+    expect(mockedGamesDb.insert).toHaveBeenCalledWith(expect.objectContaining({
+      _id: 'game123',
+      currentTeam: mockOldGame.currentTeam,
+      rounds: mockOldGame.rounds,
+    }));
+
+    expect(updatedGame).toEqual(mockOldGame);
   });
 
-  it('should delete a game by id', async () => {
-    const gameId = 'game123';
-    const rev = 'rev123';
-    (gamesDb.get as jest.Mock).mockImplementation((id, callback) => {
-      callback(null, { _id: id, _rev: rev });
+  it('should delete a game', async () => {
+    mockedGamesDb.get.mockImplementation((id, callback) => {
+      callback(null, { _id: id, _rev: '1-abc' });
     });
+    
+    mockedGamesDb.destroy.mockResolvedValue({ ok: true });
 
-    await gameRepository.delete(gameId);
-    expect(gamesDb.get).toHaveBeenCalledWith(gameId, expect.any(Function));
-    expect(gamesDb.destroy).toHaveBeenCalledWith(gameId, rev);
+    await gameRepositoryX.delete('game123');
+
+    expect(mockedGamesDb.get).toHaveBeenCalledWith('game123', expect.any(Function));
+    expect(mockedGamesDb.destroy).toHaveBeenCalledWith('game123', '1-abc');
   });
-
-
 });

@@ -22,7 +22,7 @@ class Round implements IRound {
 
 }
 
-class RoundRepository {
+export class RoundRepository {
 
   async getById(id: string): Promise<IRound> {
     return await roundsDb.get(id);

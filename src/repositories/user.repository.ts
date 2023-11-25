@@ -24,7 +24,7 @@ class User implements IUser {
 
 }
 
-class UserRepository {
+export class UserRepository {
 
   async getById(id: string): Promise<IUser> {
     return await usersDb.get(id);
