@@ -34,6 +34,7 @@ export async function register(
 export async function login(req: Request, res: Response): Promise<Response> {
   try {
     const { accessToken, refreshToken } = await authService.login(req.body);
+    res.cookie('access_token', accessToken, { httpOnly: true });
     return res.status(200).json({ accessToken, refreshToken });
   } catch (error) {
     if ((error as HttpException).status) {

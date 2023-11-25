@@ -3,6 +3,7 @@ import { chatService } from '../services/chat.service';
 import { IChat } from '../interfaces/chat.interface';
 import HttpException from '../application/utils/exceptions/http-exceptions';
 import HttpStatusCode from '../application/utils/exceptions/statusCode';
+import { RequestWithUser } from '../application/middlewares/authenticateToken';
 
 export async function getChat(req: Request, res: Response): Promise<void> {
   const chatId: string = req.params.id;
@@ -61,6 +62,27 @@ export async function deleteChat(req: Request, res: Response): Promise<void> {
   try {
     await chatService.delete(chatId);
     res.status(204).send();
+  } catch (error) {
+    if (error instanceof HttpException) {
+      res.status(error.status).json({ error: error.message });
+    } else {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        error: 'Internal Server Error',
+      });
+    }
+  }
+}
+
+export async function viewChat(
+  req: RequestWithUser,
+  res: Response,
+): Promise<void> {
+  const id = req.params.id;
+
+  try {
+    chatService.getById(id);
+
+    res.render('chat', { user: req.user, chatId: req.params.id });
   } catch (error) {
     if (error instanceof HttpException) {
       res.status(error.status).json({ error: error.message });

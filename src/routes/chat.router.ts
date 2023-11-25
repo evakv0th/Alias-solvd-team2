@@ -4,8 +4,11 @@ import {
   createChat,
   updateChat,
   deleteChat,
+  viewChat,
 } from '../controllers/chat.controller';
-import { authenticateToken } from '../application/middlewares/authenticateToken';
+import {
+  authenticateToken,
+} from '../application/middlewares/authenticateToken';
 
 const chatRouter = express.Router();
 
@@ -14,8 +17,6 @@ chatRouter.post('/', authenticateToken, createChat);
 chatRouter.patch('/:id', authenticateToken, updateChat);
 chatRouter.delete('/:id', authenticateToken, deleteChat);
 
-chatRouter.get('/:id/view', (req, res) => {
-  res.render('chat', { chatId: req.params.id });
-});
+chatRouter.get('/:id/view', viewChat);
 
 export default chatRouter;

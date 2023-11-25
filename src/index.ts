@@ -8,6 +8,7 @@ import { Server } from 'socket.io';
 import chatRouter from './routes/chat.router';
 import ejs from 'ejs';
 import path from 'path';
+import { setupSocket } from './socketSetup';
 
 dotenv.config();
 
@@ -24,31 +25,8 @@ app.use(bodyParser.json());
 app.get('/', (req: Request, res: Response) => {
   res.sendFile(__dirname + '/index.html');
 });
-io.on('connection', (socket) => {
-  console.log('a user connected');
 
-  // Handle joining a specific chat room
-  socket.on('join', (chatId: string) => {
-    socket.join(chatId);
-    console.log(`User joined chat ${chatId}`);
-  });
-
-  // Handle leaving a chat room (optional)
-  socket.on('leave', (chatId: string) => {
-    socket.leave(chatId);
-    console.log(`User left chat ${chatId}`);
-  });
-
-  // Handle chat messages within a specific room
-  socket.on('chat message', (msg, chatId) => {
-    console.log(`message: ${msg} in chat ${chatId}`);
-    io.to(chatId).emit('chat message', msg);
-  });
-
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-}); 
+setupSocket(io);
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/chats', chatRouter);
