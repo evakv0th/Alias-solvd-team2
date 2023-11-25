@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat</title>
+    <!-- Include your CSS styles here if needed -->
+  </head>
+  <body>
+    <div id="chat-container">
+      <!-- Display chat messages here -->
+      <ul id="messages"></ul>
+
+      <!-- Form for sending messages -->
+      <form id="form" action="">
+        <input id="input" autocomplete="off" /><button>Send</button>
+      </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+      const path = window.location.pathname;
+      const match = path.match(/\/chats\/([^/]+)\/view/);
+      const chatId = match ? match[1] : null;
+
+      const socket = io();
+      if (chatId) {
+        socket.emit('join', chatId);
+      } else {
+        console.error('Chat ID is missing in the URL');
+      }
+
+      const messages = document.getElementById('messages');
+      const form = document.getElementById('form');
+      const input = document.getElementById('input');
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (input.value && chatId) {
+          console.log('Emitting message to chatId:', chatId);
+          socket.emit('chat message', input.value, chatId);
+          input.value = '';
+        } else {
+          console.error('Either input value is empty or chatId is undefined');
+        }
+      });
+      socket.on('chat message', function (msg) {
+        const item = document.createElement('p');
+        item.textContent = msg;
+        messages.appendChild(item);
+      });
+    </script>
+  </body>
+</html>

@@ -14,4 +14,8 @@ chatRouter.post('/', authenticateToken, createChat);
 chatRouter.patch('/:id', authenticateToken, updateChat);
 chatRouter.delete('/:id', authenticateToken, deleteChat);
 
+chatRouter.get('/:id/view', (req, res) => {
+  res.render('chat', { chatId: req.params.id });
+});
+
 export default chatRouter;
