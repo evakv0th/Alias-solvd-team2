@@ -23,6 +23,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(express.static(__dirname + '/views'));
 
 app.get('/', (req: Request, res: Response) => {
   res.sendFile(__dirname + '/index.html');

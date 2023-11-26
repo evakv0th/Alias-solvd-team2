@@ -1,6 +1,6 @@
 import { Server } from 'socket.io';
 import { chatRepository } from './repositories/chat.repository';
-import { userRepository } from './repositories/user.repository';
+// import { userRepository } from './repositories/user.repository';
 
 export const setupSocket = (io: Server) => {
   io.on('connection', (socket) => {
@@ -13,7 +13,7 @@ export const setupSocket = (io: Server) => {
         const chat = await chatRepository.getById(chatId);
 
         chat.messages.forEach((message) => {
-          socket.emit('chat message', `${message.userId}: ${message.message}`);
+          socket.emit('chat message', `${message.message}`);
         });
       } catch (error) {
         console.error('Error getting chat entity:', error);
@@ -30,17 +30,17 @@ export const setupSocket = (io: Server) => {
 
       try {
         const chat = await chatRepository.getById(chatId);
-        const user = await userRepository.getById(
-          '0d81332b4945a796c42abb425e000e66',
-        );
+        // const user = await userRepository.getById(
+        //   '0d81332b4945a796c42abb425e000e66',
+        // );
         chat.messages.push({
           createdAt: new Date(),
-          userId: user.username as string,
+          userId: 'test',
           message: msg,
         });
         await chatRepository.update(chat);
 
-        io.to(chatId).emit('chat message', `${user.username}: ${msg}`);
+        io.to(chatId).emit('chat message', msg);
       } catch (error) {
         console.error('Error updating chat entity:', error);
       }
