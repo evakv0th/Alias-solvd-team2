@@ -1,5 +1,6 @@
 import { Server } from 'socket.io';
 import { chatRepository } from './repositories/chat.repository';
+import { wordChecker } from './application/utils/wordChecker/wordChecker';
 // import { userRepository } from './repositories/user.repository';
 
 export const setupSocket = (io: Server) => {
@@ -33,14 +34,26 @@ export const setupSocket = (io: Server) => {
         // const user = await userRepository.getById(
         //   '0d81332b4945a796c42abb425e000e66',
         // );
-        chat.messages.push({
-          createdAt: new Date(),
-          userId: 'test',
-          message: msg,
-        });
-        await chatRepository.update(chat);
+        const msgWithoutjunk = msg.replace(/[^a-zA-Z\s]/g, '');
+        const wordsToCheck = msgWithoutjunk.split(' ');
+        let stateForMsgAdd = true;
+        for (const word of wordsToCheck) {
+          if (!wordChecker('happy', word)) {
+            console.error(`you cant use words like ${word}. Its almost same as guessed words`);
+            stateForMsgAdd = false;
+          }
+        }
+        if (stateForMsgAdd) {
+          chat.messages.push({
+            createdAt: new Date(),
+            userId: 'test',
+            message: msg,
+          });
 
-        io.to(chatId).emit('chat message', msg);
+          await chatRepository.update(chat);
+
+          io.to(chatId).emit('chat message', msg);
+        }
       } catch (error) {
         console.error('Error updating chat entity:', error);
       }
