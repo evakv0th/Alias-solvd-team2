@@ -34,7 +34,15 @@ export async function register(
 export async function login(req: Request, res: Response): Promise<Response> {
   try {
     const { accessToken, refreshToken } = await authService.login(req.body);
-    res.cookie('access_token', accessToken, { httpOnly: true });
+    const secureOption = process.env.NODE_ENV === 'production';
+
+    const sameSiteOption = secureOption ? 'None' : 'Lax';
+
+    res.cookie('access_token', accessToken, {
+      httpOnly: true,
+      secure: secureOption,
+      sameSite: sameSiteOption as any,
+    });
     return res.status(200).json({ accessToken, refreshToken });
   } catch (error) {
     if ((error as HttpException).status) {
