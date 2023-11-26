@@ -2,6 +2,7 @@ import { Server } from 'socket.io';
 import { chatRepository } from './repositories/chat.repository';
 import { WordChecker } from './application/utils/wordChecker/wordChecker';
 // import { userRepository } from './repositories/user.repository';
+import badwordsArray from 'badwords/array';
 
 export const setupSocket = (io: Server) => {
   io.on('connection', (socket) => {
@@ -12,10 +13,16 @@ export const setupSocket = (io: Server) => {
       console.log(`User joined chat ${chatId}`);
       try {
         const chat = await chatRepository.getById(chatId);
-
-        chat.messages.forEach((message) => {
-          socket.emit('chat message', `${message.message}`);
-        });
+        if (chat.messages.length >= 50) {
+          const chatRev = chat.messages.reverse().slice(0, 50).reverse();
+          chatRev.forEach((message) => {
+            socket.emit('chat message', `${message.message}`);
+          });
+        } else {
+          chat.messages.forEach((message) => {
+            socket.emit('chat message', `${message.message}`);
+          });
+        }
       } catch (error) {
         console.error('Error getting chat entity:', error);
       }
@@ -39,8 +46,21 @@ export const setupSocket = (io: Server) => {
         const wordToCheck = 'happy';
         let stateForMsgAdd = true;
         for (const word of wordsToCheck) {
+<<<<<<< HEAD
           if (WordChecker.isMessageValid(msg, wordToCheck)){
             console.error(`you cant use words like ${word}. Its almost same as guessed words`);
+=======
+          if (badwordsArray.includes(word)) {
+            io.to(chatId).emit(
+              'chat message',
+              `This message has been blocked (it contains inappropriate content).`,
+            );
+            return;
+          } else if (!wordChecker('happy', word)) {
+            console.error(
+              `you cant use words like ${word}. Its almost same as guessed words`,
+            );
+>>>>>>> dev
             stateForMsgAdd = false;
           }
         }
