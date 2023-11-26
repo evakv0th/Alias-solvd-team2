@@ -1,4 +1,5 @@
-export class PorterStemmer {
+class LanguageProcessing 
+{
 
     private static getNonVowelCharsPattern(): string 
     {
@@ -12,35 +13,35 @@ export class PorterStemmer {
 
     private static getNonVowelSequencePattern(): string 
     {
-        return `${PorterStemmer.getNonVowelCharsPattern()}[^aeiouy]*`;
+        return `${LanguageProcessing.getNonVowelCharsPattern()}[^aeiouy]*`;
     }
 
     private static getVowelSequencePattern(): string 
     {
-        return `${PorterStemmer.getVowelCharsPattern()}[aeiou]*`;
+        return `${LanguageProcessing.getVowelCharsPattern()}[aeiou]*`;
     }
 
     private static getMeasureGreaterThanZeroPattern(): string 
     {
-        return `^(${PorterStemmer.getNonVowelSequencePattern()})?` +
-            `${PorterStemmer.getVowelSequencePattern()}${PorterStemmer.getNonVowelSequencePattern()}`;
+        return `^(${LanguageProcessing.getNonVowelSequencePattern()})?` +
+            `${LanguageProcessing.getVowelSequencePattern()}${LanguageProcessing.getNonVowelSequencePattern()}`;
     }
 
     private static getMeasureEqualsOnePattern(): string 
     {
-        return `^(${PorterStemmer.getNonVowelSequencePattern()})?${PorterStemmer.getVowelSequencePattern()}` +
-            `${PorterStemmer.getNonVowelSequencePattern()}(${PorterStemmer.getVowelSequencePattern()})?$`;
+        return `^(${LanguageProcessing.getNonVowelSequencePattern()})?${LanguageProcessing.getVowelSequencePattern()}` +
+            `${LanguageProcessing.getNonVowelSequencePattern()}(${LanguageProcessing.getVowelSequencePattern()})?$`;
     }
 
     private static getMeasureGreaterThanOnePattern(): string 
     {
-        return `^(${PorterStemmer.getNonVowelSequencePattern()})?${PorterStemmer.getVowelSequencePattern()}` +
-            `${PorterStemmer.getNonVowelSequencePattern()}${PorterStemmer.getVowelSequencePattern()}${PorterStemmer.getNonVowelSequencePattern()}`;
+        return `^(${LanguageProcessing.getNonVowelSequencePattern()})?${LanguageProcessing.getVowelSequencePattern()}` +
+            `${LanguageProcessing.getNonVowelSequencePattern()}${LanguageProcessing.getVowelSequencePattern()}${LanguageProcessing.getNonVowelSequencePattern()}`;
     }
 
     private static getHasVowelPattern(): string 
     {
-        return `^(${PorterStemmer.getNonVowelSequencePattern()})?${PorterStemmer.getVowelCharsPattern()}`;
+        return `^(${LanguageProcessing.getNonVowelSequencePattern()})?${LanguageProcessing.getVowelCharsPattern()}`;
     }
 
     private static getSuffixMappingsStep2(): Record<string, string> 
@@ -121,7 +122,7 @@ export class PorterStemmer {
         if (match) 
         {
             const stem = match[1];
-            const measurePattern = new RegExp(PorterStemmer.getMeasureGreaterThanZeroPattern());
+            const measurePattern = new RegExp(LanguageProcessing.getMeasureGreaterThanZeroPattern());
             if (measurePattern.test(stem)) 
             {
                 word = stem.replace(/.$/, '');
@@ -133,7 +134,7 @@ export class PorterStemmer {
             if (match2) 
             {
                 const stem = match2[1];
-                const hasVowelPattern = new RegExp(PorterStemmer.getHasVowelPattern());
+                const hasVowelPattern = new RegExp(LanguageProcessing.getHasVowelPattern());
                 if (hasVowelPattern.test(stem)) 
                 {
                     word = stem;
@@ -145,7 +146,7 @@ export class PorterStemmer {
                     { 
                         word = word.replace(/.$/, ''); 
                     } 
-                    else if (new RegExp(`^${PorterStemmer.getNonVowelSequencePattern()}${PorterStemmer.getVowelSequencePattern()}[^aeiouwxy]$`).test(word)) 
+                    else if (new RegExp(`^${LanguageProcessing.getNonVowelSequencePattern()}${LanguageProcessing.getVowelSequencePattern()}[^aeiouwxy]$`).test(word)) 
                     { 
                         word += 'e'; 
                     }
@@ -159,7 +160,7 @@ export class PorterStemmer {
 
     private static applyStep1c(word: string): string 
     {
-        const re = new RegExp(`^(.*${PorterStemmer.getVowelCharsPattern()}.*)y$`);
+        const re = new RegExp(`^(.*${LanguageProcessing.getVowelCharsPattern()}.*)y$`);
         const match = re.exec(word);
 
         if (match) 
@@ -180,10 +181,10 @@ export class PorterStemmer {
         {
             const stem = match[1];
             const suffix = match[2];
-            const reMeasure = new RegExp(PorterStemmer.getMeasureGreaterThanZeroPattern());
+            const reMeasure = new RegExp(LanguageProcessing.getMeasureGreaterThanZeroPattern());
             if (reMeasure.test(stem)) 
             {
-                word = stem + PorterStemmer.getSuffixMappingsStep2()[suffix];
+                word = stem + LanguageProcessing.getSuffixMappingsStep2()[suffix];
             }
         }
 
@@ -199,10 +200,10 @@ export class PorterStemmer {
         {
             const stem = match[1];
             const suffix = match[2];
-            const reMeasure = new RegExp(PorterStemmer.getMeasureGreaterThanZeroPattern());
+            const reMeasure = new RegExp(LanguageProcessing.getMeasureGreaterThanZeroPattern());
             if (reMeasure.test(stem)) 
             {
-                word = stem + PorterStemmer.suffixMappingsStep3()[suffix];
+                word = stem + LanguageProcessing.suffixMappingsStep3()[suffix];
             }
         }
 
@@ -218,7 +219,7 @@ export class PorterStemmer {
         if (match) 
         {
             const stem = match[1];
-            const reMeasure = new RegExp(PorterStemmer.getMeasureGreaterThanOnePattern());
+            const reMeasure = new RegExp(LanguageProcessing.getMeasureGreaterThanOnePattern());
             if (reMeasure.test(stem)) 
             {
                 word = stem;
@@ -230,7 +231,7 @@ export class PorterStemmer {
             if (match) 
             {
                 const stem = match[1] + match[2];
-                const reMeasure = new RegExp(PorterStemmer.getMeasureGreaterThanOnePattern());
+                const reMeasure = new RegExp(LanguageProcessing.getMeasureGreaterThanOnePattern());
                 if (reMeasure.test(stem)) 
                 {
                     word = stem;
@@ -249,9 +250,9 @@ export class PorterStemmer {
         if (match) 
         {
             const stem = match[1];
-            const reMeasure = new RegExp(PorterStemmer.getMeasureGreaterThanOnePattern());
-            const reMeasureOne = new RegExp(PorterStemmer.getMeasureEqualsOnePattern());
-            const reCvc = new RegExp(`^${PorterStemmer.getNonVowelSequencePattern()}${PorterStemmer.getVowelCharsPattern()}[^aeiouwxy]$`);
+            const reMeasure = new RegExp(LanguageProcessing.getMeasureGreaterThanOnePattern());
+            const reMeasureOne = new RegExp(LanguageProcessing.getMeasureEqualsOnePattern());
+            const reCvc = new RegExp(`^${LanguageProcessing.getNonVowelSequencePattern()}${LanguageProcessing.getVowelCharsPattern()}[^aeiouwxy]$`);
             if (reMeasure.test(stem) || (reMeasureOne.test(stem) && !reCvc.test(stem))) 
             {
                 word = stem;
@@ -259,7 +260,7 @@ export class PorterStemmer {
         }
 
         const reLl = /ll$/;
-        const reMeasure = new RegExp(PorterStemmer.getMeasureGreaterThanOnePattern());
+        const reMeasure = new RegExp(LanguageProcessing.getMeasureGreaterThanOnePattern());
 
         if (reLl.test(word) && reMeasure.test(word)) 
         {
@@ -275,14 +276,14 @@ export class PorterStemmer {
             return word; 
         }
 
-        word = PorterStemmer.normalizeWord(word);
-        word = PorterStemmer.applyStep1a(word);
-        word = PorterStemmer.applyStep1b(word);
-        word = PorterStemmer.applyStep1c(word);
-        word = PorterStemmer.applyStep2(word);
-        word = PorterStemmer.applyStep3(word);
-        word = PorterStemmer.applyStep4(word);
-        word = PorterStemmer.applyStep5(word);
+        word = LanguageProcessing.normalizeWord(word);
+        word = LanguageProcessing.applyStep1a(word);
+        word = LanguageProcessing.applyStep1b(word);
+        word = LanguageProcessing.applyStep1c(word);
+        word = LanguageProcessing.applyStep2(word);
+        word = LanguageProcessing.applyStep3(word);
+        word = LanguageProcessing.applyStep4(word);
+        word = LanguageProcessing.applyStep5(word);
 
         return word;
     }
@@ -292,7 +293,7 @@ export class PorterStemmer {
         return new Promise((resolve, reject) => {
             try 
             {
-                const stemmedWord = PorterStemmer.stem(word);
+                const stemmedWord = LanguageProcessing.stem(word);
                 resolve(stemmedWord);
             } 
             catch (error) 
@@ -302,3 +303,5 @@ export class PorterStemmer {
         });
     }
 }
+
+export { LanguageProcessing };
