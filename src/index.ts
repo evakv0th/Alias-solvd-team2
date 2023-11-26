@@ -18,7 +18,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/api/v1/auth', authRouter);
-app.use('/api/lobby', lobbyRouter);
+app.use('/api/v1/lobby', lobbyRouter);
 const startServer = async (): Promise<void> => {
   couchdbInit().then(() => {
     app.listen(port, () => {
