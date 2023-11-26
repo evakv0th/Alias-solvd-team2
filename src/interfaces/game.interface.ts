@@ -1,6 +1,3 @@
-import { ITeam } from "./team.interface";
-import { IUser } from "./user.interface";
-
 export interface IGame {
   _id: string | undefined;
   hostId: string;

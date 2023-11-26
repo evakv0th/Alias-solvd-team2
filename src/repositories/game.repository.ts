@@ -1,8 +1,6 @@
 import nano from "nano";
 import {gamesDb} from "../couchdb.init";
 import {GameOptions, IGame, IGameCreateSchema} from "../interfaces/game.interface";
-import { IUser } from "../interfaces/user.interface";
-import { ITeam } from "../interfaces/team.interface";
 
 class Game implements IGame {
 
