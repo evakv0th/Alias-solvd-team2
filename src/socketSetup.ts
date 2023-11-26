@@ -1,6 +1,6 @@
 import { Server } from 'socket.io';
 import { chatRepository } from './repositories/chat.repository';
-import { wordChecker } from './application/utils/wordChecker/wordChecker';
+import { WordChecker } from './application/utils/wordChecker/wordChecker';
 // import { userRepository } from './repositories/user.repository';
 
 export const setupSocket = (io: Server) => {
@@ -36,9 +36,10 @@ export const setupSocket = (io: Server) => {
         // );
         const msgWithoutjunk = msg.replace(/[^a-zA-Z\s]/g, '');
         const wordsToCheck = msgWithoutjunk.split(' ');
+        const wordToCheck = 'happy';
         let stateForMsgAdd = true;
         for (const word of wordsToCheck) {
-          if (!wordChecker('happy', word)) {
+          if (WordChecker.isMessageValid(msg, wordToCheck)){
             console.error(`you cant use words like ${word}. Its almost same as guessed words`);
             stateForMsgAdd = false;
           }
