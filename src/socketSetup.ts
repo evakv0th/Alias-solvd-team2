@@ -46,21 +46,16 @@ export const setupSocket = (io: Server) => {
         const wordToCheck = 'happy';
         let stateForMsgAdd = true;
         for (const word of wordsToCheck) {
-<<<<<<< HEAD
-          if (WordChecker.isMessageValid(msg, wordToCheck)){
-            console.error(`you cant use words like ${word}. Its almost same as guessed words`);
-=======
           if (badwordsArray.includes(word)) {
             io.to(chatId).emit(
               'chat message',
               `This message has been blocked (it contains inappropriate content).`,
             );
             return;
-          } else if (!wordChecker('happy', word)) {
+          } else if (!WordChecker.isMessageValid(msg, wordToCheck)) {
             console.error(
               `you cant use words like ${word}. Its almost same as guessed words`,
             );
->>>>>>> dev
             stateForMsgAdd = false;
           }
         }
