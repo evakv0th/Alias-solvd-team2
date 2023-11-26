@@ -98,8 +98,8 @@ class LanguageProcessing
 
     private static applyStep1a(word: string): string 
     {
-        let re = /^(.+?)(ss|i)es$/;
-        let re2 = /^(.+?)([^s])s$/;
+        const re = /^(.+?)(ss|i)es$/;
+        const re2 = /^(.+?)([^s])s$/;
 
         if (re.test(word)) 
         { 
