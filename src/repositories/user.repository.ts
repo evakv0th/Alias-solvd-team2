@@ -1,8 +1,7 @@
-import {IUser, IUserCreateSchema} from "../interfaces/user.interface";
-import {usersDb} from "../couchdb.init";
+import { IUser, IUserCreateSchema } from '../interfaces/user.interface';
+import { usersDb } from '../couchdb.init';
 
 class User implements IUser {
-
   _id: string | undefined;
   username: string;
   password: string;
@@ -18,25 +17,29 @@ class User implements IUser {
     this.createdAt = new Date();
     this.stats = {
       roundPlayed: 0,
-      wordsGuessed: 0
-    }
+      wordsGuessed: 0,
+    };
   }
-
 }
 
 class UserRepository {
-
   async getById(id: string): Promise<IUser> {
     return await usersDb.get(id);
   }
 
   async getByUsername(username: string): Promise<IUser> {
-    const result = await usersDb.view('views', 'byUsername', {key: username, include_docs: true});
+    const result = await usersDb.view('views', 'byUsername', {
+      key: username,
+      include_docs: true,
+    });
     return result.rows[0].doc! as IUser;
   }
 
   async exists(username: string): Promise<boolean> {
-    const result = await usersDb.view('views', 'byUsername', {key: username, include_docs: true});
+    const result = await usersDb.view('views', 'byUsername', {
+      key: username,
+      include_docs: true,
+    });
     return result.rows.length > 0;
   }
 
@@ -64,7 +67,6 @@ class UserRepository {
       }
     });
   }
-
 }
 
 export const userRepository = new UserRepository();
