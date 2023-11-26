@@ -10,6 +10,8 @@ import path from 'path';
 import { setupSocket } from './socketSetup';
 import cookieParser from 'cookie-parser';
 
+import lobbyRouter from './routes/lobby.router';
+
 dotenv.config();
 
 const port = process.env.PORT || 3000;
@@ -32,6 +34,8 @@ setupSocket(io);
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/chats', chatRouter);
+app.use('/api/v1/lobby', lobbyRouter);
+
 const startServer = async (): Promise<void> => {
   couchdbInit().then(() => {
     server.listen(port, () => {
