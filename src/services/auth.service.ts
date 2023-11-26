@@ -29,9 +29,7 @@ export async function register(
   return newUser;
 }
 
-export async function login(
-  credentials: IUserCreateSchema,
-): Promise<{
+export async function login(credentials: IUserCreateSchema): Promise<{
   accessToken: string;
   refreshToken: string;
   _id: string | undefined;
@@ -44,27 +42,19 @@ export async function login(
       `Please provide username and password`,
     );
   }
-  try {
-    const user = await userService.getByUsername(username);
 
-    //TODO check with bcrypt
-    if (!user || user.password !== password) {
-      throw new HttpException(
-        HttpStatusCode.UNAUTHORIZED,
-        `Wrong username or password`,
-      );
-    }
+  const user = await userService.getByUsername(username);
 
-    const accessToken = generateAccessToken(user as IUser);
-    const refreshToken = generateRefreshToken(user as IUser);
-
-    console.log(user._id)
-    return { accessToken, refreshToken, _id: user._id };
-
-  } catch (error) {
+  //TODO check with bcrypt
+  if (!user || user.password !== password) {
     throw new HttpException(
       HttpStatusCode.UNAUTHORIZED,
-      'Wrong username or password.',
+      `Wrong username or password`,
     );
   }
+
+  const accessToken = generateAccessToken(user as IUser);
+  const refreshToken = generateRefreshToken(user as IUser);
+
+  return { accessToken, refreshToken, _id: user._id };
 }

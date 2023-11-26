@@ -45,11 +45,12 @@ class ChatRepository {
   }
 
   async delete(id: string) {
-    await chatsDb.get(id, (err, body) => {
-      if (!err) {
-        chatsDb.destroy(id, body._rev);
-      }
-    });
+    try {
+      const chat = chatsDb.get(id);
+      chatsDb.destroy(id, (await chat)._rev);
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
 
