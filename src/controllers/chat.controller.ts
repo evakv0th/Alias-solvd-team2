@@ -80,7 +80,10 @@ export async function viewChat(
   const id = req.params.id;
 
   try {
-    chatService.getById(id);
+    if (!(await chatService.exists(id))) {
+      res.status(404).send('chat  not found, please check your id');
+      return;
+    }
 
     res.render('chat', { user: req.user, chatId: req.params.id });
   } catch (error) {

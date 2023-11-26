@@ -1,8 +1,11 @@
-import {IUser, IUserCreateSchema} from '../interfaces/user.interface';
+import { IUser, IUserCreateSchema } from '../interfaces/user.interface';
 import HttpException from '../application/utils/exceptions/http-exceptions';
 import HttpStatusCode from '../application/utils/exceptions/statusCode';
-import {generateAccessToken, generateRefreshToken,} from '../application/utils/tokenForAuth/generateToken';
-import {userService} from "./user.service";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from '../application/utils/tokenForAuth/generateToken';
+import { userService } from './user.service';
 
 export async function register(
   newUser: IUserCreateSchema,
@@ -28,7 +31,11 @@ export async function register(
 
 export async function login(
   credentials: IUserCreateSchema,
-): Promise<{ accessToken: string; refreshToken: string }> {
+): Promise<{
+  accessToken: string;
+  refreshToken: string;
+  _id: string | undefined;
+}> {
   const { username, password } = credentials;
 
   if (!username || !password) {
@@ -51,11 +58,13 @@ export async function login(
     const accessToken = generateAccessToken(user as IUser);
     const refreshToken = generateRefreshToken(user as IUser);
 
-    return { accessToken, refreshToken };
+    console.log(user._id)
+    return { accessToken, refreshToken, _id: user._id };
+
   } catch (error) {
     throw new HttpException(
       HttpStatusCode.UNAUTHORIZED,
-      "Wrong username or password."
-    )
+      'Wrong username or password.',
+    );
   }
 }

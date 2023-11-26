@@ -6,9 +6,7 @@ import {
   deleteChat,
   viewChat,
 } from '../controllers/chat.controller';
-import {
-  authenticateToken,
-} from '../application/middlewares/authenticateToken';
+import { authenticateToken } from '../application/middlewares/authenticateToken';
 
 const chatRouter = express.Router();
 
