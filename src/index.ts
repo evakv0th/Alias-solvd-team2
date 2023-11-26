@@ -6,7 +6,6 @@ import { couchdbInit } from './couchdb.init';
 import http from 'http';
 import { Server } from 'socket.io';
 import chatRouter from './routes/chat.router';
-import ejs from 'ejs';
 import path from 'path';
 import { setupSocket } from './socketSetup';
 import cookieParser from 'cookie-parser';
@@ -19,11 +18,11 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 app.use(cookieParser());
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs'); // for ejs
+app.set('views', path.join(__dirname, 'views')); // for ejs
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(express.static(__dirname + '/views'));
+app.use(express.static(__dirname + '/views')); // for css to work
 
 app.get('/', (req: Request, res: Response) => {
   res.sendFile(__dirname + '/index.html');
