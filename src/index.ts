@@ -9,6 +9,8 @@ import chatRouter from './routes/chat.router';
 import path from 'path';
 import { setupSocket } from './socketSetup';
 import cookieParser from 'cookie-parser';
+import lobbyRouter from './routes/lobby.router';
+
 
 dotenv.config();
 
@@ -32,6 +34,7 @@ setupSocket(io);
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/chats', chatRouter);
+
 const startServer = async (): Promise<void> => {
   couchdbInit().then(() => {
     server.listen(port, () => {
