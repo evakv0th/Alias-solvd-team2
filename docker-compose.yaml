@@ -13,10 +13,24 @@ services:
     image: couchdb:3.3.2
     networks:
       - app
+    env_file:
+      - .env.example
     environment:
-      - COUCHDB_USER=${COUCHDB_USER}
-      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
+      - COUCHDB_USER:${COUCHDB_USER}
+      - COUCHDB_PASSWORD:${COUCHDB_PASSWORD}
     ports:
-      - '5984:5984'
+      - '${DATABASE_PORT}:${DATABASE_PORT}'
     volumes:
       - couchdb-data:/opt/couchdb/data
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - couchdb
+    env_file:
+      - .env.example
+    ports:
+      - '${PORT}:${PORT}'
+    networks:
+      - app
