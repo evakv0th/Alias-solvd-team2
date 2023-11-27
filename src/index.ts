@@ -4,7 +4,6 @@ import express, {Request, Response} from 'express';
 import bodyParser from 'body-parser';
 import authRouter from './routes/auth.router';
 import { couchdbInit } from './couchdb.init';
-import http from 'http';
 import { Server } from 'socket.io';
 import chatRouter from './routes/chat.router';
 import path from 'path';

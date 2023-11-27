@@ -7,6 +7,9 @@ const MAX_TEAMS = 10 // TODO: REMOVE THE MAGICAL_INAPPROPRIACY
 
 class LobbyService 
 {
+
+  private teamMembers: Map<string, string[]> = new Map();
+  
   async createLobby(hostId: string, options: GameOptions): Promise<string> 
   {
     const gameCreateSchema: IGameCreateSchema = {

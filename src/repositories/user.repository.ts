@@ -22,12 +22,9 @@ class User implements IUser {
   }
 }
 
-<<<<<<< HEAD
-export class UserRepository {
 
-=======
-class UserRepository {
->>>>>>> origin/dev
+export class UserRepository {
+  
   async getById(id: string): Promise<IUser> {
     return await usersDb.get(id);
   }
