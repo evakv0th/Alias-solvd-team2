@@ -16,6 +16,7 @@ class TeamService {
   }
 
   async update(team: ITeam): Promise<ITeam> {
+    //TODO validate members ids
     return teamRepository.update(team);
   }
 
