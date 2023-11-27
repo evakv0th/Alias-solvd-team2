@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "start": "node dist/index.js",
     "build": "tsc",
     "start:dev": "nodemon -L src/index.ts",
