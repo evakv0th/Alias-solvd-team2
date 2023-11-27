@@ -99,6 +99,7 @@ Common questions and troubleshooting tips.
 
 Final remarks and encouragement for further exploration.
 
+
 ## Database Schema
 
 Database schema is represented by JSON examples in `schema` folder.

@@ -1,0 +1,18 @@
+{
+  "_id": "roundId",
+  "startedAt": "2023-11-22'T'10:38:00.000",
+  "finishedAt": "2023-11-22'T'10:39:00.000",
+  "teamId": "teamId1",
+  "hostId": "hostId1",
+  "chatId": "chatId",
+  "words": [
+    {
+      "word": "motorbike",
+      "guessed": true
+    },
+    {
+      "word": "air balloon",
+      "guessed": false
+    }
+  ]
+}

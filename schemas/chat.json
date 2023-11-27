@@ -1,0 +1,15 @@
+{
+  "_id": "chatId",
+  "messages": [
+    {
+      "createdAt": "2022-11-22'T'10:37:45.123",
+      "userId": "userId",
+      "message": "message"
+    },
+    {
+      "createdAt": "2022-11-22'T'10:37:45.869",
+      "userId": "userId",
+      "message": "message"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "_id": "gameId",
+  "hostId": "userId",
+  "createdAt": "2023-11-22'T'10:37:15.000",
+  "teams": [
+    {
+      "teamId": "teamId1",
+      "score": 5
+    },
+    {
+      "teamId": "teamId2",
+      "score": 7
+    }
+  ],
+  "currentTeam": "teamId1",
+  "rounds": [
+    "roundId1",
+    "roundId2"
+  ],
+  "options": {
+    "goal": 100,
+    "roundTime": 60,
+    "vocabularyId": "vocabularyId"
+  }
+}
