@@ -1,3 +1,4 @@
+import nano from "nano";
 import {gamesDb} from "../couchdb.init";
 import {GameOptions, IGame, IGameCreateSchema} from "../interfaces/game.interface";
 
@@ -10,6 +11,7 @@ class Game implements IGame {
     members: any;
     teamId: string;
     score: number;
+    members: string[];
   }[];
   currentTeam: string;
   rounds: string[];
@@ -18,8 +20,9 @@ class Game implements IGame {
   constructor(game: IGameCreateSchema) {
     this.hostId = game.hostId;
     this.createdAt = new Date();
-    this.teams = game.teams.map(team => ({teamId: team, members: [], score: 0}));
-    this.currentTeam = this.teams[0].teamId;
+    this.teams = game.teams.map(team => ({teamId: team, score: 0, members: []}));
+    // the first team undefined handle
+    this.currentTeam = this.teams[0].teamId ?? ''; 
     this.rounds = [];
     this.options = game.options;
   }
@@ -51,7 +54,8 @@ class GameRepository {
     const oldGame = await this.getById(game._id!);
     oldGame.currentTeam = game.currentTeam;
     oldGame.rounds = game.rounds;
-    await gamesDb.insert(oldGame);
+    oldGame.teams= game.teams;
+    await gamesDb.insert(oldGame as nano.MaybeDocument & IGame);
     return oldGame;
   }
 

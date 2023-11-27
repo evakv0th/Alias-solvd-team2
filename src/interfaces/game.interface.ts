@@ -4,7 +4,7 @@ export interface IGame {
   createdAt: Date;
   teams: {
     //TODO remove members here
-    members: any;
+    members: string[];
     teamId: string;
     score: number;
   }[];
