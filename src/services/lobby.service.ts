@@ -84,7 +84,7 @@ class LobbyService
       throw new HttpException(HttpStatusCode.NOT_FOUND, 'Lobby not found.');
     }
 
-    this.teamMembers.forEach((members, id) => {
+    this.teamMembers.forEach((members) => {
       if (members.has(userId)) 
       {
         members.delete(userId);
@@ -99,7 +99,7 @@ class LobbyService
     }
 
     members.add(userId);
-    
+
     this.teamMembers.set(teamId, members);
 
     return gameRepository.update(game);
@@ -115,7 +115,7 @@ class LobbyService
       throw new HttpException(HttpStatusCode.NOT_FOUND, 'Lobby not found.');
     }
 
-    this.teamMembers.forEach((members, id) => {
+    this.teamMembers.forEach((members) => {
       if (members.has(userId)) 
       {
         members.delete(userId);
