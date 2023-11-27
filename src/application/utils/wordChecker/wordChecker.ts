@@ -1,84 +1,30 @@
-const commonPrefixes = [
-  'un',
-  're',
-  'pre',
-  'mis',
-  'dis',
-  'non',
-  'in',
-  'im',
-  'il',
-];
-const commonEndings = [
-  'able',
-  'ible',
-  'al',
-  'ial',
-  'ed',
-  'en',
-  'er',
-  'est',
-  'ful',
-  'ic',
-  'ing',
-  'ion',
-  'tion',
-  'ation',
-  'ition',
-  'ty',
-  'ive',
-  'ative',
-  'itive',
-  'less',
-  'ly',
-  'ment',
-  'ness',
-  'ous',
-  'eous',
-  'ious',
-  's',
-  'es',
-  'ed',
-  'ing',
-  'a',
-  'o',
-  'u',
-  'i',
-  'y',
-  'e',
-];
+import  { LanguageProcessing }  from './LanguageProcessing/LanguageProcessing';
 
-// const words = ['happy', 'play', 'like', 'do', 'agree', 'connect'];
-// const wordsToCheck = [
-//   'unhappiness',
-//   'replay',
-//   'dislike',
-//   'redo',
-//   'disagreement',
-//   'disconnected',
-// ];
+class WordChecker 
+{
+  static isWordValid(guessedWord: string, wordToCheck: string): boolean 
+  {
+    const stemmedGuessedWord = LanguageProcessing.stem(guessedWord.toLowerCase());
+    const stemmedWordToCheck = LanguageProcessing.stem(wordToCheck.toLowerCase());
 
-function removeCommonPrefixesAndEndings(word: string): string | undefined {
-  const prefixRegExp = new RegExp(`^(${commonPrefixes.join('|')})`);
-  const endingRegExp = new RegExp(`(${commonEndings.join('|')})$`);
-
-  const withoutPrefix = word.replace(prefixRegExp, '');
-  let withoutEnding = withoutPrefix.replace(endingRegExp, '');
-
-  while (endingRegExp.test(withoutEnding)) {
-    withoutEnding = withoutEnding.replace(endingRegExp, '');
+    return stemmedGuessedWord !== stemmedWordToCheck;
   }
 
-  return withoutEnding;
+  static isMessageValid(message: string, wordToCheck: string): boolean 
+  {
+    const normalizedMsg = message.toLowerCase().replace(/[^a-z\s]/gi, '');
+    const wordsInMsg = normalizedMsg.split(/\s+/);
+
+    for (const word of wordsInMsg) 
+    {
+      if (!this.isWordValid(word, wordToCheck)) 
+      {
+        return false;
+      }
+    }
+
+    return true;
+  }
 }
 
-export function wordChecker(word: string, wordForGuessing: string): boolean {
-  const cleanedWord = removeCommonPrefixesAndEndings(word);
-  const cleanedWordForGuessing =
-    removeCommonPrefixesAndEndings(wordForGuessing);
-  return cleanedWord !== cleanedWordForGuessing;
-}
-
-// for (let i = 0; i < words.length; i++) {
-//   console.log(wordChecker(words[i], wordsToCheck[i]));
-// }
+export { WordChecker };

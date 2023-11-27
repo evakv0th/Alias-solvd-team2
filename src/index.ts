@@ -10,6 +10,7 @@ import path from 'path';
 import { setupSocket } from './socketSetup';
 import cookieParser from 'cookie-parser';
 import lobbyRouter from './routes/lobby.router';
+import teamRouter from "./routes/team.router";
 
 
 
@@ -65,4 +66,3 @@ const closeServer = async (): Promise<void> => {
 };
 startServer();
 
-export { app, startServer, closeServer };

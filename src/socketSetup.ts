@@ -1,6 +1,6 @@
 import { Server } from 'socket.io';
 import { chatRepository } from './repositories/chat.repository';
-import { wordChecker } from './application/utils/wordChecker/wordChecker';
+import { WordChecker } from './application/utils/wordChecker/wordChecker';
 // import { userRepository } from './repositories/user.repository';
 import badwordsArray from 'badwords/array';
 
@@ -43,6 +43,7 @@ export const setupSocket = (io: Server) => {
         // );
         const msgWithoutjunk = msg.replace(/[^a-zA-Z\s]/g, '');
         const wordsToCheck = msgWithoutjunk.split(' ');
+        const wordToCheck = 'happy';
         let stateForMsgAdd = true;
         for (const word of wordsToCheck) {
           if (badwordsArray.includes(word)) {
@@ -51,7 +52,7 @@ export const setupSocket = (io: Server) => {
               `This message has been blocked (it contains inappropriate content).`,
             );
             return;
-          } else if (!wordChecker('happy', word)) {
+          } else if (!WordChecker.isMessageValid(msg, wordToCheck)) {
             console.error(
               `you cant use words like ${word}. Its almost same as guessed words`,
             );
