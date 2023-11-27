@@ -5,7 +5,12 @@ export interface IRound {
   teamId: string;
   hostId: string;
   chatId: string;
-  words: string[];
+  words: IRoundWord[];
+}
+
+export interface IRoundWord {
+  word: string;
+  guessed: boolean | undefined;
 }
 
 export interface IRoundCreateSchema {
@@ -13,4 +18,5 @@ export interface IRoundCreateSchema {
   hostId: string;
   chatId: string;
   finishedAt: Date;
+  currentWord: string;
 }

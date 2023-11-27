@@ -11,6 +11,7 @@ import {setupSocket} from './socketSetup';
 import cookieParser from 'cookie-parser';
 import lobbyRouter from './routes/lobby.router';
 import teamRouter from "./routes/team.router";
+import gameRouter from "./routes/game.router";
 
 
 dotenv.config();
@@ -37,6 +38,7 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/chats', chatRouter);
 app.use('/api/v1/lobby', lobbyRouter);
 app.use('/api/v1/teams', teamRouter);
+app.use('/api/v1/games', gameRouter);
 
 const startServer = async (): Promise<void> => {
   couchdbInit().then(() => {

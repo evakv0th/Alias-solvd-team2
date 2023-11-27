@@ -1,5 +1,5 @@
 import {roundsDb} from "../couchdb.init";
-import {IRound, IRoundCreateSchema} from "../interfaces/round.interface";
+import {IRound, IRoundCreateSchema, IRoundWord} from "../interfaces/round.interface";
 
 class Round implements IRound {
 
@@ -9,7 +9,7 @@ class Round implements IRound {
   teamId: string;
   hostId: string;
   chatId: string;
-  words: string[];
+  words: IRoundWord[];
 
   constructor(round: IRoundCreateSchema) {
     this.startedAt = new Date();
@@ -17,7 +17,11 @@ class Round implements IRound {
     this.teamId = round.teamId;
     this.hostId = round.hostId;
     this.chatId = round.chatId;
-    this.words = [];
+    this.words = [
+      {
+        word: round.currentWord
+      } as IRoundWord
+    ];
   }
 
 }
