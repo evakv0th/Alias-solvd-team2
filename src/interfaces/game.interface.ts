@@ -3,7 +3,7 @@ export interface IGame {
   hostId: string;
   createdAt: Date;
   teams: {
-    members: any;
+    members: string[];
     teamId: string;
     score: number;
   }[];
