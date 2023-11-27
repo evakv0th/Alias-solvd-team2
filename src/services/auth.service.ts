@@ -11,7 +11,7 @@ export async function register(
   newUser: IUserCreateSchema,
 ): Promise<IUserCreateSchema> {
   const { username, password } = newUser;
-
+  
   if (!username || !password) {
     throw new HttpException(
       HttpStatusCode.BAD_REQUEST,
