@@ -9,6 +9,15 @@ volumes:
     driver: local
 
 services:
+  backend:
+    build: .
+    networks:
+      - app
+    env_file:
+      - .env
+    ports:
+      - '3000:3000'
+
   couchdb:
     image: couchdb:3.3.2
     networks:

@@ -5,6 +5,9 @@ import {IGame} from "./interfaces/game.interface";
 import {IChat} from "./interfaces/chat.interface";
 import {ITeam} from "./interfaces/team.interface";
 import {IRound} from "./interfaces/round.interface";
+import {vocabularyRepository} from "./repositories/vocabulary.repository";
+import * as fs from "fs";
+import path from "path";
 
 export let couch: nano.ServerScope;
 export let usersDb: nano.DocumentScope<IUser>;
@@ -78,6 +81,7 @@ export async function couchdbInit() {
     },
   };
   await initViews(usersDb, userViews);
+  await initVocabularies(vocabulariesDb);
 }
 
 async function initViews(database: nano.DocumentScope<any>, view: any) {
@@ -85,5 +89,22 @@ async function initViews(database: nano.DocumentScope<any>, view: any) {
     await database.get("_design/views");
   } catch (e: any) {
     await database.insert(view)
+  }
+}
+
+async function initVocabularies(database: nano.DocumentScope<IVocabulary>) {
+  const documents = await database.list();
+  if (documents.total_rows === 0) {
+    const folder = "./vocabularies";
+    const files = fs.readdirSync(folder);
+    const vocabularies = files
+      .map(file => {
+        const filePath = path.join(folder, file);
+        const fileContent = fs.readFileSync(filePath, 'utf-8');
+        return JSON.parse(fileContent);
+      });
+    for (const vocabulary of vocabularies) {
+      await vocabularyRepository.create(vocabulary);
+    }
   }
 }
