@@ -9,7 +9,7 @@ import chatRouter from './routes/chat.router';
 import path from 'path';
 import { setupSocket } from './socketSetup';
 import cookieParser from 'cookie-parser';
-import lobbyRouter from './routes/lobby.router';
+// import lobbyRouter from './routes/lobby.router';
 
 
 dotenv.config();
