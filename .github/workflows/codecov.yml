@@ -1,0 +1,25 @@
+name: Code Coverage
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '18' 
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests with coverage
+        run: npm test -- --coverage 
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage/lcov.info 
+          flags: unittests 
+          name: codecov-umbrella 
+          fail_ci_if_error: true
