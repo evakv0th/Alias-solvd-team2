@@ -366,7 +366,7 @@ Creates new team with host of authenticated user.
 
 | Code               | Body                                    | Condition                         |
 |--------------------|-----------------------------------------|-----------------------------------|
-| `200 OK`           | [`Team`](#team)                         | If team was successfully created. |
+| `201 Created`      | [`Team`](#team)                         | If team was successfully created. |
 | `400 Bad Request`  | [`ExceptionMessage`](#exceptionmessage) | If something failed.              |
 | `401 Unauthorized` | [`ExceptionMessage`](#exceptionmessage) | If user not authorized.           |
 
@@ -388,29 +388,11 @@ Returns team by their id.
 | `400 Bad Request` | [`ExceptionMessage`](#exceptionmessage) | If something failed.   |
 | `404 Not Found`   | [`ExceptionMessage`](#exceptionmessage) | If team was not found. |
 
-#### GET `/api/v1/teams/:id/members`
-
-Returns team members.
-
-**Request:**
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `id`      | long | Yes      | Team ID.    |
-
-**Response:**
-
-| Code              | Body                                    | Condition              |
-|-------------------|-----------------------------------------|------------------------|
-| `200 OK`          | [`Team`](#team)                         | If team was found.     |
-| `400 Bad Request` | [`ExceptionMessage`](#exceptionmessage) | If something failed.   |
-| `404 Not Found`   | [`ExceptionMessage`](#exceptionmessage) | If team was not found. |
-
 #### PUT `/api/v1/teams/:id/members`
 
 Update team members.
 
-**Request:**
+**Request:** `String[]` of user IDs.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
