@@ -7,6 +7,7 @@ class Game implements IGame {
   hostId: string;
   createdAt: Date;
   teams: {
+    members: any;
     teamId: string;
     score: number;
   }[];
@@ -17,7 +18,7 @@ class Game implements IGame {
   constructor(game: IGameCreateSchema) {
     this.hostId = game.hostId;
     this.createdAt = new Date();
-    this.teams = game.teams.map(team => ({teamId: team, score: 0}));
+    this.teams = game.teams.map(team => ({teamId: team, members: [], score: 0}));
     this.currentTeam = this.teams[0].teamId;
     this.rounds = [];
     this.options = game.options;

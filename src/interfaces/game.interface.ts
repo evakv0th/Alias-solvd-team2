@@ -3,6 +3,7 @@ export interface IGame {
   hostId: string;
   createdAt: Date;
   teams: {
+    //TODO remove members here
     members: any;
     teamId: string;
     score: number;

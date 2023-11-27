@@ -34,6 +34,7 @@ setupSocket(io);
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/chats', chatRouter);
+app.use('/api/v1/lobby', lobbyRouter);
 
 const startServer = async (): Promise<void> => {
   couchdbInit().then(() => {
