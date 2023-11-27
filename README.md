@@ -15,12 +15,11 @@ Node.js-Based Game "Alias" with Chat and Word Checking
 * [FAQ](#faq)
 * [Conclusion](#conclusion)
 * [Database schema](#database-schema)
-* [API:](#apis)
+* [API](#apis)
     - [Authorization](#authorization)
     - [User](#user)
     - [Team](#team)
     - [Game](#game)
-    - [Round](#round)
     - [Chat](#chat)
     - [Vocabulary](#vocabulary)
 * [Objects](#objects)
@@ -49,9 +48,7 @@ The game concludes after a predetermined number of rounds, with the highest-scor
 
 ## System Requirements
 
-- **Backend**: Node.js
-- **Database**: CouchDB
-- `.env` file from `.env.example`
+You need to have `.env` file in root folder corresponding `.env.example`
 
 ## Architecture
 
@@ -98,7 +95,6 @@ Common questions and troubleshooting tips.
 ## Conclusion
 
 Final remarks and encouragement for further exploration.
-
 
 ## Database Schema
 
@@ -294,7 +290,7 @@ Creates new user.
 | `201 Created`     | none                                    | If user successfully registered. |
 | `400 Bad Request` | [`ExceptionMessage`](#exceptionmessage) | If registration failed.          |
 
-### `POST /api/v1/auth/login`
+#### `POST /api/v1/auth/login`
 
 Authenticates user.
 
@@ -307,7 +303,7 @@ Authenticates user.
 | `200 OK`          | [`LoginResponse`](#loginresponse)       | Correct credentials are used.   |
 | `400 Bad Request` | [`ExceptionMessage`](#exceptionmessage) | Incorrect credentials are used. |
 
-### `POST /api/v1/auth/refresh`
+#### `POST /api/v1/auth/refresh`
 
 Refreshes a pair of tokens.
 
@@ -320,47 +316,216 @@ Refreshes a pair of tokens.
 | `200 OK`          | [`LoginResponse`](#loginresponse)       | Correct token is used.   |
 | `400 Bad Request` | [`ExceptionMessage`](#exceptionmessage) | Incorrect token is used. |
 
-#### GET `/api/v1/auth/login`
-
-#### POST `/api/v1/auth/refresh`
-
 ### User
 
 #### GET `/api/v1/users/:id`
 
+Returns user by their id.
+
+**Request:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id`      | long | Yes      | User ID.    |
+
+**Response:**
+
+| Code               | Body                                    | Condition                  |
+|--------------------|-----------------------------------------|----------------------------|
+| `200 OK`           | [`User`](#user)                         | User is authenticated.     |
+| `401 Unauthorized` | [`ExceptionMessage`](#exceptionmessage) | User is not authenticated. |
+| `404 Not Found`    | [`ExceptionMessage`](#exceptionmessage) | User is not found.         |
+
 #### PUT `/api/v1/users/:id`
+
+Updates user by their id.
+
+**Request:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id`      | long | Yes      | User ID.    |
+
+**Response:**
+
+| Code               | Body                                    | Condition                     |
+|--------------------|-----------------------------------------|-------------------------------|
+| `200 OK`           | none                                    | If user successfully updated. |
+| `400 Bad Request`  | [`ExceptionMessage`](#exceptionmessage) | If something failed.          |
+| `401 Unauthorized` | [`ExceptionMessage`](#exceptionmessage) | User is not authenticated.    |
 
 ### Team
 
 #### POST `/api/v1/teams`
 
+Creates new team with host of authenticated user.
+
+**Request:** [`ITeamCreateSchema`](#iteamcreateschema)
+
+**Response:**
+
+| Code               | Body                                    | Condition                         |
+|--------------------|-----------------------------------------|-----------------------------------|
+| `200 OK`           | [`Team`](#team)                         | If team was successfully created. |
+| `400 Bad Request`  | [`ExceptionMessage`](#exceptionmessage) | If something failed.              |
+| `401 Unauthorized` | [`ExceptionMessage`](#exceptionmessage) | If user not authorized.           |
+
 #### GET `/api/v1/teams/:id`
+
+Returns team by their id.
+
+**Request:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id`      | long | Yes      | Team ID.    |
+
+**Response:**
+
+| Code              | Body                                    | Condition              |
+|-------------------|-----------------------------------------|------------------------|
+| `200 OK`          | [`Team`](#team)                         | If team was found.     |
+| `400 Bad Request` | [`ExceptionMessage`](#exceptionmessage) | If something failed.   |
+| `404 Not Found`   | [`ExceptionMessage`](#exceptionmessage) | If team was not found. |
 
 #### GET `/api/v1/teams/:id/members`
 
+Returns team members.
+
+**Request:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id`      | long | Yes      | Team ID.    |
+
+**Response:**
+
+| Code              | Body                                    | Condition              |
+|-------------------|-----------------------------------------|------------------------|
+| `200 OK`          | [`Team`](#team)                         | If team was found.     |
+| `400 Bad Request` | [`ExceptionMessage`](#exceptionmessage) | If something failed.   |
+| `404 Not Found`   | [`ExceptionMessage`](#exceptionmessage) | If team was not found. |
+
 #### PUT `/api/v1/teams/:id/members`
+
+Update team members.
+
+**Request:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id`      | long | Yes      | Team ID.    |
+
+**Response:**
+
+| Code              | Body                                    | Condition              |
+|-------------------|-----------------------------------------|------------------------|
+| `200 OK`          | none                                    | If team was saved.     |
+| `400 Bad Request` | [`ExceptionMessage`](#exceptionmessage) | If something failed.   |
+| `404 Not Found`   | [`ExceptionMessage`](#exceptionmessage) | If team was not found. |
 
 ### Game
 
 #### POST `/api/v1/games`
 
-#### GET `/api/v1/games/:id`
+Creates game.
+
+**Request:** [`IGameCreateSchema`](#igamecreateschema)
+
+**Response:**
+
+| Code               | Body                                    | Condition                         |
+|--------------------|-----------------------------------------|-----------------------------------|
+| `200 OK`           | [`Game`](#game)                         | If game was successfully created. |
+| `400 Bad Request`  | [`ExceptionMessage`](#exceptionmessage) | If something failed.              |
+| `401 Unauthorized` | [`ExceptionMessage`](#exceptionmessage) | If user not authorized.           |
 
 #### GET `/api/v1/games/:id`
 
-### Round
+Returns game by their id.
+
+**Request:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id`      | long | Yes      | Game ID.    |
+
+**Response:**
+
+| Code               | Body                                    | Condition               |
+|--------------------|-----------------------------------------|-------------------------|
+| `200 OK`           | [`Game`](#game)                         | If game was found.      |
+| `401 Unauthorized` | [`ExceptionMessage`](#exceptionmessage) | If user not authorized. |
+| `404 Not Found`    | [`ExceptionMessage`](#exceptionmessage) | If game was not found.  |
 
 ### Chat
+
+Chat is based on websockets.
+
+#### `/:chatId`
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `chatId`  | long | Yes      | Chat ID.    |
+
+**Message:** Object with `message` field.
 
 ### Vocabulary
 
 #### GET `/api/v1/vocabularies`
 
+Returns all vocabularies.
+
+**Request:** none.
+
+**Response:** [`Vocabulary[]`](#vocabulary)
+
 #### POST `/api/v1/vocabularies`
+
+Creates new vocabulary.
+
+**Request:** [`Vocabulary`](#vocabulary).
+
+**Response:**
+
+| Code              | Body                                    | Condition                               |
+|-------------------|-----------------------------------------|-----------------------------------------|
+| `200 OK`          | none                                    | If vocabulary was successfully created. |
+| `400 Bad Request` | [`ExceptionMessage`](#exceptionmessage) | If vocabulary was not created.          |
 
 #### GET `/api/v1/vocabularies/:id`
 
+Returns vocabulary by their id.
+
+**Request:**
+
+| Parameter | Type | Required | Description    |
+|-----------|------|----------|----------------|
+| `id`      | long | Yes      | Vocabulary ID. |
+
+**Response:**
+
+| Code            | Body                                    | Condition                             |
+|-----------------|-----------------------------------------|---------------------------------------|
+| `200 OK`        | [`Vocabulary`](#vocabulary)             | If vocabulary with such id was found. |
+| `404 Not Found` | [`ExceptionMessage`](#exceptionmessage) | If vocabulary was not found.          |
+
 #### PUT `/api/v1/vocabularies/:id`
+
+Updates vocabulary by their id.
+
+**Request:**
+
+| Parameter | Type | Required | Description    |
+|-----------|------|----------|----------------|
+| `id`      | long | Yes      | Vocabulary ID. |
+
+**Response:**
+
+| Code            | Body                                    | Condition                               |
+|-----------------|-----------------------------------------|-----------------------------------------|
+| `200 OK`        | none                                    | If vocabulary was successfully updated. |
+| `404 Not Found` | [`ExceptionMessage`](#exceptionmessage) | If vocabulary was not found.            |
 
 ## Objects
 
@@ -370,6 +535,31 @@ Refreshes a pair of tokens.
 {
   "username": "bob",
   "password": "bob"
+}
+```
+
+### `ITeamCreateSchema`
+
+```json
+{
+  "name": "Curious bears"
+}
+```
+
+### `IGameCreateSchema`
+
+```json
+{
+  "hostId": "1",
+  "teams": [
+    "teamId1",
+    "teamId2"
+  ],
+  "options": {
+    "goal": 100,
+    "roundTime": 60,
+    "vocabularyId": "vocabularyId"
+  }
 }
 ```
 
