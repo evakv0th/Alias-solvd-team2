@@ -86,11 +86,11 @@ class LanguageProcessing
 
     private static normalizeWord(word: string): string 
     {
-        const firstChar = word.charAt(0);
+        const firstChar = word.substring(0, 1);
 
         if (firstChar === 'y') 
         {
-            word = firstChar.toUpperCase() + word.substr(1);
+            word = firstChar.toUpperCase() + word.substring(1);
         }
 
         return word.toLowerCase().replace(/[^a-zA-Z]+/g, '');
