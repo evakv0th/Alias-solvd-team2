@@ -9,28 +9,23 @@ volumes:
     driver: local
 
 services:
+  backend:
+    build: .
+    networks:
+      - app
+    env_file:
+      - .env
+    ports:
+      - '3000:3000'
+
   couchdb:
     image: couchdb:3.3.2
     networks:
       - app
-    env_file:
-      - .env.example
     environment:
-      - COUCHDB_USER:${COUCHDB_USER}
-      - COUCHDB_PASSWORD:${COUCHDB_PASSWORD}
+      - COUCHDB_USER=${COUCHDB_USER}
+      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
     ports:
-      - '${DATABASE_PORT}:${DATABASE_PORT}'
+      - '5984:5984'
     volumes:
       - couchdb-data:/opt/couchdb/data
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      - couchdb
-    env_file:
-      - .env.example
-    ports:
-      - '${PORT}:${PORT}'
-    networks:
-      - app
