@@ -1,55 +1,104 @@
-# Alias-solvd-team2
+# Alias game
 
-# Node.js-Based Game "Alias" with Chat and Word Checking
+Node.js-Based Game "Alias" with Chat and Word Checking
 
-## Overview
-This document outlines the Alias game, a multiplayer game built with Node.js. It includes chat functionality and a feature to check for similar words.
+## Content:
 
-## Game Description
-Alias is a word-guessing game where players form teams. Each team takes turns where one member describes a word and others guess it. The game includes a chat for players to communicate and a system to check for similar words.
+* [Description](#description)
+* [System requirements](#system-requirements)
+* [Architecture](#architecture)
+* [Core modules](#core-modules)
+* [Security](#security)
+* [Testing](#testing)
+* [Deployment](#deployment)
+* [Future Enhancements](#future-enhancements)
+* [FAQ](#faq)
+* [Conclusion](#conclusion)
+* [Database schema](#database-schema)
+* [API:](#apis)
+    - [Authorization](#authorization)
+    - [User](#user)
+    - [Team](#team)
+    - [Game](#game)
+    - [Round](#round)
+    - [Chat](#chat)
+    - [Vocabulary](#vocabulary)
+* [Objects](#objects)
+
+## Description
+
+This project is a multiplayer game build with Node.js.
+Alias is a word-guessing game where players form teams. Each team takes turns where one member describes a word and
+others guess it. The game includes a chat for players to communicate and a system to check for similar words.
 
 ### Objective
+
 Teams try to guess as many words as possible from their teammates' descriptions.
 
 ### Turns
+
 Each turn is timed. Describers cannot use the word or its derivatives.
 
 ### Scoring
+
 Points are awarded for each correct guess. Similar words are checked for validation.
 
 ### End Game
+
 The game concludes after a predetermined number of rounds, with the highest-scoring team winning.
 
 ## System Requirements
+
 - **Backend**: Node.js
 - **Database**: CouchDB
-
-## Setup and Installation
-Details on installing Node.js, setting up the database, cloning the repository, and installing dependencies.
+- `.env` file from `.env.example`
 
 ## Architecture
+
 Outline of the server setup, API endpoints, and database schema.
 
 ## Core Modules
+
 1. **User Authentication**
-   - [**Login and registration**](#login-and-registration)
-   - Session management
+    - Login and registration
+    - Session management
 2. **Game Lobby**
-   - Room creation and joining
-   - Team selection
+    - Room creation and joining
+    - Team selection
 3. **Game Mechanics**
-   - Word generation
-   - Turn management
+    - Word generation
+    - Turn management
 4. **Chat System**
-   - Real-time messaging
-   - Chat history
+    - Real-time messaging
+    - Chat history
 5. **Word Checking**
-   - Similarity algorithm
-   - Word validation
+    - Similarity algorithm
+    - Word validation
 
-## APIs
+## Security
 
-Documentation for each API endpoint including authentication, game control, and chat functionalities.
+Overview of implemented security measures.
+
+## Testing
+
+Guide on unit and integration testing.
+
+## Deployment
+
+Run `docker compose up`.
+
+## Future Enhancements
+
+Suggestions for additional features or improvements.
+
+## FAQ
+
+Common questions and troubleshooting tips.
+
+## Conclusion
+
+Final remarks and encouragement for further exploration.
+
 
 ## Database Schema
 
@@ -59,14 +108,14 @@ Database schema is represented by JSON examples in `schema` folder.
 
 ```json
 {
-   "_id": "userId",
-   "username": "bob@example.com",
-   "password": "$2a$10$wSPtqqd5pujQ/1bYolF8qO.WDnSOcJ7IJt1YDvRO.U51LUfzxSHbm",
-   "createdAt": "2023-11-22'T'12:30:00.000",
-   "stats": {
-      "roundsPlayed": 5,
-      "wordsGuessed": 4
-   }
+  "_id": "userId",
+  "username": "bob@example.com",
+  "password": "$2a$10$wSPtqqd5pujQ/1bYolF8qO.WDnSOcJ7IJt1YDvRO.U51LUfzxSHbm",
+  "createdAt": "2023-11-22'T'12:30:00.000",
+  "stats": {
+    "roundsPlayed": 5,
+    "wordsGuessed": 4
+  }
 }
 ```
 
@@ -84,14 +133,14 @@ Database schema is represented by JSON examples in `schema` folder.
 
 ```json
 {
-   "_id": "teamId1",
-   "hostId": "userId",
-   "name": "Curious bears",
-   "members": [
-      "userId1",
-      "userId2",
-      "userId3"
-   ]
+  "_id": "teamId1",
+  "hostId": "userId",
+  "name": "Curious bears",
+  "members": [
+    "userId1",
+    "userId2",
+    "userId3"
+  ]
 }
 ```
 
@@ -106,12 +155,12 @@ Database schema is represented by JSON examples in `schema` folder.
 
 ```json
 {
-   "_id": "vocabularyId",
-   "words": [
-      "bear",
-      "motorbike",
-      "air baloon"
-   ]
+  "_id": "vocabularyId",
+  "words": [
+    "bear",
+    "motorbike",
+    "air balloon"
+  ]
 }
 ```
 
@@ -124,22 +173,22 @@ Database schema is represented by JSON examples in `schema` folder.
 
 ```json
 {
-   "_id": "roundId",
-   "startedAt": "2023-11-22'T'10:38:00.000",
-   "finishedAt": "2023-11-22'T'10:39:00.000",
-   "teamId": "teamId1",
-   "hostId": "hostId1",
-   "chatId": "chatId",
-   "words": [
-      {
-         "word": "motorbike",
-         "guessed": true
-      },
-      {
-         "word": "air balloon",
-         "guessed": false
-      }
-   ]
+  "_id": "roundId",
+  "startedAt": "2023-11-22'T'10:38:00.000",
+  "finishedAt": "2023-11-22'T'10:39:00.000",
+  "teamId": "teamId1",
+  "hostId": "hostId1",
+  "chatId": "chatId",
+  "words": [
+    {
+      "word": "motorbike",
+      "guessed": true
+    },
+    {
+      "word": "air balloon",
+      "guessed": false
+    }
+  ]
 }
 ```
 
@@ -159,19 +208,19 @@ Database schema is represented by JSON examples in `schema` folder.
 
 ```json
 {
-   "_id": "chatId",
-   "messages": [
-      {
-         "createdAt": "2022-11-22'T'10:37:45.123",
-         "userId": "userId",
-         "message": "message"
-      },
-      {
-         "createdAt": "2022-11-22'T'10:37:45.869",
-         "userId": "userId",
-         "message": "message"
-      }
-   ]
+  "_id": "chatId",
+  "messages": [
+    {
+      "createdAt": "2022-11-22'T'10:37:45.123",
+      "userId": "userId",
+      "message": "message"
+    },
+    {
+      "createdAt": "2022-11-22'T'10:37:45.869",
+      "userId": "userId",
+      "message": "message"
+    }
+  ]
 }
 ```
 
@@ -187,29 +236,29 @@ Database schema is represented by JSON examples in `schema` folder.
 
 ```json
 {
-   "_id": "gameId",
-   "hostId": "userId",
-   "createdAt": "2023-11-22'T'10:37:15.000",
-   "teams": [
-      {
-         "teamId": "teamId1",
-         "score": 5
-      },
-      {
-         "teamId": "teamId2",
-         "score": 7
-      }
-   ],
-   "currentTeam": "teamId1",
-   "rounds": [
-      "roundId1",
-      "roundId2"
-   ],
-   "options": {
-      "goal": 100,
-      "roundTime": 60,
-      "vocabularyId": "vocabularyId"
-   }
+  "_id": "gameId",
+  "hostId": "userId",
+  "createdAt": "2023-11-22'T'10:37:15.000",
+  "teams": [
+    {
+      "teamId": "teamId1",
+      "score": 5
+    },
+    {
+      "teamId": "teamId2",
+      "score": 7
+    }
+  ],
+  "currentTeam": "teamId1",
+  "rounds": [
+    "roundId1",
+    "roundId2"
+  ],
+  "options": {
+    "goal": 100,
+    "roundTime": 60,
+    "vocabularyId": "vocabularyId"
+  }
 }
 ```
 
@@ -228,138 +277,134 @@ Database schema is represented by JSON examples in `schema` folder.
 | `options.roundTime`    | Number     | Amount of time for round        |
 | `options.vocabularyId` | ObjectID   | ID of vocabulary for game       |
 
+## APIs
 
-## User Authentication
+### Authorization
 
-## Login and registration
+#### POST `/api/v1/auth/register`
 
-### POST Register
-```POST /api/v1/auth/register```: 
+Creates new user.
 
- - ### Request Body
+**Request:** [`IUserCreateSchema`](#iusercreateschema).
 
-| Parameter    | Type     | Description                   |
-| ------------ | ------   | -------------------           |
-| `username`   | string   | Name of the user (required)   |
-| `password`   | string   | password       (required)     |
+**Response:**
 
-- response 201 Created:
+| Code              | Body                                    | Condition                        |
+|-------------------|-----------------------------------------|----------------------------------|
+| `201 Created`     | none                                    | If user successfully registered. |
+| `400 Bad Request` | [`ExceptionMessage`](#exceptionmessage) | If registration failed.          |
+
+### `POST /api/v1/auth/login`
+
+Authenticates user.
+
+**Request:** [`LoginRequest`](#loginrequest).
+
+**Response:**
+
+| Code              | Body                                    | Condition                       |
+|-------------------|-----------------------------------------|---------------------------------|
+| `200 OK`          | [`LoginResponse`](#loginresponse)       | Correct credentials are used.   |
+| `400 Bad Request` | [`ExceptionMessage`](#exceptionmessage) | Incorrect credentials are used. |
+
+### `POST /api/v1/auth/refresh`
+
+Refreshes a pair of tokens.
+
+**Request:** Object with `token` field.
+
+**Response:**
+
+| Code              | Body                                    | Condition                |
+|-------------------|-----------------------------------------|--------------------------|
+| `200 OK`          | [`LoginResponse`](#loginresponse)       | Correct token is used.   |
+| `400 Bad Request` | [`ExceptionMessage`](#exceptionmessage) | Incorrect token is used. |
+
+#### GET `/api/v1/auth/login`
+
+#### POST `/api/v1/auth/refresh`
+
+### User
+
+#### GET `/api/v1/users/:id`
+
+#### PUT `/api/v1/users/:id`
+
+### Team
+
+#### POST `/api/v1/teams`
+
+#### GET `/api/v1/teams/:id`
+
+#### GET `/api/v1/teams/:id/members`
+
+#### PUT `/api/v1/teams/:id/members`
+
+### Game
+
+#### POST `/api/v1/games`
+
+#### GET `/api/v1/games/:id`
+
+#### GET `/api/v1/games/:id`
+
+### Round
+
+### Chat
+
+### Vocabulary
+
+#### GET `/api/v1/vocabularies`
+
+#### POST `/api/v1/vocabularies`
+
+#### GET `/api/v1/vocabularies/:id`
+
+#### PUT `/api/v1/vocabularies/:id`
+
+## Objects
+
+### `IUserCreateSchema`
+
 ```json
 {
-    "message": "User registered successfully",
-    "user": {
-        "username": "anton",
-        "password": "123"
-    }
+  "username": "bob",
+  "password": "bob"
 }
 ```
 
-- response 400 Bad Request:
+### `LoginRequest`
+
 ```json
 {
-    "error": "Please provide username and password"
-}
-```
-- response 500 Internal Server Error:
-```json
-{
-"message": "Internal Server Error"
-}
-```
-### GET Login
-
-```POST /api/v1/auth/login```: 
- - ### Request Body
-
-| Parameter    | Type     | Description                   |
-| ------------ | ------   | -------------------           |
-| `username`   | string   | Name of the user (required)   |
-| `password`   | string   | password       (required)     |
-
-- response 200 OK:
-```json
-{
-    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwidXNlcm5hbWUiOiJ0ZXN0IiwiaWF0IjoxNzAwNjgxNjczLCJleHAiOjE3MDA2ODUyNzN9.WXlUiQll8nEGFLvc28rje-r6RUOUnywpmF3UfC-yZrE",
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwidXNlcm5hbWUiOiJ0ZXN0IiwiaWF0IjoxNzAwNjgxNjczLCJleHAiOjE3MDEyODY0NzN9.XpeVcwISzCsjnB55cZTjb6XpP5Tnt6X1JVVpuc4D4bc"
+  "username": "example",
+  "password": "12345678"
 }
 ```
 
-- response 400 Bad Request:
+| Field      | Type   | Required | Description      |
+|------------|--------|----------|------------------|
+| `username` | string | Yes      | User`s username. |
+| `password` | string | Yes      | User`s password. |
+
+### `LoginResponse`
+
 ```json
 {
-"message": "Please provide username and password"
+  "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcm5hbWUiOiJleGFtcGxlQGV4YW1wbGUuY29tIiwiaWF0IjoxNTE2MjM5MDIyfQ.tCvBDCHd_VjUZ2SaGFdyxKkLYbjq-W0rH6SYHoayU_w",
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcm5hbWUiOiJleGFtcGxlQGV4YW1wbGUuY29tIiwiaWF0IjoxNTE2MjM5MDIyfQ.tCvBDCHd_VjUZ2SaGFdyxKkLYbjq-W0rH6SYHoayU_w"
 }
 ```
 
- - response 401 Unauthorized:
+| Field     | Type   | Required | Description        |
+|-----------|--------|----------|--------------------|
+| `access`  | string | Yes      | Access JWT token.  |
+| `refresh` | string | Yes      | Refresh JWT token. |
+
+### `ExceptionMessage`
+
 ```json
 {
-    "error": "Wrong username or password"
+  "message": "Something bad happened."
 }
 ```
-- response 500 Internal Server Error:
-```json
-{
-"message": "Internal Server Error"
-}
-```
-### POST Refresh
-```POST /api/v1/auth/refresh```: 
-
- - ### Request Body
-
-| Parameter      | Type     | Description                 |
-| ------------   | ------   | -------------------         |
-| `refreshToken` | string   | Refresh token (required)    |
-
-- response 200 OK:
-```json
-{
-    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFudG9uIiwiaWF0IjoxNzAwNjc0NTk4LCJleHAiOjE3MDA2NzQ2Mjh9.cMoTwYaQnIRvhvHfa_kTZzFCTaeO1pmPiGAi_xrxsUM"
-}
-```
-
-- response 400 Bad Request:
-```json
-{
-    "error": "Refresh token is missing"
-}
-```
- - response 401 Unauthorized:
-```json
-{
-    "error": "Invalid token"
-}
-```
-OR
-```json
-{
-    "error": "Token has expired"
-}
-```
-- response 500 Internal Server Error:
-```json
-{
-"message": "Internal Server Error"
-}
-```
-## Security
-
-Overview of implemented security measures.
-
-## Testing
-
-Guide on unit and integration testing.
-
-## Deployment
-
-Instructions for deploying the application.
-
-## Future Enhancements
-Suggestions for additional features or improvements.
-
-## FAQ
-Common questions and troubleshooting tips.
-
-## Conclusion
-Final remarks and encouragement for further exploration.
