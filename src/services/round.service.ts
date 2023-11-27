@@ -1,10 +1,17 @@
 import {roundRepository} from "../repositories/round.repository";
 import {IRound, IRoundCreateSchema} from "../interfaces/round.interface";
+import {gameService} from "./game.service";
 
 class RoundService {
 
   async getById(id: string): Promise<IRound> {
     return roundRepository.getById(id);
+  }
+
+  async getAllByGameId(gameId: string): Promise<IRound[]> {
+    const game = await gameService.getById(gameId);
+    const rounds = game.rounds.map(roundId => this.getById(roundId));
+    return Promise.all(rounds);
   }
 
   async exists(id: string): Promise<boolean> {
