@@ -8,7 +8,6 @@ class Game implements IGame {
   hostId: string;
   createdAt: Date;
   teams: {
-    members: any;
     teamId: string;
     score: number;
     members: string[];
