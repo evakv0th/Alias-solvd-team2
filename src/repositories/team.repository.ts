@@ -1,8 +1,7 @@
-import {teamsDb} from "../couchdb.init";
-import {ITeam, ITeamCreateSchema} from "../interfaces/team.interface";
+import { teamsDb } from '../couchdb.init';
+import { ITeam, ITeamCreateSchema } from '../interfaces/team.interface';
 
 class Team implements ITeam {
-
   _id: string | undefined;
   hostId: string;
   name: string;
@@ -13,11 +12,9 @@ class Team implements ITeam {
     this.hostId = team.hostId;
     this.members = [];
   }
-
 }
 
 class TeamRepository {
-
   async getById(id: string): Promise<ITeam> {
     return await teamsDb.get(id);
   }
@@ -56,7 +53,6 @@ class TeamRepository {
       }
     });
   }
-
 }
 
 export const teamRepository = new TeamRepository();

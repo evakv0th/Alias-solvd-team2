@@ -29,25 +29,17 @@ class GameService {
 
   async getRandomWord(id: string): Promise<string> {
     const game = await this.getById(id);
-    const vocabulary = await vocabularyService.getById(
-      game.options.vocabularyId,
-    );
+    const vocabulary = await vocabularyService.getById(game.options.vocabularyId);
     let word;
     do {
-      word =
-        vocabulary.words[Math.floor(Math.random() * vocabulary.words.length)];
+      word = vocabulary.words[Math.floor(Math.random() * vocabulary.words.length)];
     } while (await this.wordWasUsedInGame(word, game._id!));
     return word;
   }
 
-  private async wordWasUsedInGame(
-    word: string,
-    gameId: string,
-  ): Promise<boolean> {
+  private async wordWasUsedInGame(word: string, gameId: string): Promise<boolean> {
     const rounds = await roundService.getAllByGameId(gameId);
-    return rounds.some((round) =>
-      round.words.map((obj) => obj.word).includes(word),
-    );
+    return rounds.some((round) => round.words.map((obj) => obj.word).includes(word));
   }
 
   async start(id: string): Promise<{ msg: string; chatId: string }> {
@@ -62,9 +54,7 @@ class GameService {
     };
   }
 
-  private async createRound(
-    game: IGame,
-  ): Promise<{ roundId: string; chatId: string }> {
+  private async createRound(game: IGame): Promise<{ roundId: string; chatId: string }> {
     const chatId = await chatService.create();
     const roundId = await roundService.create({
       teamId: game.currentTeam,
@@ -78,9 +68,7 @@ class GameService {
 
   async handleFinishedRound(id: string, round: IRound) {
     const game = await this.getById(id);
-    let teamIndex = game.teams.findIndex(
-      (team) => team.teamId === round.teamId,
-    );
+    let teamIndex = game.teams.findIndex((team) => team.teamId === round.teamId);
     game.teams[teamIndex].score += this.getScoreFromRound(round);
     teamIndex = (teamIndex + 1) % game.teams.length;
     game.currentTeam = game.teams[teamIndex].teamId;
