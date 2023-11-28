@@ -57,30 +57,30 @@ export async function addMemberByName(
 ): Promise<Response | void> {
 
   const id: string = req.params.id;
-  const username: string = req.body.username;
+  const userToAdd = req.body;
 
-    const user = await userService.getByUsername(username);
-    const team = await teamService.getById(id);
+  const user = await userService.getByUsername(userToAdd.username);
+  const team = await teamService.getById(id);
 
-    if (!user) {
+  if (!user) {
+    return res
+    .status(HttpStatusCode.NOT_FOUND)
+    .json(new HttpException(HttpStatusCode.NOT_FOUND, "User not found"));
+  }
+
+  if (!team) {
+    return res.status(HttpStatusCode.NOT_FOUND)
+    .json(new HttpException(HttpStatusCode.NOT_FOUND, "Team not found"));
+  }
+
+  if (!team.members.includes(userToAdd.id)) {
+    team.members.push(userToAdd.id)
+    await teamService.update(team)
       return res
-      .status(HttpStatusCode.NOT_FOUND)
-      .json(new HttpException(HttpStatusCode.NOT_FOUND, "User not found"));
-    }
-
-    if (!team) {
-      return res.status(HttpStatusCode.NOT_FOUND)
-      .json(new HttpException(HttpStatusCode.NOT_FOUND, "Team not found"));
-    }
-
-    if (!team.members.includes(user._id)) {
-      team.members.push(user._id)
-      await teamService.update(team)
-      return res
-      .status(HttpStatusCode.OK);
-    } else {
-      return res.status(HttpStatusCode.BAD_REQUEST)
-      .json(new HttpException(HttpStatusCode.NOT_FOUND, "User is already exists"));
-    }
+    .status(HttpStatusCode.OK);
+  } else {
+    return res.status(HttpStatusCode.BAD_REQUEST)
+    .json(new HttpException(HttpStatusCode.NOT_FOUND, "User is already exists"));
+  }
 
 }
