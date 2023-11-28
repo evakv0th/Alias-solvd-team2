@@ -1,6 +1,6 @@
 import {Response} from 'express';
 import HttpStatusCode from '../application/utils/exceptions/statusCode';
-import {ITeamCreateSchema, ITeam} from "../interfaces/team.interface";
+import {ITeamCreateSchema} from "../interfaces/team.interface";
 import {RequestWithUser} from "../application/middlewares/authenticateToken";
 import {teamService} from "../services/team.service";
 import { userService } from '../services/user.service';
