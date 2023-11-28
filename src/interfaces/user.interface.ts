@@ -1,5 +1,5 @@
 export interface IUser {
-  _id: string | undefined;
+  _id: string;
   username: string;
   password: string;
   createdAt: Date;
