@@ -15,10 +15,19 @@ class Chat implements IChat {
 class ChatRepository {
   async getById(id: string): Promise<IChat> {
     try {
-      const chat = await chatsDb.get(id);
-      return chat;
-    } catch (err) {
-      throw new HttpException(HttpStatusCode.NOT_FOUND, 'chat not found!');
+      return await chatsDb.get(id);
+    } catch (error) {
+      if ((error as any).statusCode == 404) {
+        throw new HttpException(
+          HttpStatusCode.NOT_FOUND,
+          'chat not found by id! repository',
+        );
+      } else {
+        throw new HttpException(
+          HttpStatusCode.INTERNAL_SERVER_ERROR,
+          'Internal server error',
+        );
+      }
     }
   }
 
@@ -40,14 +49,28 @@ class ChatRepository {
   async update(chat: IChat): Promise<IChat> {
     const oldChat = await this.getById(chat._id!);
     oldChat.messages = chat.messages;
-    await chatsDb.insert(oldChat);
-    return oldChat;
+    try {
+      await chatsDb.insert(oldChat);
+      return oldChat;
+    } catch (error) {
+      if ((error as any).statusCode == 404) {
+        throw new HttpException(
+          HttpStatusCode.NOT_FOUND,
+          'chat not found by id! repository',
+        );
+      } else {
+        throw new HttpException(
+          HttpStatusCode.INTERNAL_SERVER_ERROR,
+          'Internal server error',
+        );
+      }
+    }
   }
 
-  async delete(id: string) {
+  async delete(id: string): Promise<void> {
     try {
-      const chat = chatsDb.get(id);
-      chatsDb.destroy(id, (await chat)._rev);
+      const chat = await chatsDb.get(id);
+      chatsDb.destroy(id, chat._rev);
     } catch (err) {
       console.error(err);
     }
