@@ -29,7 +29,7 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + '/views')); // for css to work
 
 app.get('/', (req: Request, res: Response) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile("Alias game");
 });
 
 setupSocket(io);

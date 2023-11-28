@@ -1,9 +1,18 @@
 import { chatRepository } from '../repositories/chat.repository';
 import { IChat } from '../interfaces/chat.interface';
+import HttpException from '../application/utils/exceptions/http-exceptions';
+import HttpStatusCode from '../application/utils/exceptions/statusCode';
 
 class ChatService {
   async getById(id: string): Promise<IChat> {
-    return chatRepository.getById(id);
+    try {
+      return chatRepository.getById(id);
+    } catch (error) {
+      throw new HttpException(
+        HttpStatusCode.NOT_FOUND,
+        'chat not found by id!',
+      );
+    }
   }
 
   async exists(id: string): Promise<boolean> {
@@ -15,11 +24,25 @@ class ChatService {
   }
 
   async update(chat: IChat): Promise<IChat> {
-    return chatRepository.update(chat);
+    try {
+      return chatRepository.update(chat);
+    } catch (error) {
+      throw new HttpException(
+        HttpStatusCode.NOT_FOUND,
+        'chat not found by id!',
+      );
+    }
   }
 
-  async delete(id: string) {
-    await chatRepository.delete(id);
+  async delete(id: string): Promise<void> {
+    try {
+      await chatRepository.delete(id);
+    } catch (error) {
+      throw new HttpException(
+        HttpStatusCode.NOT_FOUND,
+        'chat not found by id!',
+      );
+    }
   }
 }
 
