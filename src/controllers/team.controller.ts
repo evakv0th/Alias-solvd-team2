@@ -57,11 +57,12 @@ export async function addMemberByName(
 ): Promise<Response | void> {
 
   const id: string = req.params.id;
-  const userToAdd: string = req.params.username;
+  const username: string = req.params.username;
 
-  const user = await userService.getByUsername(userToAdd);
+  const user = await userService.getByUsername(username);
   const team = await teamService.getById(id);
-
+  let userId: string = '';
+  
   if (!user) {
     return res
     .status(HttpStatusCode.NOT_FOUND)
@@ -72,9 +73,15 @@ export async function addMemberByName(
     return res.status(HttpStatusCode.NOT_FOUND)
     .json(new HttpException(HttpStatusCode.NOT_FOUND, "Team not found"));
   }
+  if (!user._id || typeof(user._id === "undefined")) {
+    return res.status(HttpStatusCode.NOT_FOUND)
+    .json(new HttpException(HttpStatusCode.NOT_FOUND, "User ID is undefined"));
+  }
 
-  if (!team.members.includes(userToAdd)) {
-    team.members.push(userToAdd)
+  userId = userId;
+
+  if (!team.members.includes(userId)) {
+    team.members.push(userId)
     await teamService.update(team)
       return res
     .status(HttpStatusCode.OK);
