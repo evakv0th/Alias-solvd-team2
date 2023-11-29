@@ -10,3 +10,4 @@ userRouter.patch('/:id', authenticateToken, userController.update);
 userRouter.delete('/:id', authenticateToken, userController.delete);
 
 export default userRouter;
+
