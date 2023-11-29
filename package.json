@@ -7,7 +7,7 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "start": "node dist/index.js",
-    "build": "tsc",
+    "build": "tsc && copyfiles src/views/*.ejs src/views/*.css dist/views",
     "start:dev": "nodemon -L src/index.ts",
     "lint": "eslint \"src/**/*.ts\""
   },
@@ -43,6 +43,7 @@
     "badwords": "^1.0.0",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
+    "copyfiles": "^2.4.1",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",

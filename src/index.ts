@@ -7,10 +7,11 @@ import { couchdbInit } from './couchdb.init';
 import { Server } from 'socket.io';
 import chatRouter from './routes/chat.router';
 import path from 'path';
-import { setupSocket } from './socketSetup';
+import {setupSocket} from './socketSetup';
 import cookieParser from 'cookie-parser';
 import lobbyRouter from './routes/lobby.router';
 import teamRouter from "./routes/team.router";
+import userRouter from './routes/user.router';
 
 
 
@@ -29,7 +30,7 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + '/views')); // for css to work
 
 app.get('/', (req: Request, res: Response) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile("Alias game");
 });
 
 setupSocket(io);
@@ -38,6 +39,8 @@ app.use('/api/v1/auth', authRouter);
 
 app.use('/api/v1/chats', chatRouter);
 app.use('/api/v1/lobby', lobbyRouter);
+app.use('/api/v1/teams', teamRouter);
+app.use('/api/v1/users', userRouter);
 
 const startServer = async (): Promise<void> => {
   couchdbInit().then(() => {

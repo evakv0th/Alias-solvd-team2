@@ -33,6 +33,7 @@ export class TeamRepository {
 
   async create(team: ITeamCreateSchema): Promise<string> {
     const createdTeam = new Team(team);
+    createdTeam.members.push(team.hostId);
     const response = await teamsDb.insert(createdTeam);
     return response.id;
   }
@@ -41,6 +42,9 @@ export class TeamRepository {
     const oldTeam = await this.getById(team._id!);
     oldTeam.name = team.name;
     oldTeam.members = team.members;
+    if (!oldTeam.members.includes(oldTeam.hostId)) {
+      oldTeam.members.push(oldTeam.hostId);
+    }
     await teamsDb.insert(oldTeam);
     return oldTeam;
   }

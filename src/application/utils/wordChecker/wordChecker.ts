@@ -1,7 +1,5 @@
 import  { LanguageProcessing }  from './LanguageProcessing/LanguageProcessing';
 
-//import { stem } from "./LanguageProcessing/LanguageProcessing";
-
 
 class WordChecker 
 {

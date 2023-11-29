@@ -45,4 +45,28 @@ describe('WordChecker', () => {
     });
 
   });
+
+
+  describe('WordChecker - specific real cases', () => {
+    describe('isWordValid', () => {
+      it('should return false if the guessed word is the same as the word to check', () => {
+        expect(WordChecker.isWordValid('apple', 'apple')).toBe(false);
+      });
+  
+      it('should return true if the guessed word is different from the word to check', () => {
+        expect(WordChecker.isWordValid('banana', 'apple')).toBe(true);
+      });
+    });
+  
+    describe('isMessageValid', () => {
+      it('should return false if any word in the message is the same as the word to check', () => {
+        expect(WordChecker.isMessageValid('I ate an apple this morning', 'apple')).toBe(false);
+      });
+  
+      it('should return true if no words in the message are the same as the word to check', () => {
+        expect(WordChecker.isMessageValid('I had a banana for breakfast', 'apple')).toBe(true);
+      });
+    });
+  });
+
 });
