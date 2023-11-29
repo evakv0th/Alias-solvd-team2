@@ -3,7 +3,6 @@ import * as jwt from 'jsonwebtoken';
 import HttpStatusCode from '../utils/exceptions/statusCode';
 import {IUser} from '../../interfaces/user.interface';
 import {secretKey} from '../utils/tokenForAuth/generateToken';
-
 export interface RequestWithUser extends Request {
   user?: IUser;
 }
@@ -14,7 +13,7 @@ export async function authenticateToken(
   next: NextFunction,
 ): Promise<Response | void> {
   let token = req.header('Authorization')?.replace('Bearer ', '');
-
+  
   if (!token) {
     token = req.cookies['access_token'];
   }
@@ -27,6 +26,7 @@ export async function authenticateToken(
   try {
     const decoded = jwt.verify(token, secretKey) as { userId: string, username: string };
     req.user = {_id: decoded.userId, username: decoded.username} as IUser;
+
     next();
   } catch (error) {
     return res
