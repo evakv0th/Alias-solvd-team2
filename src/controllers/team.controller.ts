@@ -71,7 +71,6 @@ export async function addMemberByName(
 
   const user = await userService.getByUsername(username);
   const team = await teamService.getById(id);
-  let userId: string = '';
   
   if (!user) {
     return res
@@ -88,7 +87,7 @@ export async function addMemberByName(
     .json(new HttpException(HttpStatusCode.NOT_FOUND, "User ID is undefined"));
   }
 
-  userId = userId;
+  let userId: string = user._id;
 
   if (!team.members.includes(userId)) {
     team.members.push(userId)
