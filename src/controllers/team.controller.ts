@@ -92,12 +92,24 @@ export async function addMemberByName(
 
   if (!team.members.includes(userId)) {
     team.members.push(userId)
-    await teamService.update(team)
-      return res
-    .status(HttpStatusCode.OK);
+    try {
+      await teamService.update(team);
+      return res.status(HttpStatusCode.OK);
+    } catch (error) {
+      if ((error as any).statusCode == 404) {
+        return res
+          .status(HttpStatusCode.NOT_FOUND)
+          .json(new HttpException(HttpStatusCode.NOT_FOUND, "Team not found by id"));
+      } else {
+        return res
+          .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .json(new HttpException(HttpStatusCode.INTERNAL_SERVER_ERROR, "Internal server error"));
+      }
+    }
   } else {
-    return res.status(HttpStatusCode.BAD_REQUEST)
-    .json(new HttpException(HttpStatusCode.NOT_FOUND, "User is already exists"));
+    return res
+      .status(HttpStatusCode.BAD_REQUEST)
+      .json(new HttpException(HttpStatusCode.NOT_FOUND, "User already exists"));
   }
 
 }
