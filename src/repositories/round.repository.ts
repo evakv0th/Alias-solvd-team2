@@ -30,7 +30,7 @@ class RoundRepository {
       if ((error as any).statusCode == 404) {
         throw new HttpException(
           HttpStatusCode.NOT_FOUND,
-          'Round not found by id!',
+          'Round not found by id',
         );
       } else {
         throw new HttpException(
@@ -66,7 +66,7 @@ class RoundRepository {
       if ((error as any).statusCode == 404) {
         throw new HttpException(
           HttpStatusCode.NOT_FOUND,
-          'Round not found by id!',
+          'Round not found by id',
         );
       } else {
         throw new HttpException(
