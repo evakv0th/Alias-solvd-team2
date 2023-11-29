@@ -23,7 +23,7 @@ class VocabularyRepository {
       if ((error as any).statusCode == 404) {
         throw new HttpException(
           HttpStatusCode.NOT_FOUND,
-          'vocabulary not found by id! repository',
+          'Vocabulary not found by id',
         );
       } else {
         throw new HttpException(
@@ -59,7 +59,7 @@ class VocabularyRepository {
       if ((error as any).statusCode == 404) {
         throw new HttpException(
           HttpStatusCode.NOT_FOUND,
-          'vocabulary not found by id! repository',
+          'Vocabulary not found by id',
         );
       } else {
         throw new HttpException(
