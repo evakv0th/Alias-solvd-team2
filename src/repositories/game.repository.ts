@@ -44,7 +44,7 @@ class GameRepository {
       if ((error as any).statusCode == 404) {
         throw new HttpException(
           HttpStatusCode.NOT_FOUND,
-          'game not found by id! repository',
+          'Game not found by id!',
         );
       } else {
         throw new HttpException(
@@ -82,7 +82,7 @@ class GameRepository {
       if ((error as any).statusCode == 404) {
         throw new HttpException(
           HttpStatusCode.NOT_FOUND,
-          'game not found by id! repository',
+          'Game not found by id!',
         );
       } else {
         throw new HttpException(
