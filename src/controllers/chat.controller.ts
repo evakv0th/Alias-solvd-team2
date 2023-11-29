@@ -10,7 +10,7 @@ export async function getChat(req: Request, res: Response): Promise<void> {
 
   try {
     const chat = await chatService.getById(chatId);
-    res.status(200).json(chat);
+    res.status(HttpStatusCode.OK).json(chat);
   } catch (error) {
     if (error instanceof HttpException) {
       res.status(error.status).json({ error: error.message });
@@ -25,7 +25,7 @@ export async function getChat(req: Request, res: Response): Promise<void> {
 export async function createChat(req: Request, res: Response): Promise<void> {
   try {
     const chatId: string = await chatService.create();
-    res.status(201).json({ id: chatId });
+    res.status(HttpStatusCode.CREATED).json({ id: chatId });
   } catch (error) {
     if (error instanceof HttpException) {
       res.status(error.status).json({ error: error.message });
@@ -44,7 +44,7 @@ export async function updateChat(req: Request, res: Response): Promise<void> {
 
   try {
     const updatedChat: IChat = await chatService.update(newChat);
-    res.status(200).json(updatedChat);
+    res.status(HttpStatusCode.OK).json(updatedChat);
   } catch (error) {
     if (error instanceof HttpException) {
       res.status(error.status).json({ error: error.message });
@@ -61,7 +61,7 @@ export async function deleteChat(req: Request, res: Response): Promise<void> {
 
   try {
     await chatService.delete(chatId);
-    res.status(204).send();
+    res.status(HttpStatusCode.NO_CONTENT).send();
   } catch (error) {
     if (error instanceof HttpException) {
       res.status(error.status).json({ error: error.message });
@@ -81,7 +81,7 @@ export async function viewChat(
 
   try {
     if (!(await chatService.exists(id))) {
-      res.status(404).send('chat  not found, please check your id');
+      res.status(HttpStatusCode.NOT_FOUND).send('chat  not found, please check your id');
       return;
     }
 

@@ -10,7 +10,7 @@ class VocabularyController {
 
     try {
       const vocabulary = await vocabularyService.getById(vocabularyId);
-      res.status(200).json(vocabulary);
+      res.status(HttpStatusCode.OK).json(vocabulary);
     } catch (error) {
       if (error instanceof HttpException) {
         res.status(error.status).json({ error: error.message });
@@ -28,7 +28,7 @@ class VocabularyController {
       const vocabularyId: string = await vocabularyService.create(
         newVocabulary,
       );
-      res.status(201).json({ id: vocabularyId });
+      res.status(HttpStatusCode.CREATED).json({ id: vocabularyId });
     } catch (error) {
       if (error instanceof HttpException) {
         res.status(error.status).json({ error: error.message });
@@ -49,7 +49,7 @@ class VocabularyController {
       const updatedVocabulary: IVocabulary = await vocabularyService.update(
         newVocabulary,
       );
-      res.status(200).json(updatedVocabulary);
+      res.status(HttpStatusCode.OK).json(updatedVocabulary);
     } catch (error) {
       if (error instanceof HttpException) {
         res.status(error.status).json({ error: error.message });
@@ -66,7 +66,7 @@ class VocabularyController {
 
     try {
       await vocabularyService.delete(vocabularyId);
-      res.status(204).send();
+      res.status(HttpStatusCode.NO_CONTENT).send();
     } catch (error) {
       if (error instanceof HttpException) {
         res.status(error.status).json({ error: error.message });
