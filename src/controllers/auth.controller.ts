@@ -16,7 +16,7 @@ export async function register(
   try {
     const newUser = await authService.register(req.body);
     return res
-      .status(201)
+      .status(HttpStatusCode.CREATED)
       .json({ message: 'User registered successfully', user: newUser });
   } catch (error) {
     if ((error as HttpException).status) {
@@ -43,7 +43,7 @@ export async function login(req: Request, res: Response): Promise<Response> {
       secure: secureOption,
       sameSite: sameSiteOption as any,
     });
-    return res.status(200).json({ accessToken, refreshToken });
+    return res.status(HttpStatusCode.OK).json({ accessToken, refreshToken });
   } catch (error) {
     if ((error as HttpException).status) {
       return res
@@ -73,7 +73,7 @@ export async function refresh(req: Request, res: Response): Promise<Response> {
     const accessToken = generateAccessToken(decoded as IUser);
 
     res.cookie('access_token', accessToken, { httpOnly: true });
-    return res.status(200).json({ accessToken });
+    return res.status(HttpStatusCode.OK).json({ accessToken });
   } catch (error) {
     if ((error as HttpException).status) {
       return res
