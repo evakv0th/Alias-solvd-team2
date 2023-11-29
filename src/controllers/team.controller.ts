@@ -1,4 +1,4 @@
-import {Response} from 'express';
+import { Response } from 'express';
 import HttpStatusCode from '../application/utils/exceptions/statusCode';
 import {ITeamCreateSchema} from "../interfaces/team.interface";
 import {RequestWithUser} from "../application/middlewares/authenticateToken";
@@ -12,23 +12,29 @@ export async function create(
 ): Promise<Response | void> {
   const team = {
     name: req.body.name,
-    hostId: req.user!._id
+    hostId: req.user!._id,
   } as ITeamCreateSchema;
   const id = await teamService.create(team);
-  return res
-    .status(HttpStatusCode.CREATED)
-    .json(await teamService.getById(id));
+  return res.status(HttpStatusCode.CREATED).json(await teamService.getById(id));
 }
 
 export async function getById(
   req: RequestWithUser,
   res: Response,
 ): Promise<Response | void> {
-  const id: string = req.params.id;
-  const team = await teamService.getById(id);
-  return res
-    .status(HttpStatusCode.OK)
-    .json(team);
+  try {
+    const id: string = req.params.id;
+    const team = await teamService.getById(id);
+    return res.status(HttpStatusCode.OK).json(team);
+  } catch (error) {
+    if (error instanceof HttpException) {
+      res.status(error.status).json({ error: error.message });
+    } else {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        error: 'Internal Server Error',
+      });
+    }
+  }
 }
 
 export async function updateMembers(
@@ -42,12 +48,16 @@ export async function updateMembers(
   if (team.hostId === user?._id) {
     team.members = members;
     await teamService.update(team);
-    return res
-      .status(HttpStatusCode.OK);
+    return res.status(HttpStatusCode.OK);
   } else {
     return res
       .status(HttpStatusCode.UNAUTHORIZED)
-      .json(new HttpException(HttpStatusCode.UNAUTHORIZED, "Only team host can update team members."));
+      .json(
+        new HttpException(
+          HttpStatusCode.UNAUTHORIZED,
+          'Only team host can update team members.',
+        ),
+      );
   }
 }
 

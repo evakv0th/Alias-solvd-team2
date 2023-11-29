@@ -1,8 +1,9 @@
-import {teamsDb} from "../couchdb.init";
-import {ITeam, ITeamCreateSchema} from "../interfaces/team.interface";
+import HttpException from '../application/utils/exceptions/http-exceptions';
+import HttpStatusCode from '../application/utils/exceptions/statusCode';
+import { teamsDb } from '../couchdb.init';
+import { ITeam, ITeamCreateSchema } from '../interfaces/team.interface';
 
 class Team implements ITeam {
-
   _id: string | undefined;
   hostId: string;
   name: string;
@@ -13,13 +14,25 @@ class Team implements ITeam {
     this.hostId = team.hostId;
     this.members = [];
   }
-
 }
 
 class TeamRepository {
-
   async getById(id: string): Promise<ITeam> {
-    return await teamsDb.get(id);
+    try {
+      return await teamsDb.get(id);
+    } catch (error) {
+      if ((error as any).statusCode == 404) {
+        throw new HttpException(
+          HttpStatusCode.NOT_FOUND,
+          'Team not found by id',
+        );
+      } else {
+        throw new HttpException(
+          HttpStatusCode.INTERNAL_SERVER_ERROR,
+          'Internal server error',
+        );
+      }
+    }
   }
 
   async exists(id: string): Promise<boolean> {
@@ -45,18 +58,31 @@ class TeamRepository {
     if (!oldTeam.members.includes(oldTeam.hostId)) {
       oldTeam.members.push(oldTeam.hostId);
     }
-    await teamsDb.insert(oldTeam);
-    return oldTeam;
+    try {
+      await teamsDb.insert(oldTeam);
+      return oldTeam;
+    } catch (error) {
+      if ((error as any).statusCode == 404) {
+        throw new HttpException(
+          HttpStatusCode.NOT_FOUND,
+          'Team not found by id',
+        );
+      } else {
+        throw new HttpException(
+          HttpStatusCode.INTERNAL_SERVER_ERROR,
+          'Internal server error',
+        );
+      }
+    }
   }
 
-  async delete(id: string) {
+  async delete(id: string): Promise<void> {
     await teamsDb.get(id, (err, body) => {
       if (!err) {
         teamsDb.destroy(id, body._rev);
       }
     });
   }
-
 }
 
 export const teamRepository = new TeamRepository();
