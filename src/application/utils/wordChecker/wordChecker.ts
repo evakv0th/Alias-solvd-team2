@@ -3,7 +3,7 @@ function separationMap(letter: string): string {
 }
 
 function letterMap(letter: string): string {
-  const map = {
+  const map: { [key: string]: string } = {
     'a': '[a4@]',
     'b': '[b8]',
     'e': '[e3]',
