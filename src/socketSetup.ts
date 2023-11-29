@@ -37,7 +37,7 @@ export const setupSocket = (io: Server) => {
 
       try {
         const chat = await chatService.getById(chatId);
-        const msgWithoutjunk = msg.replace(/[^a-zA-Z\s]/g, '');
+        const msgWithoutjunk = msg.replace(/[^a-zA-Z\s0-9]/g, '');
         const wordsToCheck = msgWithoutjunk.split(' ');
         let stateForMsgAdd = true;
         for (const word of wordsToCheck) {
@@ -48,8 +48,9 @@ export const setupSocket = (io: Server) => {
             );
             return;
           } else if (isForbidden('happy', word)) {
-            console.error(
-              `you cant use words like ${word}. Its almost same as guessed words`,
+            io.to(chatId).emit(
+              'chat message',
+              `This message has been blocked (it has similar word to guessedWord).`,
             );
             stateForMsgAdd = false;
           }
