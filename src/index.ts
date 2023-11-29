@@ -12,7 +12,7 @@ import cookieParser from 'cookie-parser';
 import lobbyRouter from './routes/lobby.router';
 import teamRouter from "./routes/team.router";
 import userRouter from './routes/user.router';
-
+import session from 'express-session';
 
 dotenv.config();
 
@@ -27,6 +27,12 @@ app.set('views', path.join(__dirname, 'views')); // for ejs
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/views')); // for css to work
+
+app.use(session({
+  secret: 'session-secret-key',
+  resave: false,
+  saveUninitialized: false,
+}));
 
 app.get('/', (req: Request, res: Response) => {
   res.sendFile("Alias game");
