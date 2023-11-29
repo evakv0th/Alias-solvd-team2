@@ -1,17 +1,18 @@
 import dotenv from 'dotenv';
-import express, {Request, Response} from 'express';
+import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import authRouter from './routes/auth.router';
-import {couchdbInit} from './couchdb.init';
+import { couchdbInit } from './couchdb.init';
 import http from 'http';
-import {Server} from 'socket.io';
+import { Server } from 'socket.io';
 import chatRouter from './routes/chat.router';
 import path from 'path';
-import {setupSocket} from './socketSetup';
+import { setupSocket } from './socketSetup';
 import cookieParser from 'cookie-parser';
 import lobbyRouter from './routes/lobby.router';
-import teamRouter from "./routes/team.router";
-import gameRouter from "./routes/game.router";
+import teamRouter from './routes/team.router';
+import gameRouter from './routes/game.router';
+import vocabularyRouter from './routes/vocabulary.router';
 import userRouter from './routes/user.router';
 
 
@@ -41,6 +42,7 @@ app.use('/api/v1/lobby', lobbyRouter);
 app.use('/api/v1/teams', teamRouter);
 app.use('/api/v1/games', gameRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/vocabularies', vocabularyRouter);
 
 const startServer = async (): Promise<void> => {
   couchdbInit().then(() => {

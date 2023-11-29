@@ -32,7 +32,7 @@ export async function register(
 export async function login(credentials: IUserCreateSchema): Promise<{
   accessToken: string;
   refreshToken: string;
-  _id: string | undefined;
+  id: string | undefined;
 }> {
   const { username, password } = credentials;
 
@@ -44,6 +44,7 @@ export async function login(credentials: IUserCreateSchema): Promise<{
   }
 
   const user = await userService.getByUsername(username);
+  console.log(user._id);
 
   //TODO check with bcrypt
   if (!user || user.password !== password) {
@@ -56,5 +57,5 @@ export async function login(credentials: IUserCreateSchema): Promise<{
   const accessToken = generateAccessToken(user as IUser);
   const refreshToken = generateRefreshToken(user as IUser);
 
-  return { accessToken, refreshToken, _id: user._id };
+  return { id: user._id, accessToken, refreshToken };
 }
