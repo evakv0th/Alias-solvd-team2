@@ -87,7 +87,7 @@ export async function addMemberByName(
     .json(new HttpException(HttpStatusCode.NOT_FOUND, "User ID is undefined"));
   }
 
-  let userId: string = user._id;
+  const userId:string = user._id;
 
   if (!team.members.includes(userId)) {
     team.members.push(userId)
