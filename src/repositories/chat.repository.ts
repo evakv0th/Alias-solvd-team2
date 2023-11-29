@@ -20,7 +20,7 @@ class ChatRepository {
       if ((error as any).statusCode == 404) {
         throw new HttpException(
           HttpStatusCode.NOT_FOUND,
-          'Chat not found by id!',
+          'Chat not found by id',
         );
       } else {
         throw new HttpException(
@@ -56,7 +56,7 @@ class ChatRepository {
       if ((error as any).statusCode == 404) {
         throw new HttpException(
           HttpStatusCode.NOT_FOUND,
-          'Chat not found by id!',
+          'Chat not found by id',
         );
       } else {
         throw new HttpException(
