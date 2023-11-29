@@ -1,84 +1,30 @@
-const commonPrefixes = [
-  'un',
-  're',
-  'pre',
-  'mis',
-  'dis',
-  'non',
-  'in',
-  'im',
-  'il',
-];
-const commonEndings = [
-  'able',
-  'ible',
-  'al',
-  'ial',
-  'ed',
-  'en',
-  'er',
-  'est',
-  'ful',
-  'ic',
-  'ing',
-  'ion',
-  'tion',
-  'ation',
-  'ition',
-  'ty',
-  'ive',
-  'ative',
-  'itive',
-  'less',
-  'ly',
-  'ment',
-  'ness',
-  'ous',
-  'eous',
-  'ious',
-  's',
-  'es',
-  'ed',
-  'ing',
-  'a',
-  'o',
-  'u',
-  'i',
-  'y',
-  'e',
-];
-
-// const words = ['happy', 'play', 'like', 'do', 'agree', 'connect'];
-// const wordsToCheck = [
-//   'unhappiness',
-//   'replay',
-//   'dislike',
-//   'redo',
-//   'disagreement',
-//   'disconnected',
-// ];
-
-function removeCommonPrefixesAndEndings(word: string): string | undefined {
-  const prefixRegExp = new RegExp(`^(${commonPrefixes.join('|')})`);
-  const endingRegExp = new RegExp(`(${commonEndings.join('|')})$`);
-
-  const withoutPrefix = word.replace(prefixRegExp, '');
-  let withoutEnding = withoutPrefix.replace(endingRegExp, '');
-
-  while (endingRegExp.test(withoutEnding)) {
-    withoutEnding = withoutEnding.replace(endingRegExp, '');
-  }
-
-  return withoutEnding;
+function separationMap(letter: string): string {
+  return `[^a-zA-Z]?${letter}[^a-zA-Z]?`;
 }
 
-export function wordChecker(word: string, wordForGuessing: string): boolean {
-  const cleanedWord = removeCommonPrefixesAndEndings(word);
-  const cleanedWordForGuessing =
-    removeCommonPrefixesAndEndings(wordForGuessing);
-  return cleanedWord !== cleanedWordForGuessing;
+function letterMap(letter: string): string {
+  const map: { [key: string]: string } = {
+    'a': '[a4@]',
+    'b': '[b8]',
+    'e': '[e3]',
+    'i': '[i1!]',
+    'l': '[l1|]',
+    'o': '[o0]',
+    's': '[s$]',
+    't': '[t7]'
+  };
+  return map[letter.toLowerCase()] || letter;
 }
 
-// for (let i = 0; i < words.length; i++) {
-//   console.log(wordChecker(words[i], wordsToCheck[i]));
-// }
+function regexMapper(word: string, ...mappers: { (letter: string): string }[]) {
+  return word.replace(/[a-z]/gi, (letter) => {
+    return mappers.reduce((acc, mapper) => {
+      return mapper(acc);
+    }, letter);
+  })
+}
+
+export default function isForbidden(text: string, wordToCheck: string): boolean {
+  const regex = new RegExp(regexMapper(wordToCheck, letterMap, separationMap), 'gi');
+  return regex.test(text);
+}
