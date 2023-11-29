@@ -32,7 +32,7 @@ class UserRepository {
       if ((error as any).statusCode == 404) {
         throw new HttpException(
           HttpStatusCode.NOT_FOUND,
-          'user not found by id! repository',
+          'User not found by id!',
         );
       } else {
         throw new HttpException(
@@ -79,7 +79,7 @@ class UserRepository {
       if ((error as any).statusCode == 404) {
         throw new HttpException(
           HttpStatusCode.NOT_FOUND,
-          'user not found by id! repository',
+          'User not found by id!',
         );
       } else {
         throw new HttpException(
