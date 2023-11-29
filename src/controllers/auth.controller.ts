@@ -60,7 +60,7 @@ export async function login(req: Request, res: Response): Promise<Response> {
 export async function refresh(req: Request, res: Response): Promise<Response> {
   try {
     const { refreshToken } = req.body;
-
+    
     if (!refreshToken) {
       throw new HttpException(
         HttpStatusCode.BAD_REQUEST,

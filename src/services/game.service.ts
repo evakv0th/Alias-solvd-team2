@@ -5,11 +5,20 @@ import {roundService} from "./round.service";
 import {IRound, IRoundCreateSchema} from "../interfaces/round.interface";
 import {chatService} from "./chat.service";
 import {teamService} from "./team.service";
+import HttpStatusCode from '../application/utils/exceptions/statusCode';
+import HttpException from '../application/utils/exceptions/http-exceptions';
 
 class GameService {
-
+  
   async getById(id: string): Promise<IGame> {
-    return gameRepository.getById(id);
+    try {
+      return gameRepository.getById(id);
+    } catch (error) {
+      throw new HttpException(
+        HttpStatusCode.NOT_FOUND,
+        'game not found by id!',
+      );
+    }
   }
 
   async exists(id: string): Promise<boolean> {
@@ -21,10 +30,16 @@ class GameService {
   }
 
   async update(game: IGame): Promise<IGame> {
-    return gameRepository.update(game);
+    try {
+      return gameRepository.update(game);
+    } catch (error) {
+      throw new HttpException(
+        HttpStatusCode.NOT_FOUND,
+        'game not found by id!',
+      );
+    }
   }
-
-  async delete(id: string) {
+  async delete(id: string): Promise<void> {
     await gameRepository.delete(id);
   }
 
@@ -93,7 +108,7 @@ class GameService {
   private getScoreFromRound(round: IRound): number {
     return round.words.filter(word => word.guessed).length;
   }
-
+  
 }
 
 export const gameService = new GameService();
