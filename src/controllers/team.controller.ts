@@ -57,9 +57,9 @@ export async function addMemberByName(
 ): Promise<Response | void> {
 
   const id: string = req.params.id;
-  const userToAdd = req.body;
+  const userToAdd: string = req.params.username;
 
-  const user = await userService.getByUsername(userToAdd.username);
+  const user = await userService.getByUsername(userToAdd);
   const team = await teamService.getById(id);
 
   if (!user) {
@@ -73,8 +73,8 @@ export async function addMemberByName(
     .json(new HttpException(HttpStatusCode.NOT_FOUND, "Team not found"));
   }
 
-  if (!team.members.includes(userToAdd.id)) {
-    team.members.push(userToAdd.id)
+  if (!team.members.includes(userToAdd)) {
+    team.members.push(userToAdd)
     await teamService.update(team)
       return res
     .status(HttpStatusCode.OK);

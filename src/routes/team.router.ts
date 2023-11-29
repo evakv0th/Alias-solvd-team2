@@ -7,6 +7,6 @@ const teamRouter = express.Router();
 teamRouter.post('/', authenticateToken, create);
 teamRouter.get('/:id', authenticateToken, getById);
 teamRouter.put('/:id/members', authenticateToken, updateMembers);
-teamRouter.put('/:id/members/name', authenticateToken, addMemberByName);
+teamRouter.put('/:id/members/:username', authenticateToken, addMemberByName);
 
 export default teamRouter;
