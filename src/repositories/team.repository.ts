@@ -24,7 +24,7 @@ class TeamRepository {
       if ((error as any).statusCode == 404) {
         throw new HttpException(
           HttpStatusCode.NOT_FOUND,
-          'team not found by id! repository',
+          'Team not found by id!',
         );
       } else {
         throw new HttpException(
@@ -65,7 +65,7 @@ class TeamRepository {
       if ((error as any).statusCode == 404) {
         throw new HttpException(
           HttpStatusCode.NOT_FOUND,
-          'team not found by id! repository',
+          'Team not found by id!',
         );
       } else {
         throw new HttpException(
