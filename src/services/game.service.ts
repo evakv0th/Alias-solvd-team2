@@ -11,14 +11,7 @@ import HttpException from '../application/utils/exceptions/http-exceptions';
 class GameService {
   
   async getById(id: string): Promise<IGame> {
-    try {
-      return gameRepository.getById(id);
-    } catch (error) {
-      throw new HttpException(
-        HttpStatusCode.NOT_FOUND,
-        'game not found by id!',
-      );
-    }
+    return gameRepository.getById(id);
   }
 
   async exists(id: string): Promise<boolean> {
@@ -30,14 +23,7 @@ class GameService {
   }
 
   async update(game: IGame): Promise<IGame> {
-    try {
-      return gameRepository.update(game);
-    } catch (error) {
-      throw new HttpException(
-        HttpStatusCode.NOT_FOUND,
-        'game not found by id!',
-      );
-    }
+    return gameRepository.update(game);
   }
   async delete(id: string): Promise<void> {
     await gameRepository.delete(id);

@@ -1,8 +1,9 @@
 import {gamesDb} from "../couchdb.init";
 import {GameOptions, IGame, IGameCreateSchema} from "../interfaces/game.interface";
+import HttpStatusCode from '../application/utils/exceptions/statusCode';
+import HttpException from '../application/utils/exceptions/http-exceptions';
 
 class Game implements IGame {
-
   _id: string | undefined;
   hostId: string;
   createdAt: Date | undefined;
@@ -17,19 +18,36 @@ class Game implements IGame {
 
   constructor(game: IGameCreateSchema) {
     this.hostId = game.hostId;
-    this.teams = game.teams.map(team => ({teamId: team, score: 0, members: []}));
+    this.createdAt = new Date();
+    this.teams = game.teams.map((team) => ({
+      teamId: team,
+      score: 0,
+      members: [],
+    }));
     // the first team undefined handle
-    this.currentTeam = this.teams[0].teamId ?? ''; 
+    this.currentTeam = this.teams[0].teamId ?? '';
     this.rounds = [];
     this.options = game.options;
   }
-
 }
 
 class GameRepository {
-
   async getById(id: string): Promise<IGame> {
-    return await gamesDb.get(id);
+    try {
+      return await gamesDb.get(id);
+    } catch (error) {
+      if ((error as any).statusCode == 404) {
+        throw new HttpException(
+          HttpStatusCode.NOT_FOUND,
+          'Game not found by id',
+        );
+      } else {
+        throw new HttpException(
+          HttpStatusCode.INTERNAL_SERVER_ERROR,
+          'Internal server error',
+        );
+      }
+    }
   }
 
   async exists(id: string): Promise<boolean> {
@@ -70,7 +88,6 @@ class GameRepository {
       console.error(err);
     }
   }
-
 }
 
 export const gameRepository = new GameRepository();

@@ -1,5 +1,7 @@
 import {IUser, IUserCreateSchema} from '../interfaces/user.interface';
 import {usersDb} from '../couchdb.init';
+import HttpException from '../application/utils/exceptions/http-exceptions';
+import HttpStatusCode from '../application/utils/exceptions/statusCode';
 
 class User implements IUser {
 
@@ -27,7 +29,21 @@ class User implements IUser {
 class UserRepository {
 
   async getById(id: string): Promise<IUser> {
-    return await usersDb.get(id);
+    try {
+      return await usersDb.get(id);
+    } catch (error) {
+      if ((error as any).statusCode == 404) {
+        throw new HttpException(
+          HttpStatusCode.NOT_FOUND,
+          'User not found by id',
+        );
+      } else {
+        throw new HttpException(
+          HttpStatusCode.INTERNAL_SERVER_ERROR,
+          'Internal server error',
+        );
+      }
+    }
   }
 
   async getByUsername(username: string): Promise<IUser> {
@@ -59,8 +75,22 @@ class UserRepository {
     oldUser.username = user.username;
     oldUser.password = user.password;
     oldUser.stats = user.stats;
-    await usersDb.insert(oldUser);
-    return oldUser;
+    try {
+      await usersDb.insert(oldUser);
+      return oldUser;
+    } catch (error) {
+      if ((error as any).statusCode == 404) {
+        throw new HttpException(
+          HttpStatusCode.NOT_FOUND,
+          'User not found by id',
+        );
+      } else {
+        throw new HttpException(
+          HttpStatusCode.INTERNAL_SERVER_ERROR,
+          'Internal server error',
+        );
+      }
+    }
   }
 
   async delete(id: string): Promise<void> {
