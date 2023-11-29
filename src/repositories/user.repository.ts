@@ -1,7 +1,8 @@
-import { IUser, IUserCreateSchema } from '../interfaces/user.interface';
-import { usersDb } from '../couchdb.init';
+import {IUser, IUserCreateSchema} from '../interfaces/user.interface';
+import {usersDb} from '../couchdb.init';
 
 class User implements IUser {
+
   _id: string | undefined;
   username: string;
   password: string;
@@ -20,9 +21,11 @@ class User implements IUser {
       wordsGuessed: 0,
     };
   }
+
 }
 
 class UserRepository {
+
   async getById(id: string): Promise<IUser> {
     return await usersDb.get(id);
   }
@@ -60,13 +63,15 @@ class UserRepository {
     return oldUser;
   }
 
-  async delete(id: string) {
-    await usersDb.get(id, (err, body) => {
-      if (!err) {
-        usersDb.destroy(id, body._rev);
-      }
-    });
+  async delete(id: string): Promise<void> {
+    try {
+      const doc = await usersDb.get(id);
+      await usersDb.destroy(id, doc._rev);
+    } catch (err) {
+      console.error(err);
+    }
   }
+
 }
 
 export const userRepository = new UserRepository();

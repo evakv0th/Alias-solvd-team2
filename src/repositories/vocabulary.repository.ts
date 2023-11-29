@@ -40,12 +40,13 @@ class VocabularyRepository {
     return oldVocabulary;
   }
 
-  async delete(id: string) {
-    await vocabulariesDb.get(id, (err, body) => {
-      if (!err) {
-        vocabulariesDb.destroy(id, body._rev);
-      }
-    });
+  async delete(id: string): Promise<void> {
+    try {
+      const doc = await vocabulariesDb.get(id);
+      await vocabulariesDb.destroy(id, doc._rev);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
 }

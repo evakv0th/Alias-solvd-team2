@@ -5,10 +5,20 @@ import { roundService } from './round.service';
 import { IRound, IRoundCreateSchema } from '../interfaces/round.interface';
 import { chatService } from './chat.service';
 import { teamService } from './team.service';
+import HttpStatusCode from '../application/utils/exceptions/statusCode';
+import HttpException from '../application/utils/exceptions/http-exceptions';
 
 class GameService {
+  
   async getById(id: string): Promise<IGame> {
-    return gameRepository.getById(id);
+    try {
+      return gameRepository.getById(id);
+    } catch (error) {
+      throw new HttpException(
+        HttpStatusCode.NOT_FOUND,
+        'game not found by id!',
+      );
+    }
   }
 
   async exists(id: string): Promise<boolean> {
@@ -20,26 +30,37 @@ class GameService {
   }
 
   async update(game: IGame): Promise<IGame> {
-    return gameRepository.update(game);
+    try {
+      return gameRepository.update(game);
+    } catch (error) {
+      throw new HttpException(
+        HttpStatusCode.NOT_FOUND,
+        'game not found by id!',
+      );
+    }
   }
-
-  async delete(id: string) {
+  async delete(id: string): Promise<void> {
     await gameRepository.delete(id);
   }
 
   async getRandomWord(id: string): Promise<string> {
     const game = await this.getById(id);
     const vocabulary = await vocabularyService.getById(game.options.vocabularyId);
+    const uniquenessThreshold = vocabulary.words.length * 0.85;
     let word;
     do {
       word = vocabulary.words[Math.floor(Math.random() * vocabulary.words.length)];
-    } while (await this.wordWasUsedInGame(word, game._id!));
+    } while (await this.wordWasUsedInGame(word, game._id!, uniquenessThreshold))
     return word;
   }
 
-  private async wordWasUsedInGame(word: string, gameId: string): Promise<boolean> {
+  private async wordWasUsedInGame(word: string, gameId: string, threshold: number): Promise<boolean> {
     const rounds = await roundService.getAllByGameId(gameId);
-    return rounds.some((round) => round.words.map((obj) => obj.word).includes(word));
+    const wordsUsed = rounds.reduce((acc, round) => acc + round.words.length, 0);
+    if (wordsUsed > threshold) {
+      return false;
+    }
+    return rounds.some(round => round.words.map(obj => obj.word).includes(word));
   }
 
   async start(id: string): Promise<{ msg: string; chatId: string }> {
@@ -78,7 +99,7 @@ class GameService {
   private async getHostIdFromTeam(id: string, gameId: string): Promise<string> {
     const team = await teamService.getById(id);
     let rounds = await roundService.getAllByGameId(gameId);
-    rounds = rounds.filter((round) => (round.teamId = id));
+    rounds = rounds.filter(round => round.teamId === id);
     return team.members[rounds.length % team.members.length];
   }
 
@@ -91,6 +112,7 @@ class GameService {
   private getScoreFromRound(round: IRound): number {
     return round.words.filter((word) => word.guessed).length;
   }
+  
 }
 
 export const gameService = new GameService();
