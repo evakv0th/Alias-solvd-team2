@@ -47,7 +47,7 @@ class GameRepository {
     return response.id;
   }
 
-  async start(id: string) {
+  async start(id: string): Promise<void> {
     const game = await this.getById(id);
     game.createdAt = new Date();
     await gamesDb.insert(game);
@@ -62,12 +62,13 @@ class GameRepository {
     return oldGame;
   }
 
-  async delete(id: string) {
-    await gamesDb.get(id, (err, body) => {
-      if (!err) {
-        gamesDb.destroy(id, body._rev);
-      }
-    });
+  async delete(id: string): Promise<void> {
+    try {
+      const doc = await gamesDb.get(id);
+      await gamesDb.destroy(id, doc._rev);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
 }

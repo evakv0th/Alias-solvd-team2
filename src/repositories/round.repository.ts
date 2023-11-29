@@ -54,12 +54,13 @@ class RoundRepository {
     return oldRound;
   }
 
-  async delete(id: string) {
-    await roundsDb.get(id, (err, body) => {
-      if (!err) {
-        roundsDb.destroy(id, body._rev);
-      }
-    });
+  async delete(id: string): Promise<void> {
+    try {
+      const doc = await roundsDb.get(id);
+      await roundsDb.destroy(id, doc._rev);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
 }

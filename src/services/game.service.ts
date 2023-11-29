@@ -31,15 +31,20 @@ class GameService {
   async getRandomWord(id: string): Promise<string> {
     const game = await this.getById(id);
     const vocabulary = await vocabularyService.getById(game.options.vocabularyId);
+    const uniquenessThreshold = vocabulary.words.length * 0.85;
     let word;
     do {
       word = vocabulary.words[Math.floor(Math.random() * vocabulary.words.length)];
-    } while (await this.wordWasUsedInGame(word, game._id!))
+    } while (await this.wordWasUsedInGame(word, game._id!, uniquenessThreshold))
     return word;
   }
 
-  private async wordWasUsedInGame(word: string, gameId: string): Promise<boolean> {
+  private async wordWasUsedInGame(word: string, gameId: string, threshold: number): Promise<boolean> {
     const rounds = await roundService.getAllByGameId(gameId);
+    const wordsUsed = rounds.reduce((acc, round) => acc + round.words.length, 0);
+    if (wordsUsed > threshold) {
+      return false;
+    }
     return rounds.some(round => round.words.map(obj => obj.word).includes(word));
   }
 
@@ -75,7 +80,7 @@ class GameService {
   private async getHostIdFromTeam(id: string, gameId: string): Promise<string> {
     const team = await teamService.getById(id);
     let rounds = await roundService.getAllByGameId(gameId);
-    rounds = rounds.filter(round => round.teamId = id);
+    rounds = rounds.filter(round => round.teamId === id);
     return team.members[rounds.length % team.members.length];
   }
 
