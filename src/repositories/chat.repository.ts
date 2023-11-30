@@ -1,24 +1,36 @@
 import HttpException from '../application/utils/exceptions/http-exceptions';
 import HttpStatusCode from '../application/utils/exceptions/statusCode';
-import { chatsDb } from '../couchdb.init';
-import { ChatMessage, IChat } from '../interfaces/chat.interface';
+import {chatsDb} from '../couchdb.init';
+import {ChatMessage, IChat} from '../interfaces/chat.interface';
 
 class Chat implements IChat {
+
   _id: string | undefined;
   messages: ChatMessage[];
 
   constructor() {
     this.messages = [];
   }
+
 }
 
 class ChatRepository {
+
   async getById(id: string): Promise<IChat> {
     try {
-      const chat = await chatsDb.get(id);
-      return chat;
-    } catch (err) {
-      throw new HttpException(HttpStatusCode.NOT_FOUND, 'chat not found!');
+      return await chatsDb.get(id);
+    } catch (error) {
+      if ((error as any).statusCode == 404) {
+        throw new HttpException(
+          HttpStatusCode.NOT_FOUND,
+          'Chat not found by id',
+        );
+      } else {
+        throw new HttpException(
+          HttpStatusCode.INTERNAL_SERVER_ERROR,
+          'Internal server error',
+        );
+      }
     }
   }
 
@@ -40,18 +52,33 @@ class ChatRepository {
   async update(chat: IChat): Promise<IChat> {
     const oldChat = await this.getById(chat._id!);
     oldChat.messages = chat.messages;
-    await chatsDb.insert(oldChat);
-    return oldChat;
+    try {
+      await chatsDb.insert(oldChat);
+      return oldChat;
+    } catch (error) {
+      if ((error as any).statusCode == 404) {
+        throw new HttpException(
+          HttpStatusCode.NOT_FOUND,
+          'Chat not found by id',
+        );
+      } else {
+        throw new HttpException(
+          HttpStatusCode.INTERNAL_SERVER_ERROR,
+          'Internal server error',
+        );
+      }
+    }
   }
 
-  async delete(id: string) {
+  async delete(id: string): Promise<void> {
     try {
-      const chat = chatsDb.get(id);
-      chatsDb.destroy(id, (await chat)._rev);
+      const chat = await chatsDb.get(id);
+      await chatsDb.destroy(id, chat._rev);
     } catch (err) {
       console.error(err);
     }
   }
+
 }
 
 export const chatRepository = new ChatRepository();

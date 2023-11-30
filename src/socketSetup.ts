@@ -1,8 +1,14 @@
+<<<<<<< HEAD
 import { Server } from 'socket.io';
 import { chatRepository } from './repositories/chat.repository';
 import { WordChecker } from './application/utils/wordChecker/wordChecker';
 // import { userRepository } from './repositories/user.repository';
+=======
+import {Server} from 'socket.io';
+import isForbidden from './application/utils/wordChecker/wordChecker';
+>>>>>>> remotes/origin/dev
 import badwordsArray from 'badwords/array';
+import {chatService} from "./services/chat.service";
 
 export const setupSocket = (io: Server) => {
   io.on('connection', (socket) => {
@@ -12,7 +18,7 @@ export const setupSocket = (io: Server) => {
       socket.join(chatId);
       console.log(`User joined chat ${chatId}`);
       try {
-        const chat = await chatRepository.getById(chatId);
+        const chat = await chatService.getById(chatId);
         if (chat.messages.length >= 50) {
           const chatRev = chat.messages.reverse().slice(0, 50).reverse();
           chatRev.forEach((message) => {
@@ -37,11 +43,8 @@ export const setupSocket = (io: Server) => {
       console.log(`message: ${msg} in chat ${chatId}`);
 
       try {
-        const chat = await chatRepository.getById(chatId);
-        // const user = await userRepository.getById(
-        //   '0d81332b4945a796c42abb425e000e66',
-        // );
-        const msgWithoutjunk = msg.replace(/[^a-zA-Z\s]/g, '');
+        const chat = await chatService.getById(chatId);
+        const msgWithoutjunk = msg.replace(/[^a-zA-Z\s0-9]/g, '');
         const wordsToCheck = msgWithoutjunk.split(' ');
         const wordToCheck = 'happy';
         let stateForMsgAdd = true;
@@ -52,9 +55,16 @@ export const setupSocket = (io: Server) => {
               `This message has been blocked (it contains inappropriate content).`,
             );
             return;
+<<<<<<< HEAD
           } else if (!WordChecker.isMessageValid(msg, wordToCheck)) {
             console.error(
               `you cant use words like ${word}. Its almost same as guessed words`,
+=======
+          } else if (isForbidden('happy', word)) {
+            io.to(chatId).emit(
+              'chat message',
+              `This message has been blocked (it has similar word to guessedWord).`,
+>>>>>>> remotes/origin/dev
             );
             stateForMsgAdd = false;
           }
@@ -66,7 +76,7 @@ export const setupSocket = (io: Server) => {
             message: msg,
           });
 
-          await chatRepository.update(chat);
+          await chatService.update(chat);
 
           io.to(chatId).emit('chat message', msg);
         }
@@ -77,9 +87,9 @@ export const setupSocket = (io: Server) => {
 
     socket.on('admin clear messages', async (chatId) => {
       try {
-        const chat = await chatRepository.getById(chatId);
+        const chat = await chatService.getById(chatId);
         chat.messages = [];
-        await chatRepository.update(chat);
+        await chatService.update(chat);
 
         io.to(chatId).emit('admin messages cleared');
       } catch (error) {

@@ -1,21 +1,9 @@
-import HttpException from '../application/utils/exceptions/http-exceptions';
-import HttpStatusCode from '../application/utils/exceptions/statusCode';
-import {
-  IVocabulary,
-  IVocabularyCreateSchema,
-} from '../interfaces/vocabulary.interface';
-import { vocabularyRepository } from '../repositories/vocabulary.repository';
+import {IVocabulary, IVocabularyCreateSchema,} from '../interfaces/vocabulary.interface';
+import {vocabularyRepository} from '../repositories/vocabulary.repository';
 
 class VocabularyService {
   async getById(id: string): Promise<IVocabulary> {
-    try {
-      return vocabularyRepository.getById(id);
-    } catch (error) {
-      throw new HttpException(
-        HttpStatusCode.NOT_FOUND,
-        'vocabulary not found by id!',
-      );
-    }
+    return vocabularyRepository.getById(id);
   }
 
   async exists(id: string): Promise<boolean> {
@@ -27,25 +15,11 @@ class VocabularyService {
   }
 
   async update(vocabulary: IVocabulary): Promise<IVocabulary> {
-    try {
-      return vocabularyRepository.update(vocabulary);
-    } catch (error) {
-      throw new HttpException(
-        HttpStatusCode.NOT_FOUND,
-        'vocabulary not found by id!',
-      );
-    }
+    return vocabularyRepository.update(vocabulary);
   }
 
   async delete(id: string): Promise<void> {
-    try {
-      await vocabularyRepository.delete(id);
-    } catch (error) {
-      throw new HttpException(
-        HttpStatusCode.NOT_FOUND,
-        'vocabulary not found by id!',
-      );
-    }
+    await vocabularyRepository.delete(id);
   }
 }
 

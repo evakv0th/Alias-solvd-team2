@@ -23,6 +23,7 @@
   "homepage": "https://github.com/evakv0th/Alias-solvd-team2#readme",
   "devDependencies": {
     "@types/badwords": "^1.0.3",
+    "@types/bcrypt": "^5.0.1",
     "@types/cookie-parser": "^1.4.6",
     "@types/ejs": "^3.1.5",
     "@types/express": "^4.17.21",
@@ -41,6 +42,7 @@
   "dependencies": {
     "@types/nano": "^7.0.0",
     "badwords": "^1.0.0",
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
     "copyfiles": "^2.4.1",

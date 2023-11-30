@@ -1,20 +1,33 @@
 import dotenv from 'dotenv';
+<<<<<<< HEAD
 import http from 'http'; 
 import express, {Request, Response} from 'express';
 import bodyParser from 'body-parser';
 import authRouter from './routes/auth.router';
 import { couchdbInit } from './couchdb.init';
+=======
+import express, { Request, Response } from 'express';
+import bodyParser from 'body-parser';
+import authRouter from './routes/auth.router';
+import { couchdbInit } from './couchdb.init';
+import http from 'http';
+>>>>>>> remotes/origin/dev
 import { Server } from 'socket.io';
 import chatRouter from './routes/chat.router';
 import path from 'path';
-import {setupSocket} from './socketSetup';
+import { setupSocket } from './socketSetup';
 import cookieParser from 'cookie-parser';
 import lobbyRouter from './routes/lobby.router';
-import teamRouter from "./routes/team.router";
+import teamRouter from './routes/team.router';
+import gameRouter from './routes/game.router';
+import vocabularyRouter from './routes/vocabulary.router';
 import userRouter from './routes/user.router';
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> remotes/origin/dev
 dotenv.config();
 
 const port = process.env.PORT || 3000;
@@ -24,13 +37,13 @@ const io = new Server(server);
 
 app.use(cookieParser());
 app.set('view engine', 'ejs'); // for ejs
-app.set('views', path.join(__dirname, 'views')); // for ejs
+app.set('views', path.join(__dirname, 'views/src/views')); // for ejs
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(express.static(__dirname + '/views')); // for css to work
+app.use(express.static(__dirname + '/views/src/views')); // for css to work
 
 app.get('/', (req: Request, res: Response) => {
-  res.sendFile("Alias game");
+  res.sendFile('Alias game');
 });
 
 setupSocket(io);
@@ -40,7 +53,9 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/chats', chatRouter);
 app.use('/api/v1/lobby', lobbyRouter);
 app.use('/api/v1/teams', teamRouter);
+app.use('/api/v1/games', gameRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/vocabularies', vocabularyRouter);
 
 const startServer = async (): Promise<void> => {
   couchdbInit().then(() => {

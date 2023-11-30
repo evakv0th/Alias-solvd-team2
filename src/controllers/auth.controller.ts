@@ -1,12 +1,9 @@
-import { Request, Response } from 'express';
+import {Request, Response} from 'express';
 import * as authService from '../services/auth.service';
 import HttpException from '../application/utils/exceptions/http-exceptions';
 import HttpStatusCode from '../application/utils/exceptions/statusCode';
-import {
-  generateAccessToken,
-  refreshTokenSecretKey,
-} from '../application/utils/tokenForAuth/generateToken';
-import { IUser } from '../interfaces/user.interface';
+import {generateAccessToken, refreshTokenSecretKey,} from '../application/utils/tokenForAuth/generateToken';
+import {IUser} from '../interfaces/user.interface';
 import * as jwt from 'jsonwebtoken';
 
 export async function register(
@@ -14,10 +11,10 @@ export async function register(
   res: Response,
 ): Promise<Response | void> {
   try {
-    const newUser = await authService.register(req.body);
+    await authService.register(req.body);
     return res
-      .status(201)
-      .json({ message: 'User registered successfully', user: newUser });
+      .status(HttpStatusCode.CREATED)
+      .json({message: 'User registered successfully'});
   } catch (error) {
     if ((error as HttpException).status) {
       return res
@@ -43,7 +40,7 @@ export async function login(req: Request, res: Response): Promise<Response> {
       secure: secureOption,
       sameSite: sameSiteOption as any,
     });
-    return res.status(200).json({ accessToken, refreshToken });
+    return res.status(HttpStatusCode.OK).json({ accessToken, refreshToken });
   } catch (error) {
     if ((error as HttpException).status) {
       return res
@@ -73,7 +70,7 @@ export async function refresh(req: Request, res: Response): Promise<Response> {
     const accessToken = generateAccessToken(decoded as IUser);
 
     res.cookie('access_token', accessToken, { httpOnly: true });
-    return res.status(200).json({ accessToken });
+    return res.status(HttpStatusCode.OK).json({ accessToken });
   } catch (error) {
     if ((error as HttpException).status) {
       return res

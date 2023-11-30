@@ -1,17 +1,14 @@
-import { IUser, IUserCreateSchema } from '../interfaces/user.interface';
+import {IUser, IUserCreateSchema} from '../interfaces/user.interface';
 import HttpException from '../application/utils/exceptions/http-exceptions';
 import HttpStatusCode from '../application/utils/exceptions/statusCode';
-import {
-  generateAccessToken,
-  generateRefreshToken,
-} from '../application/utils/tokenForAuth/generateToken';
-import { userService } from './user.service';
+import {generateAccessToken, generateRefreshToken,} from '../application/utils/tokenForAuth/generateToken';
+import {userService} from './user.service';
+import util from "util";
+import bcrypt from "bcrypt";
 
-export async function register(
-  newUser: IUserCreateSchema,
-): Promise<IUserCreateSchema> {
-  const { username, password } = newUser;
-  
+export async function register(newUser: IUserCreateSchema): Promise<IUserCreateSchema> {
+  const {username, password} = newUser;
+
   if (!username || !password) {
     throw new HttpException(
       HttpStatusCode.BAD_REQUEST,
@@ -19,7 +16,7 @@ export async function register(
     );
   }
 
-  if (await userService.exists(username)) {
+  if (await userService.existsByUsername(username)) {
     throw new HttpException(
       HttpStatusCode.BAD_REQUEST,
       `User with username ${username} already exists`,
@@ -32,7 +29,7 @@ export async function register(
 export async function login(credentials: IUserCreateSchema): Promise<{
   accessToken: string;
   refreshToken: string;
-  _id: string | undefined;
+  id: string | undefined;
 }> {
   const { username, password } = credentials;
 
@@ -44,9 +41,9 @@ export async function login(credentials: IUserCreateSchema): Promise<{
   }
 
   const user = await userService.getByUsername(username);
+  const passwordMatch = await util.promisify(bcrypt.compare)(password, user.password);
 
-  //TODO check with bcrypt
-  if (!user || user.password !== password) {
+  if (!user || !passwordMatch) {
     throw new HttpException(
       HttpStatusCode.UNAUTHORIZED,
       `Wrong username or password`,
@@ -56,5 +53,5 @@ export async function login(credentials: IUserCreateSchema): Promise<{
   const accessToken = generateAccessToken(user as IUser);
   const refreshToken = generateRefreshToken(user as IUser);
 
-  return { accessToken, refreshToken, _id: user._id };
+  return { id: user._id, accessToken, refreshToken };
 }

@@ -1,12 +1,12 @@
-import nano from "nano";
 import {gamesDb} from "../couchdb.init";
 import {GameOptions, IGame, IGameCreateSchema} from "../interfaces/game.interface";
+import HttpStatusCode from '../application/utils/exceptions/statusCode';
+import HttpException from '../application/utils/exceptions/http-exceptions';
 
 class Game implements IGame {
-
   _id: string | undefined;
   hostId: string;
-  createdAt: Date;
+  createdAt: Date | undefined;
   teams: {
     teamId: string;
     score: number;
@@ -19,19 +19,40 @@ class Game implements IGame {
   constructor(game: IGameCreateSchema) {
     this.hostId = game.hostId;
     this.createdAt = new Date();
-    this.teams = game.teams.map(team => ({teamId: team, score: 0, members: []}));
+    this.teams = game.teams.map((team) => ({
+      teamId: team,
+      score: 0,
+      members: [],
+    }));
     // the first team undefined handle
-    this.currentTeam = this.teams[0].teamId ?? ''; 
+    this.currentTeam = this.teams[0].teamId ?? '';
     this.rounds = [];
     this.options = game.options;
   }
-
 }
 
+<<<<<<< HEAD
 export class GameRepository {
 
+=======
+class GameRepository {
+>>>>>>> remotes/origin/dev
   async getById(id: string): Promise<IGame> {
-    return await gamesDb.get(id);
+    try {
+      return await gamesDb.get(id);
+    } catch (error) {
+      if ((error as any).statusCode == 404) {
+        throw new HttpException(
+          HttpStatusCode.NOT_FOUND,
+          'Game not found by id',
+        );
+      } else {
+        throw new HttpException(
+          HttpStatusCode.INTERNAL_SERVER_ERROR,
+          'Internal server error',
+        );
+      }
+    }
   }
 
   async exists(id: string): Promise<boolean> {
@@ -49,23 +70,29 @@ export class GameRepository {
     return response.id;
   }
 
+  async start(id: string): Promise<void> {
+    const game = await this.getById(id);
+    game.createdAt = new Date();
+    await gamesDb.insert(game);
+  }
+
   async update(game: IGame): Promise<IGame> {
     const oldGame = await this.getById(game._id!);
     oldGame.currentTeam = game.currentTeam;
     oldGame.rounds = game.rounds;
-    oldGame.teams= game.teams;
-    await gamesDb.insert(oldGame as nano.MaybeDocument & IGame);
+    oldGame.teams = game.teams;
+    await gamesDb.insert(oldGame);
     return oldGame;
   }
 
-  async delete(id: string) {
-    await gamesDb.get(id, (err, body) => {
-      if (!err) {
-        gamesDb.destroy(id, body._rev);
-      }
-    });
+  async delete(id: string): Promise<void> {
+    try {
+      const doc = await gamesDb.get(id);
+      await gamesDb.destroy(id, doc._rev);
+    } catch (err) {
+      console.error(err);
+    }
   }
-
 }
 
 export const gameRepository = new GameRepository();

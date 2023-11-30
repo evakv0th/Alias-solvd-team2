@@ -440,6 +440,24 @@ Returns game by their id.
 | `401 Unauthorized` | [`ExceptionMessage`](#exceptionmessage) | If user not authorized. |
 | `404 Not Found`    | [`ExceptionMessage`](#exceptionmessage) | If game was not found.  |
 
+#### POST `/api/v1/games/:id/start`
+
+Starts game.
+
+**Request:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id`      | long | Yes      | Game ID.    |
+
+**Response:**
+
+| Code               | Body                                    | Condition                                     |
+|--------------------|-----------------------------------------|-----------------------------------------------|
+| `200 OK`           | none.                                   | If game was started.                          |
+| `401 Unauthorized` | [`ExceptionMessage`](#exceptionmessage) | If user is not a game host or not authorized. |
+| `404 Not Found`    | [`ExceptionMessage`](#exceptionmessage) | If game was not found.                        |
+
 ### Chat
 
 Chat is based on websockets.

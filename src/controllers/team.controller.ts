@@ -1,8 +1,9 @@
-import {Response} from 'express';
+import { Response } from 'express';
 import HttpStatusCode from '../application/utils/exceptions/statusCode';
 import {ITeamCreateSchema} from "../interfaces/team.interface";
 import {RequestWithUser} from "../application/middlewares/authenticateToken";
 import {teamService} from "../services/team.service";
+import { userService } from '../services/user.service';
 import HttpException from "../application/utils/exceptions/http-exceptions";
 
 export async function create(
@@ -11,23 +12,29 @@ export async function create(
 ): Promise<Response | void> {
   const team = {
     name: req.body.name,
-    hostId: req.user!._id
+    hostId: req.user!._id,
   } as ITeamCreateSchema;
   const id = await teamService.create(team);
-  return res
-    .status(HttpStatusCode.CREATED)
-    .json(await teamService.getById(id));
+  return res.status(HttpStatusCode.CREATED).json(await teamService.getById(id));
 }
 
 export async function getById(
   req: RequestWithUser,
   res: Response,
 ): Promise<Response | void> {
-  const id: string = req.params.id;
-  const team = await teamService.getById(id);
-  return res
-    .status(HttpStatusCode.OK)
-    .json(team);
+  try {
+    const id: string = req.params.id;
+    const team = await teamService.getById(id);
+    return res.status(HttpStatusCode.OK).json(team);
+  } catch (error) {
+    if (error instanceof HttpException) {
+      res.status(error.status).json({ error: error.message });
+    } else {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        error: 'Internal Server Error',
+      });
+    }
+  }
 }
 
 export async function updateMembers(
@@ -41,11 +48,67 @@ export async function updateMembers(
   if (team.hostId === user?._id) {
     team.members = members;
     await teamService.update(team);
-    return res
-      .status(HttpStatusCode.OK);
+    return res.status(HttpStatusCode.OK);
   } else {
     return res
       .status(HttpStatusCode.UNAUTHORIZED)
-      .json(new HttpException(HttpStatusCode.UNAUTHORIZED, "Only team host can update team members."));
+      .json(
+        new HttpException(
+          HttpStatusCode.UNAUTHORIZED,
+          'Only team host can update team members.',
+        ),
+      );
   }
+}
+
+export async function addMemberByName(
+  req:RequestWithUser,
+  res:Response,
+): Promise<Response | void> {
+
+  const id: string = req.params.id;
+  const username: string = req.params.username;
+
+  const user = await userService.getByUsername(username);
+  const team = await teamService.getById(id);
+  
+  if (!user) {
+    return res
+    .status(HttpStatusCode.NOT_FOUND)
+    .json(new HttpException(HttpStatusCode.NOT_FOUND, "User not found"));
+  }
+
+  if (!team) {
+    return res.status(HttpStatusCode.NOT_FOUND)
+    .json(new HttpException(HttpStatusCode.NOT_FOUND, "Team not found"));
+  }
+  if (!user._id || typeof(user._id === "undefined")) {
+    return res.status(HttpStatusCode.NOT_FOUND)
+    .json(new HttpException(HttpStatusCode.NOT_FOUND, "User ID is undefined"));
+  }
+
+  const userId:string = user._id;
+
+  if (!team.members.includes(userId)) {
+    team.members.push(userId)
+    try {
+      await teamService.update(team);
+      return res.status(HttpStatusCode.OK);
+    } catch (error) {
+      if ((error as any).statusCode == 404) {
+        return res
+          .status(HttpStatusCode.NOT_FOUND)
+          .json(new HttpException(HttpStatusCode.NOT_FOUND, "Team not found by id"));
+      } else {
+        return res
+          .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .json(new HttpException(HttpStatusCode.INTERNAL_SERVER_ERROR, "Internal server error"));
+      }
+    }
+  } else {
+    return res
+      .status(HttpStatusCode.BAD_REQUEST)
+      .json(new HttpException(HttpStatusCode.NOT_FOUND, "User already exists"));
+  }
+
 }
