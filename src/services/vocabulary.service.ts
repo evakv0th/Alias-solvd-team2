@@ -1,8 +1,5 @@
-import {
-  IVocabulary,
-  IVocabularyCreateSchema,
-} from '../interfaces/vocabulary.interface';
-import { vocabularyRepository } from '../repositories/vocabulary.repository';
+import {IVocabulary, IVocabularyCreateSchema,} from '../interfaces/vocabulary.interface';
+import {vocabularyRepository} from '../repositories/vocabulary.repository';
 
 class VocabularyService {
   async getById(id: string): Promise<IVocabulary> {

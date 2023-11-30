@@ -1,15 +1,18 @@
-import { IUser, IUserCreateSchema } from '../interfaces/user.interface';
-import { usersDb } from '../couchdb.init';
+import {IUser, IUserCreateSchema} from '../interfaces/user.interface';
+import {usersDb} from '../couchdb.init';
 import HttpException from '../application/utils/exceptions/http-exceptions';
 import HttpStatusCode from '../application/utils/exceptions/statusCode';
+import bcrypt from 'bcrypt';
+import util from "util";
 
 class User implements IUser {
+
   _id: string | undefined;
   username: string;
   password: string;
   createdAt: Date;
   stats: {
-    roundPlayed: number;
+    roundsPlayed: number;
     wordsGuessed: number;
   };
 
@@ -18,13 +21,15 @@ class User implements IUser {
     this.password = user.password;
     this.createdAt = new Date();
     this.stats = {
-      roundPlayed: 0,
+      roundsPlayed: 0,
       wordsGuessed: 0,
     };
   }
+
 }
 
 class UserRepository {
+
   async getById(id: string): Promise<IUser> {
     try {
       return await usersDb.get(id);
@@ -51,7 +56,16 @@ class UserRepository {
     return result.rows[0].doc! as IUser;
   }
 
-  async exists(username: string): Promise<boolean> {
+  async exists(id: string): Promise<boolean> {
+    try {
+      await usersDb.get(id);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  async existsByUsername(username: string): Promise<boolean> {
     const result = await usersDb.view('views', 'byUsername', {
       key: username,
       include_docs: true,
@@ -59,18 +73,17 @@ class UserRepository {
     return result.rows.length > 0;
   }
 
-  //TODO implement BCrypt
   async create(user: IUserCreateSchema): Promise<string> {
     const createdUser = new User(user);
+    createdUser.password = await util.promisify(bcrypt.hash)(createdUser.password, 10);
     const response = await usersDb.insert(createdUser);
     return response.id;
   }
 
-  //TODO implement BCrypt
   async update(user: IUser): Promise<IUser> {
     const oldUser = await this.getById(user._id!);
     oldUser.username = user.username;
-    oldUser.password = user.password;
+    oldUser.password = await util.promisify(bcrypt.hash)(user.password, 10);
     oldUser.stats = user.stats;
     try {
       await usersDb.insert(oldUser);
@@ -91,12 +104,14 @@ class UserRepository {
   }
 
   async delete(id: string): Promise<void> {
-    await usersDb.get(id, (err, body) => {
-      if (!err) {
-        usersDb.destroy(id, body._rev);
-      }
-    });
+    try {
+      const doc = await usersDb.get(id);
+      await usersDb.destroy(id, doc._rev);
+    } catch (err) {
+      console.error(err);
+    }
   }
+
 }
 
 export const userRepository = new UserRepository();

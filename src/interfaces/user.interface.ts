@@ -4,7 +4,7 @@ export interface IUser {
   password: string;
   createdAt: Date;
   stats: {
-    roundPlayed: number;
+    roundsPlayed: number;
     wordsGuessed: number;
   };
 }

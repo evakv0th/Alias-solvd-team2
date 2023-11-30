@@ -71,11 +71,12 @@ class VocabularyRepository {
   }
 
   async delete(id: string): Promise<void> {
-    await vocabulariesDb.get(id, (err, body) => {
-      if (!err) {
-        vocabulariesDb.destroy(id, body._rev);
-      }
-    });
+    try {
+      const doc = await vocabulariesDb.get(id);
+      await vocabulariesDb.destroy(id, doc._rev);
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
 

@@ -1,10 +1,9 @@
-import { gameRepository } from "../repositories/game.repository";
-import { GameOptions, IGame, IGameCreateSchema } from "../interfaces/game.interface";
+import {gameRepository} from "../repositories/game.repository";
+import {GameOptions, IGame, IGameCreateSchema} from "../interfaces/game.interface";
 import HttpException from "../application/utils/exceptions/http-exceptions";
 import HttpStatusCode from "../application/utils/exceptions/statusCode";
 import { ITeamCreateSchema } from "../interfaces/team.interface";
 import { teamService } from "./team.service";
-
 
 class LobbyService 
 {
@@ -12,10 +11,11 @@ class LobbyService
 
   async createLobby(hostId: string, options: GameOptions): Promise<string> 
   {
+
     const gameCreateSchema: IGameCreateSchema = {
       hostId: hostId,
       options: options,
-      teams: [], 
+      teams: [],
     };
 
     const gameId = await gameRepository.create(gameCreateSchema);
