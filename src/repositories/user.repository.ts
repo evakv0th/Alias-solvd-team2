@@ -12,7 +12,7 @@ class User implements IUser {
   password: string;
   createdAt: Date;
   stats: {
-    roundPlayed: number;
+    roundsPlayed: number;
     wordsGuessed: number;
   };
 
@@ -21,7 +21,7 @@ class User implements IUser {
     this.password = user.password;
     this.createdAt = new Date();
     this.stats = {
-      roundPlayed: 0,
+      roundsPlayed: 0,
       wordsGuessed: 0,
     };
   }
@@ -56,7 +56,16 @@ class UserRepository {
     return result.rows[0].doc! as IUser;
   }
 
-  async exists(username: string): Promise<boolean> {
+  async exists(id: string): Promise<boolean> {
+    try {
+      await usersDb.get(id);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  async existsByUsername(username: string): Promise<boolean> {
     const result = await usersDb.view('views', 'byUsername', {
       key: username,
       include_docs: true,

@@ -5,9 +5,12 @@ import {roundService} from './round.service';
 import {IRound, IRoundCreateSchema} from '../interfaces/round.interface';
 import {chatService} from './chat.service';
 import {teamService} from './team.service';
+import {userService} from "./user.service";
+import HttpException from "../application/utils/exceptions/http-exceptions";
+import HttpStatusCode from "../application/utils/exceptions/statusCode";
 
 class GameService {
-  
+
   async getById(id: string): Promise<IGame> {
     return gameRepository.getById(id);
   }
@@ -17,10 +20,36 @@ class GameService {
   }
 
   async create(game: IGameCreateSchema): Promise<string> {
+    const hostExists = await userService.exists(game.hostId);
+    if (!hostExists) {
+      throw new HttpException(HttpStatusCode.NOT_FOUND, "Host of game is not found.");
+    }
+    for (const teamId of game.teams) {
+      const teamExists = await teamService.exists(teamId);
+      if (!teamExists) {
+        throw new HttpException(HttpStatusCode.NOT_FOUND, `Team ${teamId} is not found.`);
+      }
+    }
     return gameRepository.create(game);
   }
 
   async update(game: IGame): Promise<IGame> {
+    const teamExists = await teamService.exists(game.currentTeam);
+    if (!teamExists) {
+      throw new HttpException(HttpStatusCode.NOT_FOUND, `Team ${game.currentTeam} is not found.`);
+    }
+    for (const team of game.teams) {
+      const teamExists = await teamService.exists(team.teamId);
+      if (!teamExists) {
+        throw new HttpException(HttpStatusCode.NOT_FOUND, `Team ${team.teamId} is not found.`);
+      }
+    }
+    for (const roundId of game.rounds) {
+      const roundExists = await roundService.exists(roundId);
+      if (!roundExists) {
+        throw new HttpException(HttpStatusCode.NOT_FOUND, `Round ${roundId} is not found.`);
+      }
+    }
     return gameRepository.update(game);
   }
   async delete(id: string): Promise<void> {
@@ -61,13 +90,16 @@ class GameService {
 
   private async createRound(game: IGame): Promise<{ roundId: string; chatId: string }> {
     const chatId = await chatService.create();
+    const hostId = await this.getHostIdFromTeam(game.currentTeam, game._id!);
+    const randomWord = await this.getRandomWord(game._id!);
     const roundId = await roundService.create({
       teamId: game.currentTeam,
-      hostId: await this.getHostIdFromTeam(game.currentTeam, game._id!),
+      hostId: hostId,
       chatId: chatId,
       finishedAt: this.getFinishDate(new Date(), game.options.roundTime),
-      currentWord: await this.getRandomWord(game._id!),
+      currentWord: randomWord,
     } as IRoundCreateSchema);
+    await userService.incrementRoundsPlayed(hostId);
     return { roundId, chatId };
   }
 
