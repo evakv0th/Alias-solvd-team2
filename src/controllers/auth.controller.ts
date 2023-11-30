@@ -1,12 +1,9 @@
-import { Request, Response } from 'express';
+import {Request, Response} from 'express';
 import * as authService from '../services/auth.service';
 import HttpException from '../application/utils/exceptions/http-exceptions';
 import HttpStatusCode from '../application/utils/exceptions/statusCode';
-import {
-  generateAccessToken,
-  refreshTokenSecretKey,
-} from '../application/utils/tokenForAuth/generateToken';
-import { IUser } from '../interfaces/user.interface';
+import {generateAccessToken, refreshTokenSecretKey,} from '../application/utils/tokenForAuth/generateToken';
+import {IUser} from '../interfaces/user.interface';
 import * as jwt from 'jsonwebtoken';
 
 export async function register(
@@ -14,10 +11,10 @@ export async function register(
   res: Response,
 ): Promise<Response | void> {
   try {
-    const newUser = await authService.register(req.body);
+    await authService.register(req.body);
     return res
       .status(HttpStatusCode.CREATED)
-      .json({ message: 'User registered successfully', user: newUser });
+      .json({message: 'User registered successfully'});
   } catch (error) {
     if ((error as HttpException).status) {
       return res

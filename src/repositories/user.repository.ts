@@ -2,6 +2,8 @@ import {IUser, IUserCreateSchema} from '../interfaces/user.interface';
 import {usersDb} from '../couchdb.init';
 import HttpException from '../application/utils/exceptions/http-exceptions';
 import HttpStatusCode from '../application/utils/exceptions/statusCode';
+import bcrypt from 'bcrypt';
+import util from "util";
 
 class User implements IUser {
 
@@ -62,18 +64,17 @@ class UserRepository {
     return result.rows.length > 0;
   }
 
-  //TODO implement BCrypt
   async create(user: IUserCreateSchema): Promise<string> {
     const createdUser = new User(user);
+    createdUser.password = await util.promisify(bcrypt.hash)(createdUser.password, 10);
     const response = await usersDb.insert(createdUser);
     return response.id;
   }
 
-  //TODO implement BCrypt
   async update(user: IUser): Promise<IUser> {
     const oldUser = await this.getById(user._id!);
     oldUser.username = user.username;
-    oldUser.password = user.password;
+    oldUser.password = await util.promisify(bcrypt.hash)(user.password, 10);
     oldUser.stats = user.stats;
     try {
       await usersDb.insert(oldUser);
