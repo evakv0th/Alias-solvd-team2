@@ -15,7 +15,6 @@ class Game implements IGame {
   teams: {
     teamId: string;
     score: number;
-    members: string[];
   }[];
   currentTeam: string;
   rounds: string[];
@@ -26,8 +25,7 @@ class Game implements IGame {
     this.createdAt = new Date();
     this.teams = game.teams.map((team) => ({
       teamId: team,
-      score: 0,
-      members: [],
+      score: 0
     }));
     // the first team undefined handle
     this.currentTeam = this.teams[0].teamId ?? '';
