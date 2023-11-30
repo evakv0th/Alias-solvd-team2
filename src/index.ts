@@ -15,7 +15,6 @@ import gameRouter from './routes/game.router';
 import vocabularyRouter from './routes/vocabulary.router';
 import userRouter from './routes/user.router';
 
-
 dotenv.config();
 
 const port = process.env.PORT || 3000;
@@ -25,13 +24,13 @@ const io = new Server(server);
 
 app.use(cookieParser());
 app.set('view engine', 'ejs'); // for ejs
-app.set('views', path.join(__dirname, 'views')); // for ejs
+app.set('views', path.join(__dirname, 'views/src/views')); // for ejs
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(express.static(__dirname + '/views')); // for css to work
+app.use(express.static(__dirname + '/views/src/views')); // for css to work
 
 app.get('/', (req: Request, res: Response) => {
-  res.sendFile("Alias game");
+  res.sendFile('Alias game');
 });
 
 setupSocket(io);

@@ -1,9 +1,10 @@
 import { Response } from 'express';
 import HttpStatusCode from '../application/utils/exceptions/statusCode';
-import { ITeamCreateSchema } from '../interfaces/team.interface';
-import { RequestWithUser } from '../application/middlewares/authenticateToken';
-import { teamService } from '../services/team.service';
-import HttpException from '../application/utils/exceptions/http-exceptions';
+import {ITeamCreateSchema} from "../interfaces/team.interface";
+import {RequestWithUser} from "../application/middlewares/authenticateToken";
+import {teamService} from "../services/team.service";
+import { userService } from '../services/user.service';
+import HttpException from "../application/utils/exceptions/http-exceptions";
 
 export async function create(
   req: RequestWithUser,
@@ -58,4 +59,56 @@ export async function updateMembers(
         ),
       );
   }
+}
+
+export async function addMemberByName(
+  req:RequestWithUser,
+  res:Response,
+): Promise<Response | void> {
+
+  const id: string = req.params.id;
+  const username: string = req.params.username;
+
+  const user = await userService.getByUsername(username);
+  const team = await teamService.getById(id);
+  
+  if (!user) {
+    return res
+    .status(HttpStatusCode.NOT_FOUND)
+    .json(new HttpException(HttpStatusCode.NOT_FOUND, "User not found"));
+  }
+
+  if (!team) {
+    return res.status(HttpStatusCode.NOT_FOUND)
+    .json(new HttpException(HttpStatusCode.NOT_FOUND, "Team not found"));
+  }
+  if (!user._id || typeof(user._id === "undefined")) {
+    return res.status(HttpStatusCode.NOT_FOUND)
+    .json(new HttpException(HttpStatusCode.NOT_FOUND, "User ID is undefined"));
+  }
+
+  const userId:string = user._id;
+
+  if (!team.members.includes(userId)) {
+    team.members.push(userId)
+    try {
+      await teamService.update(team);
+      return res.status(HttpStatusCode.OK);
+    } catch (error) {
+      if ((error as any).statusCode == 404) {
+        return res
+          .status(HttpStatusCode.NOT_FOUND)
+          .json(new HttpException(HttpStatusCode.NOT_FOUND, "Team not found by id"));
+      } else {
+        return res
+          .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .json(new HttpException(HttpStatusCode.INTERNAL_SERVER_ERROR, "Internal server error"));
+      }
+    }
+  } else {
+    return res
+      .status(HttpStatusCode.BAD_REQUEST)
+      .json(new HttpException(HttpStatusCode.NOT_FOUND, "User already exists"));
+  }
+
 }

@@ -10,7 +10,7 @@ class UserController {
 
     try {
       const user = await userService.getById(id);
-      res.status(200).json(user);
+      res.status(HttpStatusCode.OK).json(user);
     } catch (error) {
       if (error instanceof HttpException) {
         res.status(error.status).json({ error: error.message });
@@ -26,7 +26,7 @@ class UserController {
     try {
       const newUser: IUser = req.body;
       const userId: string = await userService.create(newUser);
-      res.status(201).json({ id: userId });
+      res.status(HttpStatusCode.CREATED).json({ id: userId });
     } catch (error) {
       if (error instanceof HttpException) {
         res.status(error.status).json({ error: error.message });
@@ -45,7 +45,7 @@ class UserController {
 
     try {
       const updatedUser: IUser = await userService.update(newUser);
-      res.status(200).json(updatedUser);
+      res.status(HttpStatusCode.OK).json(updatedUser);
     } catch (error) {
       if (error instanceof HttpException) {
         res.status(error.status).json({ error: error.message });
@@ -62,7 +62,7 @@ class UserController {
 
     try {
       await userService.delete(userId);
-      res.status(204).send();
+      res.status(HttpStatusCode.NO_CONTENT).send();
     } catch (error) {
       if (error instanceof HttpException) {
         res.status(error.status).json({ error: error.message });
