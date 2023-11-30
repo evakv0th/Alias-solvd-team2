@@ -56,7 +56,7 @@ class LobbyService
       }
     }
     
-    if (!assigned && game.teams.length < MAX_TEAMS) 
+    if (!assigned) 
     {
       const newTeamId = `team-${game.teams.length + 1}`;
       game.teams.push({
