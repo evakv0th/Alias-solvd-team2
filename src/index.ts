@@ -21,6 +21,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
+let serverInstance;
 
 app.use(cookieParser());
 app.set('view engine', 'ejs'); // for ejs
@@ -43,12 +44,42 @@ app.use('/api/v1/games', gameRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/vocabularies', vocabularyRouter);
 
-const startServer = async (): Promise<void> => {
-  couchdbInit().then(() => {
-    server.listen(port, () => {
-      console.log(`Server started at Port ${port}`);
+export default app;
+
+export const startServer = async (): Promise<void> => {
+  if (process.env.NODE_ENV !== 'test') {
+    return new Promise((resolve, reject) => {
+      couchdbInit().then(() => {
+        server.listen(port, () => {
+          console.log(`Server started at Port ${port}`);
+          resolve();
+        });
+      }).catch(reject);
     });
+  } else {
+    console.log('Server start skipped in test environment');
+    return Promise.resolve();
+  }
+};
+
+export const closeServer = async (): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    if (server.listening) {
+      server.close((err) => {
+        if (err) {
+          console.error('Failed to close the server', err);
+          reject(err);
+        } else {
+          console.log('Server closed');
+          resolve();
+        }
+      });
+    } else {
+      console.log('Server was not running');
+      resolve();
+    }
   });
 };
+
 
 startServer();
