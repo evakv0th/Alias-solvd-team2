@@ -3,7 +3,6 @@ import { GameOptions, IGame, IGameCreateSchema } from "../interfaces/game.interf
 import HttpException from "../application/utils/exceptions/http-exceptions";
 import HttpStatusCode from "../application/utils/exceptions/statusCode";
 
-const MAX_TEAMS = 10 // TODO: REMOVE THE MAGICAL_INAPPROPRIACY
 
 class LobbyService 
 {
