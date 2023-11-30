@@ -77,11 +77,12 @@ class TeamRepository {
   }
 
   async delete(id: string): Promise<void> {
-    await teamsDb.get(id, (err, body) => {
-      if (!err) {
-        teamsDb.destroy(id, body._rev);
-      }
-    });
+    try {
+      const doc = await teamsDb.get(id);
+      await teamsDb.destroy(id, doc._rev);
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
 

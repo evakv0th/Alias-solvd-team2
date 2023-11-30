@@ -1,7 +1,7 @@
+import {roundsDb} from "../couchdb.init";
+import {IRound, IRoundCreateSchema, IRoundWord} from "../interfaces/round.interface";
 import HttpException from '../application/utils/exceptions/http-exceptions';
 import HttpStatusCode from '../application/utils/exceptions/statusCode';
-import { roundsDb } from '../couchdb.init';
-import { IRound, IRoundCreateSchema } from '../interfaces/round.interface';
 
 class Round implements IRound {
   _id: string | undefined;
@@ -10,7 +10,7 @@ class Round implements IRound {
   teamId: string;
   hostId: string;
   chatId: string;
-  words: string[];
+  words: IRoundWord[];
 
   constructor(round: IRoundCreateSchema) {
     this.startedAt = new Date();
@@ -18,7 +18,11 @@ class Round implements IRound {
     this.teamId = round.teamId;
     this.hostId = round.hostId;
     this.chatId = round.chatId;
-    this.words = [];
+    this.words = [
+      {
+        word: round.currentWord
+      } as IRoundWord
+    ];
   }
 }
 
@@ -78,11 +82,12 @@ class RoundRepository {
   }
 
   async delete(id: string): Promise<void> {
-    await roundsDb.get(id, (err, body) => {
-      if (!err) {
-        roundsDb.destroy(id, body._rev);
-      }
-    });
+    try {
+      const doc = await roundsDb.get(id);
+      await roundsDb.destroy(id, doc._rev);
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
 

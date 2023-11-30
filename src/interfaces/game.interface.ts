@@ -1,7 +1,7 @@
 export interface IGame {
   _id: string | undefined;
   hostId: string;
-  createdAt: Date;
+  createdAt: Date | undefined;
   teams: {
     //TODO remove members here
     members: string[];
@@ -20,6 +20,7 @@ export interface IGameCreateSchema {
 }
 
 export interface GameOptions {
+  //TODO remove maxPlayersPerTeam
   maxPlayersPerTeam: any;
   goal: number;
   roundTime: number;
