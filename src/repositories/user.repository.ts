@@ -12,7 +12,7 @@ class User implements IUser {
   password: string;
   createdAt: Date;
   stats: {
-    roundPlayed: number;
+    roundsPlayed: number;
     wordsGuessed: number;
   };
 
@@ -21,7 +21,7 @@ class User implements IUser {
     this.password = user.password;
     this.createdAt = new Date();
     this.stats = {
-      roundPlayed: 0,
+      roundsPlayed: 0,
       wordsGuessed: 0,
     };
   }
