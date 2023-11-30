@@ -76,16 +76,13 @@ class GameService {
     return rounds.some(round => round.words.map(obj => obj.word).includes(word));
   }
 
-  async start(id: string): Promise<{ msg: string; chatId: string }> {
+  async start(id: string): Promise<string> {
     await gameRepository.start(id);
     const game = await this.getById(id);
     const { roundId, chatId } = await this.createRound(game);
     game.rounds.push(roundId);
     await this.update(game);
-    return {
-      msg: `proceed to chat with chatId:${chatId}. Link: http://localhost:3000/api/v1/chats/${chatId}/view`,
-      chatId,
-    };
+    return chatId
   }
 
   private async createRound(game: IGame): Promise<{ roundId: string; chatId: string }> {

@@ -9,6 +9,6 @@ chatRouter.post('/', authenticateToken, chatController.create);
 chatRouter.patch('/:id', authenticateToken, chatController.update);
 chatRouter.delete('/:id', authenticateToken, chatController.delete);
 
-chatRouter.get('/:id/view', chatController.view);
+chatRouter.get('/:id/view/:userName', chatController.view);
 
 export default chatRouter;
