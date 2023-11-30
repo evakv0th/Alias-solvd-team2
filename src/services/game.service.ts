@@ -90,14 +90,16 @@ class GameService {
 
   private async createRound(game: IGame): Promise<{ roundId: string; chatId: string }> {
     const chatId = await chatService.create();
+    const hostId = await this.getHostIdFromTeam(game.currentTeam, game._id!);
+    const randomWord = await this.getRandomWord(game._id!);
     const roundId = await roundService.create({
       teamId: game.currentTeam,
-      hostId: await this.getHostIdFromTeam(game.currentTeam, game._id!),
+      hostId: hostId,
       chatId: chatId,
       finishedAt: this.getFinishDate(new Date(), game.options.roundTime),
-      currentWord: await this.getRandomWord(game._id!),
+      currentWord: randomWord,
     } as IRoundCreateSchema);
-    //TODO update user stats
+    await userService.incrementRoundsPlayed(hostId);
     return { roundId, chatId };
   }
 

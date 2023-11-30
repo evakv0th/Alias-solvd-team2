@@ -29,6 +29,12 @@ class UserService {
   async delete(id: string): Promise<void> {
     await userRepository.delete(id);
   }
+
+  async incrementRoundsPlayed(id: string): Promise<void> {
+    const user = await this.getById(id);
+    user.stats.roundsPlayed += 1;
+    await userRepository.update(user);
+  }
 }
 
 export const userService = new UserService();
