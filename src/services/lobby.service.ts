@@ -2,6 +2,8 @@ import { gameRepository } from "../repositories/game.repository";
 import { GameOptions, IGame, IGameCreateSchema } from "../interfaces/game.interface";
 import HttpException from "../application/utils/exceptions/http-exceptions";
 import HttpStatusCode from "../application/utils/exceptions/statusCode";
+import { ITeamCreateSchema } from "../interfaces/team.interface";
+import { teamService } from "./team.service";
 
 
 class LobbyService 
@@ -58,12 +60,15 @@ class LobbyService
     
     if (!assigned) 
     {
-      const newTeamId = `team-${game.teams.length + 1}`;
-      game.teams.push({
-        teamId: newTeamId,
-        score: 0
-      });
-      this.teamMembers.set(newTeamId, new Set([userId]));
+      const newTeamData: ITeamCreateSchema = {
+        name: `Team ${game.teams.length + 1}`,
+        hostId: userId
+      };
+      const newTeamId = await teamService.create(newTeamData);
+      game.teams.push({ teamId: newTeamId, score: 0 });
+      await gameRepository.update(game);
+    
+      return gameRepository.getById(gameId);
     } 
     else if (!assigned) 
     {

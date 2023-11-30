@@ -18,7 +18,7 @@ export interface IGameCreateSchema {
 }
 
 export interface GameOptions {
-  maxPlayersPerTeam: number;
+  maxPlayersPerTeam: any;
   goal: number;
   roundTime: number;
   vocabularyId: string;
