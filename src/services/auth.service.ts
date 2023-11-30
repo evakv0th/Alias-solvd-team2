@@ -16,7 +16,7 @@ export async function register(newUser: IUserCreateSchema): Promise<IUserCreateS
     );
   }
 
-  if (await userService.exists(username)) {
+  if (await userService.existsByUsername(username)) {
     throw new HttpException(
       HttpStatusCode.BAD_REQUEST,
       `User with username ${username} already exists`,

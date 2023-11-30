@@ -5,9 +5,12 @@ import {roundService} from './round.service';
 import {IRound, IRoundCreateSchema} from '../interfaces/round.interface';
 import {chatService} from './chat.service';
 import {teamService} from './team.service';
+import {userService} from "./user.service";
+import HttpException from "../application/utils/exceptions/http-exceptions";
+import HttpStatusCode from "../application/utils/exceptions/statusCode";
 
 class GameService {
-  
+
   async getById(id: string): Promise<IGame> {
     return gameRepository.getById(id);
   }
@@ -17,10 +20,36 @@ class GameService {
   }
 
   async create(game: IGameCreateSchema): Promise<string> {
+    const hostExists = await userService.exists(game.hostId);
+    if (!hostExists) {
+      throw new HttpException(HttpStatusCode.NOT_FOUND, "Host of game is not found.");
+    }
+    for (const teamId of game.teams) {
+      const teamExists = await teamService.exists(teamId);
+      if (!teamExists) {
+        throw new HttpException(HttpStatusCode.NOT_FOUND, `Team ${teamId} is not found.`);
+      }
+    }
     return gameRepository.create(game);
   }
 
   async update(game: IGame): Promise<IGame> {
+    const teamExists = await teamService.exists(game.currentTeam);
+    if (!teamExists) {
+      throw new HttpException(HttpStatusCode.NOT_FOUND, `Team ${game.currentTeam} is not found.`);
+    }
+    for (const team of game.teams) {
+      const teamExists = await teamService.exists(team.teamId);
+      if (!teamExists) {
+        throw new HttpException(HttpStatusCode.NOT_FOUND, `Team ${team.teamId} is not found.`);
+      }
+    }
+    for (const roundId of game.rounds) {
+      const roundExists = await roundService.exists(roundId);
+      if (!roundExists) {
+        throw new HttpException(HttpStatusCode.NOT_FOUND, `Round ${roundId} is not found.`);
+      }
+    }
     return gameRepository.update(game);
   }
   async delete(id: string): Promise<void> {
@@ -68,6 +97,7 @@ class GameService {
       finishedAt: this.getFinishDate(new Date(), game.options.roundTime),
       currentWord: await this.getRandomWord(game._id!),
     } as IRoundCreateSchema);
+    //TODO update user stats
     return { roundId, chatId };
   }
 

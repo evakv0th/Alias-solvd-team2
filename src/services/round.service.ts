@@ -1,6 +1,10 @@
-import { roundRepository } from '../repositories/round.repository';
-import { IRound, IRoundCreateSchema } from '../interfaces/round.interface';
-import { gameService } from './game.service';
+import {roundRepository} from '../repositories/round.repository';
+import {IRound, IRoundCreateSchema} from '../interfaces/round.interface';
+import {gameService} from './game.service';
+import {userService} from "./user.service";
+import HttpException from "../application/utils/exceptions/http-exceptions";
+import HttpStatusCode from "../application/utils/exceptions/statusCode";
+import {teamService} from "./team.service";
 
 class RoundService {
   async getById(id: string): Promise<IRound> {
@@ -18,6 +22,18 @@ class RoundService {
   }
 
   async create(round: IRoundCreateSchema): Promise<string> {
+    const hostExists = await userService.exists(round.hostId);
+    if (!hostExists) {
+      throw new HttpException(HttpStatusCode.NOT_FOUND, "Host of round is not found.");
+    }
+    const teamExists = await teamService.exists(round.teamId);
+    if (!teamExists) {
+      throw new HttpException(HttpStatusCode.NOT_FOUND, "Team of round is not found.");
+    }
+    const chatExists = await userService.exists(round.chatId);
+    if (!chatExists) {
+      throw new HttpException(HttpStatusCode.NOT_FOUND, "Chat of round is not found.");
+    }
     return roundRepository.create(round);
   }
 

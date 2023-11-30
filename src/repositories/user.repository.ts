@@ -56,7 +56,16 @@ class UserRepository {
     return result.rows[0].doc! as IUser;
   }
 
-  async exists(username: string): Promise<boolean> {
+  async exists(id: string): Promise<boolean> {
+    try {
+      await usersDb.get(id);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  async existsByUsername(username: string): Promise<boolean> {
     const result = await usersDb.view('views', 'byUsername', {
       key: username,
       include_docs: true,

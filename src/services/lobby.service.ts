@@ -1,22 +1,19 @@
-import { gameRepository } from "../repositories/game.repository";
-import { GameOptions, IGame, IGameCreateSchema } from "../interfaces/game.interface";
+import {gameRepository} from "../repositories/game.repository";
+import {GameOptions, IGame, IGameCreateSchema} from "../interfaces/game.interface";
 import HttpException from "../application/utils/exceptions/http-exceptions";
 import HttpStatusCode from "../application/utils/exceptions/statusCode";
 
 const MAX_TEAMS = 10 // TODO: REMOVE THE MAGICAL_INAPPROPRIACY
 
-class LobbyService 
-{
-  async createLobby(hostId: string, options: GameOptions): Promise<string> 
-  {
+class LobbyService {
+  async createLobby(hostId: string, options: GameOptions): Promise<string> {
     const gameCreateSchema: IGameCreateSchema = {
       hostId: hostId,
       options: options,
-      teams: [], 
+      teams: [],
     };
     const gameId = await gameRepository.create(gameCreateSchema);
-    if (!gameId) 
-    {
+    if (!gameId) {
       throw new HttpException(HttpStatusCode.INTERNAL_SERVER_ERROR, 'Lobby could not be created.');
     }
 
