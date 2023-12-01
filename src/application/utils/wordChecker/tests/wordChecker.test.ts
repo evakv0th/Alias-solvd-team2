@@ -1,4 +1,5 @@
 import isForbidden from '../wordChecker';
+import fixtures from './test_fixtures.json';
 
 describe('WordChecker', () => {
   describe('isMessageValid', () => {
@@ -64,6 +65,20 @@ describe('WordChecker', () => {
       it('should return true if no words in the message are the same as the word to check', () => {
         expect(isForbidden('I had a banana for breakfast', 'apple')).toBe(true);
       });
+    });
+  });
+});
+
+
+
+
+const typedFixtures = fixtures as [string, string][];
+
+describe('Stemming Test', () => {
+  typedFixtures.forEach(([input, output]) => {
+    test(`${input} should stem to ${output}`, () => {
+      const result = isForbidden(input, output);
+      expect(result).toBe(true);
     });
   });
 });
