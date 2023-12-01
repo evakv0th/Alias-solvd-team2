@@ -78,7 +78,7 @@ class ChatController {
 
     try {
       if (!(await chatService.exists(id))) {
-        res.status(HttpStatusCode.NOT_FOUND).send('chat  not found, please check your id');
+        res.status(HttpStatusCode.NOT_FOUND).send('chat not found, please check your id');
         return;
       }
 
