@@ -2,89 +2,80 @@ import { Request, Response, NextFunction } from "express";
 import HttpStatusCode from "../application/utils/exceptions/statusCode";
 import { paramsErrorMessage, bodyErrorMessage } from "../application/utils/errorRequestHandler/errorRequestHandler"
 
-
-export function validateCreateTeamRoute(): (
+export function validateTeamCreateRoute(
   req: Request,
   res: Response,
   next: NextFunction
-) => void {
-  return(req: Request, res: Response, next: NextFunction) => {
-    const name = req.body.name;
+): Response | void {
+  const name = req.body.name;
+
+  if (!name) {
+    return res
+    .status(HttpStatusCode.BAD_REQUEST)
+    .json({ error: bodyErrorMessage("name") }); 
+  } 
     
-    if (!name) {
-      return res
-      .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: bodyErrorMessage("name") });
-    }
-    next();
-  }
+  next();
 }
 
-export function validateGetTeamRoute(): (
+export function validateGetTeamRoute(
   req: Request,
   res: Response,
   next: NextFunction
-) => void {
-  return(req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
+): Response | void {
+  const id = req.params.id;
+
+  if (!id || id === " ") {
+    return res
+    .status(HttpStatusCode.BAD_REQUEST)
+    .json({ error: paramsErrorMessage('id') }); 
+  } 
+
+  next();
+}
+
+export function validateUpdateTeamRoute(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Response | void {
+  const id = req.params.id;
+  const members = req.body;
+
+  if (!id || id === " ") {
+    return res
+    .status(HttpStatusCode.BAD_REQUEST)
+    .json({ error: paramsErrorMessage('id') }); 
+  }
     
-    if (!id) {
-      return res
-      .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: paramsErrorMessage("id") });
-    }
-    next();
-  }
+  if (!members || members.length === 0) {
+    return res
+    .status(HttpStatusCode.BAD_REQUEST)
+    .json({ error: bodyErrorMessage("members") }); 
+  } 
+
+  next();
 }
 
-export function validateUpdateTeamRoute(): (
+export function validateAddMembereByNameRoute(
   req: Request,
   res: Response,
   next: NextFunction
-) => void {
-  return(req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    const members = req.body;
+): Response | void {
+  const id = req.params.id;
+  const username = req.params.username;
 
-    if (!id) {
-      return res
-      .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: paramsErrorMessage("id")} );
-    }
-
-    if (!members || members.length === 0) {
-      return res
-      .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: bodyErrorMessage("members") });
-    }
-
-    next();
+  if (!id || id === " ") {
+    return res
+    .status(HttpStatusCode.BAD_REQUEST)
+    .json({ error: paramsErrorMessage('id') }); 
   }
-}
 
-export function validateAddMemberByNameRoute(): (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => void {
-  return(req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    const username = req.params.username;
-
-    if (!id) {
-      return res
-      .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: paramsErrorMessage("id") });
-    }
-
-    if (!username) {
-      return res
-      .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: paramsErrorMessage("username") });
-    }
-
-    next();
+  if (!username) {
+    return res
+    .status(HttpStatusCode.BAD_REQUEST)
+    .json({ error: paramsErrorMessage('username') }); 
   }
+
+  next();
 }
-
-

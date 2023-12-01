@@ -10,10 +10,10 @@ import {
 
 const userRouter = express.Router();
 
-userRouter.get('/:id', authenticateToken, validateGetUserRoute(), userController.getById);
-userRouter.post('/', authenticateToken, validatePostUserRoute(), userController.create);
-userRouter.patch('/:id', authenticateToken, validatePatchUserRoute(), userController.update);
-userRouter.delete('/:id', authenticateToken, validateDeliteUserRoute(), userController.delete);
+userRouter.get('/:id', authenticateToken, validateGetUserRoute, userController.getById);
+userRouter.post('/', authenticateToken, validatePostUserRoute, userController.create);
+userRouter.patch('/:id', authenticateToken, validatePatchUserRoute, userController.update);
+userRouter.delete('/:id', authenticateToken, validateDeliteUserRoute, userController.delete);
 
 export default userRouter;
 
