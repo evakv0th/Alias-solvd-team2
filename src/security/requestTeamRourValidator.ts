@@ -13,7 +13,7 @@ export function validateTeamCreateRoute(): (
     if (!name) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage("name")}` }); 
+      .json({ error: bodyErrorMessage("name") }); 
     } 
 
     next();
@@ -31,7 +31,7 @@ export function validateGetTeamRoute(): (
     if (!id || id === " ") {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage('id')}` }); 
+      .json({ error: paramsErrorMessage('id') }); 
     } 
 
     next();
@@ -50,13 +50,13 @@ export function validateUpdateTeamRoute(): (
     if (!id || id === " ") {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage('id')}` }); 
+      .json({ error: paramsErrorMessage('id') }); 
     }
     
     if (!members || members.length === 0) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage("members")}` }); 
+      .json({ error: bodyErrorMessage("members") }); 
     } 
 
     next();
@@ -75,13 +75,13 @@ export function validateAddMembereByNameRoute(): (
     if (!id || id === " ") {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage('id')}` }); 
+      .json({ error: paramsErrorMessage('id') }); 
     }
 
     if (!username) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage('username')}` }); 
+      .json({ error: paramsErrorMessage('username') }); 
     }
 
     next();

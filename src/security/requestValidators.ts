@@ -14,13 +14,13 @@ export function validateRegisterRequest(): (
     if (!username) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage("username")}` });
+      .json({ error: bodyErrorMessage("username") });
     }
 
     if (!password) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage("password")}` });
+      .json({ error: bodyErrorMessage("password") });
     }
     next();
     }
@@ -38,13 +38,13 @@ export function validateLoginRequest(): (
     if (!username) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage("username")}` });
+      .json({ error: bodyErrorMessage("username") });
     }
 
     if (!password) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage("password")}` });
+      .json({ error: bodyErrorMessage("password") });
     }
     next();
   }

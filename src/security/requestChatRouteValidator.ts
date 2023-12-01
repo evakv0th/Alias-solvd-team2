@@ -12,7 +12,7 @@ export function validateGetChatRoute(): (
     if(!id || id === " ") {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage("id")}`}); 
+      .json({ error: paramsErrorMessage("id") }); 
     }
     next();
   }   
@@ -30,13 +30,13 @@ export function validateUpdateChatRoute(): (
     if (!chat) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage("chat")}`});
+      .json({ error: bodyErrorMessage("chat") });
     }
 
     if (!id || id === " ") {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage("id")}`}); 
+      .json({ error: paramsErrorMessage("id") }); 
     }
     next();
   }   
@@ -52,7 +52,7 @@ export function validateDeleteChatRoute(): (
     if(!id || id === " ") {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage("id")}`}); 
+      .json({ error: paramsErrorMessage("id") }); 
     }
     next();
   }   
@@ -68,7 +68,7 @@ export function validateViewChatRoute(): (
     if(!id || id === " ") {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage("id")}`}); 
+      .json({ error: paramsErrorMessage("id") }); 
     }
     next();
   }   

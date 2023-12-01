@@ -14,13 +14,13 @@ export function validateLobbyCreateRoute(): (
     if (!hostId) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage('hostId')}` }); 
+      .json({ error: bodyErrorMessage('hostId') }); 
     } 
 
     if (!options) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage('options')}` }); 
+      .json({ error: bodyErrorMessage('options') }); 
     }
 
     next();
@@ -39,13 +39,13 @@ export function validateJoinLobbyRoute(): (
     if (!gameId || gameId === " ") {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage('gameId')}` }); 
+      .json({ error: paramsErrorMessage('gameId') }); 
     }
 
     if (!options) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage('options')}` }); 
+      .json({ error: bodyErrorMessage('options') }); 
     }
 
     next();
@@ -65,19 +65,19 @@ export function validateSelectTeamRoute(): (
     if (!gameId || gameId === " ") {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage('gameId')}` }); 
+      .json({ error: paramsErrorMessage('gameId') }); 
     }
 
     if (!userId) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage('userId')}` }); 
+      .json({ error: bodyErrorMessage('userId') }); 
     }
 
     if (!teamId) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage('teamId')}` }); 
+      .json({ error: bodyErrorMessage('teamId') }); 
     }
 
     next();
@@ -96,13 +96,13 @@ export function validateLeaveLobbyRoute(): (
     if (!gameId || gameId === " ") {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage('gameId')}` }); 
+      .json({ error: paramsErrorMessage('gameId') }); 
     }
 
     if (!userId) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage('userId')}` }); 
+      .json({ error: bodyErrorMessage('userId') }); 
     }
 
     next();

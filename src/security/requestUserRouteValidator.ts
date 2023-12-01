@@ -12,7 +12,7 @@ export function validateGetUserRoute(): (
     if (!id || id === " ") {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage("id")}` });
+      .json({ error: paramsErrorMessage("id") });
     }
     next()
   }
@@ -28,7 +28,7 @@ export function validatePostUserRoute(): (
     if (!newUser) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage("newUser")}` }); 
+      .json({ error: bodyErrorMessage("newUser") }); 
     } 
     next();
   }
@@ -46,13 +46,13 @@ export function validatePatchUserRoute(): (
     if (!id || id === " ") {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage("id")}` })
+      .json({ error: paramsErrorMessage("id") });
     }
 
     if (!newUser) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage("newUser")}` }); 
+      .json({ error: bodyErrorMessage("newUser") }); 
     } 
     next();
   }
@@ -68,7 +68,7 @@ export function validateDeliteUserRoute(): (
     if (!id || id === " ") {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage("id")}` })
+      .json({ error: paramsErrorMessage("id") })
     }
     next();
   }

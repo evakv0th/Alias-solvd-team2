@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import HttpStatusCode from "../application/utils/exceptions/statusCode";
-import HttpException from "../application/utils/exceptions/http-exceptions";
+import { paramsErrorMessage, bodyErrorMessage } from "../application/utils/errorRequestHandler/errorRequestHandler"
+
 
 export function validateCreateTeamRoute(): (
   req: Request,
@@ -8,12 +9,12 @@ export function validateCreateTeamRoute(): (
   next: NextFunction
 ) => void {
   return(req: Request, res: Response, next: NextFunction) => {
-    const teamName = req.body.name;
+    const name = req.body.name;
     
-    if (!teamName) {
+    if (!name) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json(new HttpException(HttpStatusCode.BAD_REQUEST, "error"));
+      .json({ error: bodyErrorMessage("name") });
     }
     next();
   }
@@ -30,7 +31,7 @@ export function validateGetTeamRoute(): (
     if (!id) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json(new HttpException(HttpStatusCode.BAD_REQUEST, "error"));
+      .json({ error: paramsErrorMessage("id") });
     }
     next();
   }
@@ -48,13 +49,13 @@ export function validateUpdateTeamRoute(): (
     if (!id) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json(new HttpException(HttpStatusCode.BAD_REQUEST, "error"));
+      .json({ error: paramsErrorMessage("id")} );
     }
 
     if (!members || members.length === 0) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json(new HttpException(HttpStatusCode.BAD_REQUEST, "error"));
+      .json({ error: bodyErrorMessage("members") });
     }
 
     next();
@@ -73,13 +74,13 @@ export function validateAddMemberByNameRoute(): (
     if (!id) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json(new HttpException(HttpStatusCode.BAD_REQUEST, "error"));
+      .json({ error: paramsErrorMessage("id") });
     }
 
     if (!username) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json(new HttpException(HttpStatusCode.BAD_REQUEST, "error"));
+      .json({ error: paramsErrorMessage("username") });
     }
 
     next();

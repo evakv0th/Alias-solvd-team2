@@ -14,13 +14,13 @@ export function validateGameCreateRoute(): (
     if (!options) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage("options")}` }); 
+      .json({ error: bodyErrorMessage("options") }); 
     } 
 
     if (!teams || teams.length < 2) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage("teams")}` }); 
+      .json({ error: bodyErrorMessage("teams") }); 
     }
 
     next();
@@ -38,7 +38,7 @@ export function validateGetGameRoute(): (
     if (!id || id === " ") {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage("id")}` }); 
+      .json({ error: paramsErrorMessage("id") }); 
     }
     next();
   }
@@ -55,7 +55,7 @@ export function validateGameStartRoute(): (
     if (!id || id === " ") {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage("id")}` }); 
+      .json({ error: paramsErrorMessage("id") }); 
     }
     next();
   }

@@ -12,7 +12,7 @@ export function validateGetVocabularyByIdRout(): (
     if(!id || id === " ") {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage("id")}`}); 
+      .json({ error: paramsErrorMessage("id") }); 
     }
     next();
   }   
@@ -29,7 +29,7 @@ export function validateCreateVocabularyRout(): (
     if(!vocabulary || vocabulary.words.length === 0) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage("vocabulary")}`}); 
+      .json({ error: bodyErrorMessage("vocabulary") }); 
     }
     next();
   }   
@@ -47,13 +47,13 @@ export function validateUpdateVocabularyRout(): (
     if (!id || id === " ") {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage("id")}`});
+      .json({ error: paramsErrorMessage("id") });
     }
 
     if (!vocabulary || vocabulary.words.length === 0) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${bodyErrorMessage("vocabulary")}`}); 
+      .json({ error: bodyErrorMessage("vocabulary") }); 
     }
     next();
   }   
@@ -70,7 +70,7 @@ export function validateDeleteVocabularyRout(): (
     if (!id || id === " ") {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: `${paramsErrorMessage("id")}`});
+      .json({ error: paramsErrorMessage("id") });
     }
     
     next();
