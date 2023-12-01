@@ -7,6 +7,7 @@ import { userService } from '../user.service';
 import { GameService } from '../game.service';
 import HttpException from '../../application/utils/exceptions/http-exceptions';
 import HttpStatusCode from '../../application/utils/exceptions/statusCode';
+import { IGame, IGameCreateSchema } from '../../interfaces/game.interface';
 
 jest.mock('../../repositories/game.repository');
 jest.mock('../vocabulary.service');
@@ -18,6 +19,11 @@ jest.mock('../user.service');
 const gameService = new GameService();
 
 describe('GameService', () => {
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+  
   describe('create', () => {
     it('should create a new game if host and teams exist', async () => {
       const mockGame = { hostId: 'hostId', teams: ['team1', 'team2'], options: { maxPlayersPerTeam: 10, goal: 10, roundTime: 100,  vocabularyId: '0' } };
@@ -73,6 +79,67 @@ describe('GameService', () => {
       expect(gameRepository.delete).toHaveBeenCalledWith(mockGameId);
     });
   });
+
+  const mockGameCreate: IGameCreateSchema = {
+    hostId: 'host123',
+    teams: ['team1', 'team2'],
+    options: {
+      maxPlayersPerTeam: 10,
+      goal: 100,
+      roundTime: 60,
+      vocabularyId: 'vocab123',
+    },
+  };
+
+  const mockGame: IGame = {
+    _id: 'game123',
+    hostId: mockGameCreate.hostId,
+    createdAt: new Date(),
+    teams: mockGameCreate.teams.map(team => ({ teamId: team, score: 0, members: [] })),
+    currentTeam: 'team1',
+    rounds: [],
+    options: mockGameCreate.options,
+  };
+
+
+  describe('GameService.update(mockGame)', () => {
+    it('should update a game successfully', async () => {
+      
+      (teamService.exists as jest.Mock).mockResolvedValue(true);
+      (roundService.exists as jest.Mock).mockResolvedValue(true);
+      (gameRepository.update as jest.Mock).mockResolvedValue(mockGame);
+  
+      const result = await gameService.update(mockGame);
+  
+      expect(result).toEqual(mockGame);
+    });
+
 });
 
+  describe('GameService.create(mockGame)', () => {
+    it('should create a new game if host and teams exist', async () => {
+      (userService.exists as jest.Mock).mockResolvedValue(true);
+      (teamService.exists as jest.Mock).mockResolvedValue(true);
+      (gameRepository.create as jest.Mock).mockResolvedValue('game123');
 
+      const result = await gameService.create(mockGameCreate);
+
+      expect(userService.exists).toHaveBeenCalledWith('host123');
+      expect(teamService.exists).toHaveBeenCalledTimes(2);
+      expect(gameRepository.create).toHaveBeenCalledWith(mockGameCreate);
+      expect(result).toBe('game123');
+    });
+  });
+
+  describe('GameService.getById(mockGame)', () => {
+    it('should retrieve a game by its ID', async () => {
+      (gameRepository.getById as jest.Mock).mockResolvedValue(mockGame);
+
+      const result = await gameService.getById('game123');
+
+      expect(gameRepository.getById).toHaveBeenCalledWith('game123');
+      expect(result).toEqual(mockGame);
+    });
+  });
+
+});

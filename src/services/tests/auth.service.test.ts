@@ -40,6 +40,12 @@ describe('Auth Service', () => {
   });
 
   describe('login', () => {
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+  
+    
     const mockUser = { _id: 'userId', username: 'testUser', password: 'password' };
 
     it('should throw an error if username or password is not provided', async () => {
