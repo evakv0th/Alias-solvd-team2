@@ -44,7 +44,7 @@ describe('Auth Controller', () => {
         });
 
         it('should return a 400 status if the request data is invalid', async () => {
-            const errorMessage = 'Missing required fields';
+            const errorMessage = 'Missing username in body request';
             (authService.register as jest.Mock).mockRejectedValue(new HttpException(HttpStatusCode.BAD_REQUEST, errorMessage));
 
             const response = await request(app)

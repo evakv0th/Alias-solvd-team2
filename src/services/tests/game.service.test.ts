@@ -81,7 +81,6 @@ describe('GameService', () => {
     hostId: 'host123',
     teams: ['team1', 'team2'],
     options: {
-      maxPlayersPerTeam: 10,
       goal: 100,
       roundTime: 60,
       vocabularyId: 'vocab123',
