@@ -1,12 +1,9 @@
 import { gameRepository } from '../../repositories/game.repository';
-import { vocabularyService } from '../vocabulary.service';
 import { roundService } from '../round.service';
-import { chatService } from '../chat.service';
 import { teamService } from '../team.service';
 import { userService } from '../user.service';
 import { GameService } from '../game.service';
 import HttpException from '../../application/utils/exceptions/http-exceptions';
-import HttpStatusCode from '../../application/utils/exceptions/statusCode';
 import { IGame, IGameCreateSchema } from '../../interfaces/game.interface';
 
 jest.mock('../../repositories/game.repository');
@@ -23,7 +20,7 @@ describe('GameService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  
+
   describe('create', () => {
     it('should create a new game if host and teams exist', async () => {
       const mockGame = { hostId: 'hostId', teams: ['team1', 'team2'], options: { maxPlayersPerTeam: 10, goal: 10, roundTime: 100,  vocabularyId: '0' } };

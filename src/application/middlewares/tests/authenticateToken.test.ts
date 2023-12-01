@@ -12,7 +12,7 @@ jest.mock('jsonwebtoken', () => ({
 describe("authenticateToken Middleware", () => {
   let mockRequest: Partial<RequestWithUser>;
   let mockResponse: Partial<Response>;
-  let nextFunction: NextFunction = jest.fn();
+  const nextFunction: NextFunction = jest.fn();
 
   beforeEach(() => {
     mockRequest = {

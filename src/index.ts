@@ -21,7 +21,6 @@ const port = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
-let serverInstance;
 
 app.use(cookieParser());
 app.set('view engine', 'ejs'); // for ejs

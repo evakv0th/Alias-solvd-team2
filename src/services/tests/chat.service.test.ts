@@ -2,7 +2,6 @@ import { chatRepository } from '../../repositories/chat.repository';
 import { userService } from '../../services/user.service';
 import { ChatService } from '../chat.service';
 import HttpException from '../../application/utils/exceptions/http-exceptions';
-import HttpStatusCode from '../../application/utils/exceptions/statusCode';
 
 jest.mock('../../repositories/chat.repository');
 jest.mock('../../services/user.service');

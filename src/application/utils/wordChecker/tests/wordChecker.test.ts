@@ -1,5 +1,4 @@
 import isForbidden from '../wordChecker';
-import fixtures from './test_fixtures.json';
 
 describe('WordChecker', () => {
   describe('isMessageValid', () => {
