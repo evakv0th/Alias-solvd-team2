@@ -99,17 +99,13 @@ describe('RoundRepository', () => {
   
 
   it('should delete a round', async () => {
-    const mockGetResponse = { _id: 'round123', _rev: '1-abc' };
-    mockedRoundsDb.get.mockImplementation((id, callback) => {
-        callback(null, mockGetResponse); 
-    });
+    const mockRoundId = 'round123';
+    const mockRev = '1-abc';
+    mockedRoundsDb.get.mockResolvedValue({ _id: mockRoundId, _rev: mockRev });
 
-    mockedRoundsDb.destroy.mockResolvedValue({ ok: true });
+    await roundRepository.delete(mockRoundId);
 
-    await roundRepository.delete('round123');
-
-    expect(mockedRoundsDb.get).toHaveBeenCalledWith('round123', expect.any(Function));
-
-    expect(mockedRoundsDb.destroy).toHaveBeenCalledWith('round123', '1-abc');
+    expect(mockedRoundsDb.get).toHaveBeenCalledWith(mockRoundId);
+    expect(mockedRoundsDb.destroy).toHaveBeenCalledWith(mockRoundId, mockRev);
   });
 });
