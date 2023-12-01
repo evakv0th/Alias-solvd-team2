@@ -40,4 +40,39 @@ describe('GameService', () => {
       await expect(gameService.create(mockGame)).rejects.toThrow(HttpException);
     });
   });
+  describe('getById', () => {
+    it('should retrieve a game by its ID', async () => {
+      const mockGameId = 'gameId';
+      const mockGame = { _id: mockGameId, hostId: 'host1', teams: [], options: {} };
+      (gameRepository.getById as jest.Mock).mockResolvedValue(mockGame);
+
+      const result = await gameService.getById(mockGameId);
+
+      expect(gameRepository.getById).toHaveBeenCalledWith(mockGameId);
+      expect(result).toBe(mockGame);
+    });
+  });
+
+  describe('exists', () => {
+    it('should check if a game exists', async () => {
+      const mockGameId = 'gameId';
+      (gameRepository.exists as jest.Mock).mockResolvedValue(true);
+
+      const exists = await gameService.exists(mockGameId);
+
+      expect(gameRepository.exists).toHaveBeenCalledWith(mockGameId);
+      expect(exists).toBe(true);
+    });
+  });
+
+  describe('delete', () => {
+    it('should delete a game by its ID', async () => {
+      const mockGameId = 'gameId';
+      await gameService.delete(mockGameId);
+
+      expect(gameRepository.delete).toHaveBeenCalledWith(mockGameId);
+    });
+  });
 });
+
+
