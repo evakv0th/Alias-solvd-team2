@@ -10,9 +10,9 @@ import {
 
 const teamRouter = express.Router();
 
-teamRouter.post('/', validateTeamCreateRoute(), authenticateToken, create);
-teamRouter.get('/:id', validateGetTeamRoute(), authenticateToken, getById);
-teamRouter.put('/:id/members', validateUpdateTeamRoute(), authenticateToken, updateMembers);
-teamRouter.put('/:id/members/:username', validateAddMembereByNameRoute(), authenticateToken, addMemberByName);
+teamRouter.post('/', authenticateToken, validateTeamCreateRoute(), create);
+teamRouter.get('/:id', authenticateToken, validateGetTeamRoute(), getById);
+teamRouter.put('/:id/members', authenticateToken, validateUpdateTeamRoute(), updateMembers);
+teamRouter.put('/:id/members/:username', authenticateToken, validateAddMembereByNameRoute(), addMemberByName);
 
 export default teamRouter;

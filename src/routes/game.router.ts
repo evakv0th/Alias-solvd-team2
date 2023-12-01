@@ -8,8 +8,8 @@ import { validateGameCreateRoute,
 
 const gameRouter = express.Router();
 
-gameRouter.post('/', validateGameCreateRoute(), authenticateToken, create);
-gameRouter.get('/:id', validateGetGameRoute(), authenticateToken, getById);
-gameRouter.post('/:id/start', validateGameStartRoute(), authenticateToken, start);
+gameRouter.post('/', authenticateToken, validateGameCreateRoute(), create);
+gameRouter.get('/:id', authenticateToken, validateGetGameRoute(), getById);
+gameRouter.post('/:id/start', authenticateToken, validateGameStartRoute(), start);
 
 export default gameRouter;

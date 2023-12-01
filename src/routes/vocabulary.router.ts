@@ -10,9 +10,9 @@ import {
 
 const vocabularyRouter = express.Router();
 
-vocabularyRouter.get('/:id', validateGetVocabularyByIdRout(), authenticateToken, vocabularyController.getById);
-vocabularyRouter.post('/', validateCreateVocabularyRout(), authenticateToken, vocabularyController.create);
-vocabularyRouter.patch('/:id', validateUpdateVocabularyRout(),  authenticateToken, vocabularyController.update);
-vocabularyRouter.delete('/:id', validateDeleteVocabularyRout(), authenticateToken, vocabularyController.delete);
+vocabularyRouter.get('/:id', authenticateToken, validateGetVocabularyByIdRout(), vocabularyController.getById);
+vocabularyRouter.post('/', authenticateToken, validateCreateVocabularyRout(), vocabularyController.create);
+vocabularyRouter.patch('/:id', authenticateToken, validateUpdateVocabularyRout(), vocabularyController.update);
+vocabularyRouter.delete('/:id', authenticateToken, validateDeleteVocabularyRout(), vocabularyController.delete);
 
 export default vocabularyRouter;
