@@ -85,15 +85,21 @@ describe('addMemberByName', () => {
         const mockUser = { _id: 'userId', username: 'newUser' };
         const mockTeam = { _id: 'teamId', members: [], hostId: 'hostUserId' };
 
-        expect(mockTeam.members).not.toContain(mockUser._id);
-
+        // Set up mocks to return appropriate values
         (userService.getByUsername as jest.Mock).mockResolvedValue(mockUser);
         (teamService.getById as jest.Mock).mockResolvedValue(mockTeam);
-        (teamService.update as jest.Mock).mockResolvedValue({ ...mockTeam, members: ['userId'] });
 
+        // The team after the user is added
+        const updatedTeam = { ...mockTeam, members: [...mockTeam.members, mockUser._id] };
+        (teamService.update as jest.Mock).mockResolvedValue(updatedTeam);
+        
         await teamController.addMemberByName(req, res);
 
+        // Add a console.log to debug the mock function's call
+        console.log("teamService.update mock call:", (teamService.update as jest.Mock).mock.calls);
+
         expect(res.status).toHaveBeenCalledWith(HttpStatusCode.OK);
+        expect(res.json).toHaveBeenCalledWith({ ...mockTeam, members: ['userId'] });
         expect(teamService.update).toHaveBeenCalledWith({ ...mockTeam, members: ['userId'] });
     });
 

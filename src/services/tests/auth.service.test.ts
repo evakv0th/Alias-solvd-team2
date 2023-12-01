@@ -52,28 +52,7 @@ describe('Auth Service', () => {
       await expect(authService.login({ username: '', password: '' })).rejects.toThrow(HttpException);
     });
 
-    it('should throw an error if credentials are incorrect', async () => {
-      const incorrectPassword = 'wrongPassword';
-      (userService.getByUsername as jest.Mock).mockResolvedValue(mockUser);
-      (bcrypt.compare as jest.Mock).mockResolvedValue(false); 
-    
-      await expect(authService.login({ username: 'testUser', password: incorrectPassword }))
-          .rejects.toThrow(HttpException);
-    });
-    
-    it('should log in a user successfully and return tokens', async () => {
-      const mockUser = { _id: 'userId', username: 'testUser', password: 'hashedPassword' };
-      (userService.getByUsername as jest.Mock).mockResolvedValue(mockUser);
-      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
-
-      await expect(authService.login({ username: 'testUser', password: 'password' }))
-          .resolves
-          .toMatchObject({
-            accessToken: expect.any(String),
-            refreshToken: expect.any(String)
-          });
-    });
-
+   
     it('should throw an error if userService throws an error', async () => {
       (userService.getByUsername as jest.Mock).mockRejectedValue(new HttpException(HttpStatusCode.BAD_REQUEST, 'User not found'));
       await expect(authService.login({ username: 'testUser', password: 'password' }))
@@ -81,4 +60,27 @@ describe('Auth Service', () => {
           .toBeInstanceOf(HttpException);
     });
   });
+
+  describe('login, throwing errors, generating token', () => {
+    const mockUser = { _id: 'userId', username: 'testUser', password: 'password' };
+
+    it('should throw an error if credentials are incorrect', async () => {
+      const incorrectPassword = 'wrongPassword';
+      (userService.getByUsername as jest.Mock).mockResolvedValue(mockUser);
+      (bcrypt.compare as jest.Mock).mockResolvedValue(false); 
+    
+      await expect(authService.login({ username: 'testUser', password: incorrectPassword }))
+        .rejects.toThrow(HttpException);
+    });
+    
+    it('should log in a user successfully and return tokens', async () => {
+      (userService.getByUsername as jest.Mock).mockResolvedValue(mockUser);
+      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+
+      const result = await authService.login({ username: 'testUser', password: 'password' });
+      expect(result).toHaveProperty('accessToken');
+      expect(result).toHaveProperty('refreshToken');
+      expect(result).toHaveProperty('id', 'userId');
+    });
+});
 });
