@@ -53,11 +53,14 @@ describe('Auth Service', () => {
     });
 
     it('should throw an error if credentials are incorrect', async () => {
+      const incorrectPassword = 'wrongPassword';
       (userService.getByUsername as jest.Mock).mockResolvedValue(mockUser);
-      await expect(authService.login({ username: 'testUser', password: 'wrongPassword' }))
+      (bcrypt.compare as jest.Mock).mockResolvedValue(false); 
+    
+      await expect(authService.login({ username: 'testUser', password: incorrectPassword }))
           .rejects.toThrow(HttpException);
     });
-
+    
     it('should log in a user successfully and return tokens', async () => {
       const mockUser = { _id: 'userId', username: 'testUser', password: 'hashedPassword' };
       (userService.getByUsername as jest.Mock).mockResolvedValue(mockUser);
