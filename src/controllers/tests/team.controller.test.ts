@@ -85,6 +85,8 @@ describe('addMemberByName', () => {
         const mockUser = { _id: 'userId', username: 'newUser' };
         const mockTeam = { _id: 'teamId', members: [], hostId: 'hostUserId' };
 
+        expect(mockTeam.members).not.toContain(mockUser._id);
+
         (userService.getByUsername as jest.Mock).mockResolvedValue(mockUser);
         (teamService.getById as jest.Mock).mockResolvedValue(mockTeam);
         (teamService.update as jest.Mock).mockResolvedValue({ ...mockTeam, members: ['userId'] });
@@ -92,6 +94,7 @@ describe('addMemberByName', () => {
         await teamController.addMemberByName(req, res);
 
         expect(res.status).toHaveBeenCalledWith(HttpStatusCode.OK);
+        expect(teamService.update).toHaveBeenCalledWith({ ...mockTeam, members: ['userId'] });
     });
 
     it('should return not found if user does not exist', async () => {
