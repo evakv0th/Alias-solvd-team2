@@ -18,8 +18,6 @@ export interface IGameCreateSchema {
 }
 
 export interface GameOptions {
-  //TODO remove maxPlayersPerTeam
-  maxPlayersPerTeam: any;
   goal: number;
   roundTime: number;
   vocabularyId: string;

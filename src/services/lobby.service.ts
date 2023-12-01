@@ -4,6 +4,7 @@ import HttpException from "../application/utils/exceptions/http-exceptions";
 import HttpStatusCode from "../application/utils/exceptions/statusCode";
 import { ITeamCreateSchema } from "../interfaces/team.interface";
 import { teamService } from "./team.service";
+import { teamRepository } from "../repositories/team.repository";
 
 class LobbyService 
 {
@@ -57,21 +58,20 @@ class LobbyService
         throw new HttpException(HttpStatusCode.BAD_REQUEST, 'User already in the lobby.');
       }
 
-      let assigned = false;
+      let leastPopulatedTeam = null;
+      let minMembersCount = Infinity;
 
       for (const team of game.teams) 
       {
         const members = this.teamMembers.get(team.teamId) ?? new Set<string>();
-        if (members.size < game.options.maxPlayersPerTeam) 
+        if (members.size < minMembersCount) 
         {
-          members.add(userId);
-          this.teamMembers.set(team.teamId, members);
-          assigned = true;
-          break;
+          leastPopulatedTeam = team.teamId;
+          minMembersCount = members.size;
         }
       }
-      
-      if (!assigned) 
+
+      if (!leastPopulatedTeam || game.teams.length === 0) 
       {
         const newTeamData: ITeamCreateSchema = {
           name: `Team ${game.teams.length + 1}`,
@@ -79,16 +79,16 @@ class LobbyService
         };
         const newTeamId = await teamService.create(newTeamData);
         game.teams.push({ teamId: newTeamId, score: 0 });
-        await gameRepository.update(game);
-      
-        return gameRepository.getById(gameId);
+        this.teamMembers.set(newTeamId, new Set([userId]));
       } 
-      else if (!assigned) 
+      else 
       {
-        throw new HttpException(HttpStatusCode.BAD_REQUEST, 'All teams are full, and no more teams can be created.');
+        this.teamMembers.get(leastPopulatedTeam)?.add(userId);
       }
 
-      return gameRepository.update(game);
+      await gameRepository.update(game);
+
+      return gameRepository.getById(gameId);
     } 
     catch (error) 
     {
@@ -111,25 +111,28 @@ class LobbyService
         throw new HttpException(HttpStatusCode.NOT_FOUND, 'Lobby not found.');
       }
 
-      this.teamMembers.forEach((members) => {
+      const team = await teamRepository.getById(teamId);
+      if (!team) {
+        throw new HttpException(HttpStatusCode.NOT_FOUND, 'Team not found.');
+      }
+
+      game.teams.forEach((team) => {
+        const members = this.teamMembers.get(team.teamId) ?? new Set<string>();
         if (members.has(userId)) 
         {
           members.delete(userId);
+          this.teamMembers.set(team.teamId, members);
         }
       });
 
       const members = this.teamMembers.get(teamId) ?? new Set<string>();
-
-      if (members.size >= game.options.maxPlayersPerTeam) 
-      {
-        throw new HttpException(HttpStatusCode.BAD_REQUEST, 'Team is full.');
-      }
-
       members.add(userId);
-
       this.teamMembers.set(teamId, members);
 
-      return gameRepository.update(game);
+      team.members = Array.from(members);
+      await teamRepository.update(team);
+
+      return await gameRepository.update(game);
     } 
     catch (error) 
     {
