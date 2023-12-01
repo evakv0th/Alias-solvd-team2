@@ -3,7 +3,6 @@ import HttpException from '../application/utils/exceptions/http-exceptions';
 import HttpStatusCode from '../application/utils/exceptions/statusCode';
 import {generateAccessToken, generateRefreshToken,} from '../application/utils/tokenForAuth/generateToken';
 import {userService} from './user.service';
-import util from "util";
 import bcrypt from "bcrypt";
 
 export async function register(newUser: IUserCreateSchema): Promise<IUserCreateSchema> {
