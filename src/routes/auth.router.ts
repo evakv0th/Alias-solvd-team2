@@ -12,8 +12,8 @@ import {
 
 const authRouter = express.Router();
 
-authRouter.post('/register', validateRegisterRequest(), register);
-authRouter.post('/login', validateLoginRequest(), login);
-authRouter.post('/refresh', validateRefreshRequest(), refresh);
+authRouter.post('/register', validateRegisterRequest, register);
+authRouter.post('/login', validateLoginRequest, login);
+authRouter.post('/refresh', validateRefreshRequest, refresh);
 
 export default authRouter;
