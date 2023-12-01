@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import HttpStatusCode from  '../application/utils/exceptions/statusCode';
+import { bodyErrorMessage } from "../application/utils/errorRequestHandler/errorRequestHandler";
 
 export function validateRegisterRequest(): (
   req: Request,
@@ -7,12 +8,21 @@ export function validateRegisterRequest(): (
   next: NextFunction
 ) => void {
   return(req: Request, res: Response, next: NextFunction) => {
-    if (!req.body.username || !req.body.password) {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    if (!username) {
       return res
-        .status(HttpStatusCode.BAD_REQUEST)
-        .json({ error: "Missing required fields" });
-      }
-      next();
+      .status(HttpStatusCode.BAD_REQUEST)
+      .json({ error: `${bodyErrorMessage("username")}` });
+    }
+
+    if (!password) {
+      return res
+      .status(HttpStatusCode.BAD_REQUEST)
+      .json({ error: `${bodyErrorMessage("password")}` });
+    }
+    next();
     }
 }
 
@@ -22,10 +32,19 @@ export function validateLoginRequest(): (
   next: NextFunction
 ) => void {
   return(req: Request, res: Response, next: NextFunction) => {
-    if(!req.body.username || !req.body.password) {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    if (!username) {
       return res
       .status(HttpStatusCode.BAD_REQUEST)
-      .json({ error: "Missing required fields" });
+      .json({ error: `${bodyErrorMessage("username")}` });
+    }
+
+    if (!password) {
+      return res
+      .status(HttpStatusCode.BAD_REQUEST)
+      .json({ error: `${bodyErrorMessage("password")}` });
     }
     next();
   }
