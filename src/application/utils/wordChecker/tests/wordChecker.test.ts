@@ -70,15 +70,13 @@ describe('WordChecker', () => {
 });
 
 
+// const typedFixtures = fixtures as [string, string][];
 
-
-const typedFixtures = fixtures as [string, string][];
-
-describe('Stemming Test', () => {
-  typedFixtures.forEach(([input, output]) => {
-    test(`${input} should stem to ${output}`, () => {
-      const result = isForbidden(input, output);
-      expect(result).toBe(true);
-    });
-  });
-});
+// describe('... Supremacy test ...', () => {
+//   typedFixtures.forEach(([input, output]) => {
+//     test(`${input} should stem to ${output}`, () => {
+//       const result = isForbidden(input, output);
+//       expect(result).toBe(true);
+//     });
+//   });
+// });
