@@ -4,7 +4,7 @@ import HttpException from "../application/utils/exceptions/http-exceptions";
 import HttpStatusCode from "../application/utils/exceptions/statusCode";
 import {userService} from "./user.service";
 
-class ChatService {
+export class ChatService {
   async getById(id: string): Promise<IChat> {
     return chatRepository.getById(id);
   }

@@ -9,7 +9,7 @@ import {userService} from "./user.service";
 import HttpException from "../application/utils/exceptions/http-exceptions";
 import HttpStatusCode from "../application/utils/exceptions/statusCode";
 
-class GameService {
+export class GameService {
 
   async getById(id: string): Promise<IGame> {
     return gameRepository.getById(id);
