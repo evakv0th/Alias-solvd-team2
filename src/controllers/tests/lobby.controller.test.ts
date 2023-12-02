@@ -41,17 +41,18 @@ describe('LobbyController', () => {
         it('should allow a user to join a lobby successfully', async () => {
             const userId = 'user123';
             const gameId = 'game123';
-            const mockGame = { id: gameId, players: [userId] };
-
+            const mockGame = { id: gameId, teams: [{ teamId: 'team123', members: [userId] }] };
+        
             (lobbyService.joinLobby as jest.Mock).mockResolvedValue(mockGame);
-
+        
             const response = await request(app)
                 .post(`/api/v1/lobby/join/${gameId}`)
                 .send({ userId });
-    
+        
             expect(response.status).toBe(HttpStatusCode.OK);
-            expect(response.body).toEqual(mockGame); 
+            expect(response.body).toEqual(mockGame);
         });
+        
     
         it('should handle errors when joining a lobby', async () => {
             const userId = 'user123';
@@ -75,16 +76,17 @@ describe('LobbyController', () => {
             const gameId = 'game123';
             const teamId = 'team123';
             const mockGame = { id: gameId, teams: [{ teamId: teamId, members: [userId] }] };
-    
+        
             (lobbyService.selectTeam as jest.Mock).mockResolvedValue(mockGame);
-    
+        
             const response = await request(app)
-                .post(`/api/v1/lobby/${gameId}/selectTeam`)
-                .send({ userId, teamId });
-    
+                .put(`/api/v1/lobby/selectTeam/${gameId}`)
+                .send({ gameId, userId, teamId });
+        
             expect(response.status).toBe(HttpStatusCode.OK);
             expect(response.body).toEqual(mockGame);
         });
+        
     
         it('should handle errors when selecting a team', async () => {
             const userId = 'user123';
@@ -95,7 +97,7 @@ describe('LobbyController', () => {
             (lobbyService.selectTeam as jest.Mock).mockRejectedValue(new HttpException(HttpStatusCode.NOT_FOUND, errorMessage));
     
             const response = await request(app)
-                .post(`/api/v1/lobby/${gameId}/selectTeam`)
+                .put(`/api/v1/lobby/selectTeam/${gameId}`)
                 .send({ userId, teamId });
     
             expect(response.status).toBe(HttpStatusCode.NOT_FOUND);
@@ -112,7 +114,7 @@ describe('LobbyController', () => {
             (lobbyService.leaveLobby as jest.Mock).mockResolvedValue(mockGame);
     
             const response = await request(app)
-                .post(`/api/v1/lobby/${gameId}/leave`)
+                .post(`/api/v1/lobby/leave/${gameId}`)
                 .send({ userId });
     
             expect(response.status).toBe(HttpStatusCode.OK);
@@ -127,7 +129,7 @@ describe('LobbyController', () => {
             (lobbyService.leaveLobby as jest.Mock).mockRejectedValue(new HttpException(HttpStatusCode.NOT_FOUND, errorMessage));
     
             const response = await request(app)
-                .post(`/api/v1/lobby/${gameId}/leave`)
+                .post(`/api/v1/lobby/leave/${gameId}`)
                 .send({ userId });
     
             expect(response.status).toBe(HttpStatusCode.NOT_FOUND);

@@ -48,14 +48,14 @@ class LobbyController {
     }
   }
 
-  async selectTeam(req: Request, res: Response): Promise<void> 
-  {
+  async selectTeam(req: Request, res: Response): Promise<void> {
     try 
     {
       const userId = req.body.userId;
       const gameId = req.params.gameId;
       const teamId = req.body.teamId;
       const updatedGame = await lobbyService.selectTeam(userId, gameId, teamId);
+  
       res.status(HttpStatusCode.OK).json(updatedGame);
     } 
     catch (error) 
@@ -70,14 +70,15 @@ class LobbyController {
       }
     }
   }
+  
 
-  async leaveLobby(req: Request, res: Response): Promise<void> 
-  {
+  async leaveLobby(req: Request, res: Response): Promise<void> {
     try 
     {
       const userId = req.body.userId;
       const gameId = req.params.gameId;
       const updatedGame = await lobbyService.leaveLobby(userId, gameId);
+  
       res.status(HttpStatusCode.OK).json(updatedGame);
     } 
     catch (error) 
@@ -86,11 +87,13 @@ class LobbyController {
       {
         res.status(error.status).json({ message: error.message });
       } 
-      else {
+      else 
+      {
         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Internal server error' });
       }
     }
   }
+  
 }
 
 export const lobbyController = new LobbyController();
