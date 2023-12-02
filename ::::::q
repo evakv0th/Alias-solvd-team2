@@ -1,0 +1,1254 @@
+[33mcommit 327a979ca159d64db13bc62b1dd481cf03f3f8fa[m[33m ([m[1;36mHEAD -> [m[1;32missue72resolve[m[33m, [m[1;31morigin/issue72resolve[m[33m)[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Sat Dec 2 03:53:48 2023 +0100
+
+    #72: validateJoinLobbyRoute update -> gameOptions remove
+
+[33mcommit 542b0da859e57ae0a723eee2466251cdb96e80f8[m
+Merge: 59883a5 2724cdd
+Author: AdrianV <96334335+SaintAngeLs@users.noreply.github.com>
+Date:   Fri Dec 1 23:31:32 2023 +0100
+
+    Merge pull request #56 from evakv0th/UncommitedChanges
+    
+    Updating the iconcistency in the dev
+
+[33mcommit 2724cddd6e323a41d1fe16acdd5d2db6c5c97baa[m[33m ([m[1;31morigin/UncommitedChanges[m[33m, [m[1;32mUncommitedChanges[m[33m)[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Fri Dec 1 16:58:35 2023 +0100
+
+    #56: lobby.service ->  updating the algorithms of join and selection teamd in the case of the the absence of the MaxPlayers for the team in the GameOptions interface
+
+[33mcommit 59883a52db633c2edcbdde089ab3f712777b5771[m
+Merge: e8d08e5 06ef78e
+Author: Alexandrina <71590061+suprugafad@users.noreply.github.com>
+Date:   Fri Dec 1 18:45:14 2023 +0300
+
+    Merge pull request #65 from evakv0th/ImplementValidationMiddleware
+    
+    #58 ImpementValidationRequest
+
+[33mcommit 1170d46f2a9ca1c4fc7f7dfe7e232a0c2d6ce077[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Fri Dec 1 16:42:22 2023 +0100
+
+    #56: lobby.service ->  securing reason update
+
+[33mcommit 06ef78e8a33b0326f3ef2214d44ad5430127044d[m[33m ([m[1;31morigin/ImplementValidationMiddleware[m[33m)[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Fri Dec 1 16:59:05 2023 +0300
+
+    #58 fix:change signature of function
+
+[33mcommit 48f40a3e2b8190024055910e629ab47c9495ec13[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Fri Dec 1 15:49:12 2023 +0300
+
+    #58 fix: cange an order of middlewars
+
+[33mcommit cfff59e6b22a0d45615b412481311d8ba5104111[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Fri Dec 1 15:41:52 2023 +0300
+
+    #58 Fix: fix code style
+
+[33mcommit 59665e7573376350c2c053b30387889fccc20d30[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Fri Dec 1 03:43:00 2023 +0300
+
+    #58 ImpementValidationRequest
+
+[33mcommit 58ce4f96a6422062d4e693fb7110800532eb1d22[m
+Merge: 8454151 e8d08e5
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Thu Nov 30 21:13:20 2023 +0100
+
+    #56: resolving the conflicts
+
+[33mcommit 8454151b9fb65fd46b7c1e877adaea0bb66481dd[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Thu Nov 30 21:09:14 2023 +0100
+
+    #56: Update the assigning to the teams, update in the game.interface
+
+[33mcommit e8d08e56925902909f28322931957a8cdf9b613a[m
+Merge: 8d0ee73 4d694cc
+Author: Ilya Lisov <121865301+ilisau@users.noreply.github.com>
+Date:   Thu Nov 30 18:54:13 2023 +0300
+
+    Merge pull request #62 from evakv0th/#60
+    
+    #60 Implement validation of IDs on service layer
+
+[33mcommit 4d694ccef4ab07207751e294fc126d9417757298[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Thu Nov 30 17:31:08 2023 +0300
+
+    #60 Implement incrementing amount of playing rounds of user
+
+[33mcommit 05c5e2b10139c949f3437e0b61c3be8cd985ea0d[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Thu Nov 30 17:29:39 2023 +0300
+
+    #60 Implement incrementing amount of playing rounds of user
+
+[33mcommit bf256cc4f5a1c2847bb9da432cffd1839f6900c0[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Thu Nov 30 17:16:58 2023 +0300
+
+    #60 Implement validation od IDs on service layer
+
+[33mcommit 8d0ee7327e73910a1a49f4f619c406d6ff0ad19c[m
+Merge: e8cfd5a 76ced91
+Author: Ilya Lisov <121865301+ilisau@users.noreply.github.com>
+Date:   Thu Nov 30 16:54:38 2023 +0300
+
+    Merge pull request #61 from evakv0th/#59
+    
+    #59 Implement password encryption
+
+[33mcommit 76ced91472ecbceb4af8e36fc906d9caf552d25a[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Thu Nov 30 10:42:21 2023 +0300
+
+    #59 Implement password encryption
+
+[33mcommit e8cfd5afb38351aa479e49aaca3dae015e54a14a[m
+Merge: a198878 4728a7a
+Author: Ilya Lisov <121865301+ilisau@users.noreply.github.com>
+Date:   Thu Nov 30 10:18:14 2023 +0300
+
+    Merge pull request #46 from evakv0th/#42
+    
+    #42 Implement game logic
+
+[33mcommit 4728a7a35800c0a63973536cf9521075a77a1185[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Thu Nov 30 10:16:34 2023 +0300
+
+    #42 Fix linter
+
+[33mcommit d74bf9e761c8db29e27a3955f8921a47547db06f[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Thu Nov 30 10:15:36 2023 +0300
+
+    #42 Fix linter
+
+[33mcommit ab0035ab6c301bbb18f27ef21557051bee07a860[m
+Merge: 2002fd6 a198878
+Author: Ilya Lisov <121865301+ilisau@users.noreply.github.com>
+Date:   Thu Nov 30 10:14:18 2023 +0300
+
+    Merge branch 'dev' into #42
+
+[33mcommit f7cc5035652ee155fa9d28c63dc9fdb1a13a2e29[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Thu Nov 30 02:03:50 2023 +0100
+
+    #35: update the joinLobby algorithm with no boundaries for the teams
+
+[33mcommit 7f8ba451adbac8723bb4abd373630defeef11754[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Thu Nov 30 02:02:01 2023 +0100
+
+    #35: remove the MAX_NUMBER_OF_TEAMS from the service
+
+[33mcommit b973b883683ebe297255213e38370ec9b6bceff0[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Thu Nov 30 02:00:52 2023 +0100
+
+    #35: removing the members as the field in the game.repository
+
+[33mcommit a1988788e991b28fa69bff7f671345c66c3f489d[m[33m ([m[1;32mdev[m[33m)[m
+Merge: 9bcffd8 ebf0fa6
+Author: Alexandrina <71590061+suprugafad@users.noreply.github.com>
+Date:   Wed Nov 29 21:10:05 2023 +0300
+
+    Merge pull request #54 from evakv0th/fix-controllers-status-codes
+    
+    #51: fix controllers statusCodes in dev for users, chats and auth
+
+[33mcommit 9bcffd8a49c7654102b193bc4fbc85e20a14eee9[m
+Merge: 662a139 3433f84
+Author: ruslan-andreev <84670531+ruslan-andreev@users.noreply.github.com>
+Date:   Wed Nov 29 20:50:23 2023 +0300
+
+    Merge pull request #49 from evakv0th/AddMembersToTeamByUsername
+    
+    Add members to team by username
+
+[33mcommit 2002fd6cf431491394295131f0ff9ffa2a0329fa[m[33m ([m[1;31morigin/#42[m[33m, [m[1;32missue-42[m[33m)[m
+Merge: 729a49d 662a139
+Author: Ilya Lisov <121865301+ilisau@users.noreply.github.com>
+Date:   Wed Nov 29 20:13:04 2023 +0300
+
+    Merge branch 'dev' into #42
+
+[33mcommit 3433f84f2311a66eb910caa3a1354573494b8333[m[33m ([m[1;31morigin/AddMembersToTeamByUsername[m[33m)[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Wed Nov 29 18:11:00 2023 +0300
+
+    #43 change let on const
+
+[33mcommit b2f87795a2ae1f5950f7d28a3af5185408a49c14[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Wed Nov 29 18:05:21 2023 +0300
+
+    #43 Change userID
+
+[33mcommit 7975e38c63b9549b30cd8f39717a8481c6233647[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Wed Nov 29 17:05:00 2023 +0300
+
+    #43 add try catch block
+
+[33mcommit ebf0fa615e0ccd35869cd7755232f10726ff88a7[m[33m ([m[1;31morigin/fix-controllers-status-codes[m[33m)[m
+Merge: 32c31d6 2377ae4
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Wed Nov 29 16:02:15 2023 +0200
+
+    Merge pull request #55 from evakv0th/chat-fix
+    
+    Chat fix
+
+[33mcommit 2377ae424fee6624e41e8723e116489f798e21c2[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Wed Nov 29 15:55:00 2023 +0200
+
+    #16: fixed chat preview, fix word checker msging error in chat
+
+[33mcommit 518e4df6d4bcbd3775caf5f544894bc2a9ae0666[m
+Merge: 79a419f b98f32a
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Wed Nov 29 16:23:47 2023 +0300
+
+    Merge branch 'AddMembersToTeamByUsername' of https://github.com/evakv0th/Alias-solvd-team2 into AddMembersToTeamByUsername
+
+[33mcommit 79a419f3302170607634ea1bbe746ec2c461b9b5[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Wed Nov 29 16:23:23 2023 +0300
+
+    #43 change user id
+
+[33mcommit 729a49ddc22fa1b919cad308e958ab5444697d5e[m
+Merge: e936cbf b2b795d
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Wed Nov 29 13:45:12 2023 +0200
+
+    Merge pull request #51 from evakv0th/addChatToGameStart
+    
+    #42: started game, received chat link, added vocabulary router
+
+[33mcommit b2b795d40eb10f0e0442c9eb0b4b6771ccb1ecc7[m[33m ([m[1;31morigin/addChatToGameStart[m[33m)[m
+Merge: dd32bf4 e936cbf
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Wed Nov 29 13:26:21 2023 +0200
+
+    resolved conflicts with #42
+
+[33mcommit 32c31d6d26c088a6d56aeeb1e35d2bc54eedc258[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Wed Nov 29 13:07:30 2023 +0200
+
+    #51: fix controllers in dev for user, chat and auth
+
+[33mcommit dd32bf413f0010924e586edcd82c30a61465a039[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Wed Nov 29 12:50:41 2023 +0200
+
+    #51: fix controllers status codes for vocabulary and chats
+
+[33mcommit 662a1394b21fa857f89ce921e531d1094f3acbb6[m
+Merge: 01f9935 042aa7e
+Author: Ilya Lisov <121865301+ilisau@users.noreply.github.com>
+Date:   Wed Nov 29 12:04:11 2023 +0300
+
+    Merge pull request #52 from evakv0th/#28
+    
+    #28 Implement validation of similar words
+
+[33mcommit b98f32a8e7035b0337b5a57b7c4b01cf0f146d23[m
+Merge: a0f8614 01f9935
+Author: ruslan-andreev <84670531+ruslan-andreev@users.noreply.github.com>
+Date:   Wed Nov 29 11:34:48 2023 +0300
+
+    Merge branch 'dev' into AddMembersToTeamByUsername
+
+[33mcommit a0f86148619cd7cc431e18da239ac4be57192b37[m
+Merge: 9959c54 445de2e
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Wed Nov 29 11:30:03 2023 +0300
+
+    Merge branch 'AddMembersToTeamByUsername' of https://github.com/evakv0th/Alias-solvd-team2 into AddMembersToTeamByUsername
+
+[33mcommit 9959c546c9700f6f2ceba8e1f6a39a03d4b2ce69[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Wed Nov 29 11:29:46 2023 +0300
+
+    #49 update my code
+
+[33mcommit 01f9935624bf594f1153cc2d80785ffa1aabffef[m
+Merge: ea6e7c3 9b65a9f
+Author: Alexandrina <71590061+suprugafad@users.noreply.github.com>
+Date:   Wed Nov 29 11:25:35 2023 +0300
+
+    Merge pull request #50 from evakv0th/fix404Entities
+    
+    #44: move from service to repository logic about throwing errors
+
+[33mcommit a8d1901676315219c8ec4ee0bd9f907a9fe47904[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Wed Nov 29 11:21:49 2023 +0300
+
+    #49 fix params
+
+[33mcommit 042aa7e38a038d5d2181301ecd09495ccb07ccb0[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Wed Nov 29 11:10:09 2023 +0300
+
+    #28 Fix type
+
+[33mcommit f06d4b1eb6b87bc0bc245a16e40b66d2b21c578f[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Wed Nov 29 11:04:41 2023 +0300
+
+    #28 Implement validation of similar words
+
+[33mcommit 9b65a9f4d9c9d1d17562fb5ff38ef971898c04f9[m
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Wed Nov 29 09:39:16 2023 +0200
+
+    #44: fix
+
+[33mcommit d6de54b0dee55de4ccad3fde825378c757a6a323[m
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Wed Nov 29 09:39:02 2023 +0200
+
+    #44: fix
+
+[33mcommit e936cbf20a8bb7beefb6f79ff914f946f602ed85[m
+Merge: f60c68d ea6e7c3
+Author: Ilya Lisov <121865301+ilisau@users.noreply.github.com>
+Date:   Wed Nov 29 10:39:01 2023 +0300
+
+    Merge branch 'dev' into #42
+
+[33mcommit 82f8e41ad019d1bd7cbadad781cf34650288b4f7[m
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Wed Nov 29 09:38:48 2023 +0200
+
+    #44: fix
+
+[33mcommit ca876fb05a2b95c40e3da0e9d58572eed75dcafd[m
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Wed Nov 29 09:38:33 2023 +0200
+
+    #44: fix
+
+[33mcommit c04f27b08f2c0846e020b8547e93353f722471a8[m
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Wed Nov 29 09:38:19 2023 +0200
+
+    #44: fix
+
+[33mcommit 727853d08cfc4190b4ae84224a3dc0b2138f7c41[m
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Wed Nov 29 09:38:04 2023 +0200
+
+    #44: fix
+
+[33mcommit 3d5cea5b840419c02711f9905c536a4d764fe9b7[m
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Wed Nov 29 09:37:39 2023 +0200
+
+    #44: fix
+
+[33mcommit df6d67c1a046216b1e159296f15f05f56e071de3[m
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Wed Nov 29 09:37:16 2023 +0200
+
+    #44: fix
+
+[33mcommit 01086548e528fdaf7b442af6e09322dfb642226e[m
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Wed Nov 29 09:36:50 2023 +0200
+
+    #44: fix
+
+[33mcommit 3a79212452a8f74ac50edb3d6a918705583f9cdb[m
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Wed Nov 29 09:36:29 2023 +0200
+
+    #44: fix
+
+[33mcommit a4760197d6499d431aac3525b97629f670d147b6[m
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Wed Nov 29 09:36:01 2023 +0200
+
+    #44: fix
+
+[33mcommit f60c68d05ab0b7dd48e170e76a37e9213e5b3f6b[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Wed Nov 29 10:35:50 2023 +0300
+
+    #42 Fix repositories and infinity word search loop
+
+[33mcommit ef95a4be0197f941153c4661e26bae6c9990a91b[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Tue Nov 28 23:44:10 2023 +0200
+
+    #42: fixed prettier characters width 80--->150
+
+[33mcommit 04facc3dc5f1d6df4ffa33c1884d319226f6e6f0[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Tue Nov 28 21:27:03 2023 +0200
+
+    #42: started game and it game me link to chat
+
+[33mcommit 7c0fd418b18ecac0fe601eb9f68f0ea63dcf8273[m[33m ([m[1;31morigin/fix404Entities[m[33m)[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Tue Nov 28 19:42:52 2023 +0200
+
+    #44: wrapped repository calls to db in try catch block
+
+[33mcommit 445de2ef0e4c4252d1652fa35a7e058de9a2b74d[m
+Merge: 1675a63 ea6e7c3
+Author: ruslan-andreev <84670531+ruslan-andreev@users.noreply.github.com>
+Date:   Tue Nov 28 16:19:52 2023 +0300
+
+    Merge branch 'dev' into AddMembersToTeamByUsername
+
+[33mcommit 1675a638b630fb5287ca3cf50780b7c3f12ca79f[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Tue Nov 28 16:13:28 2023 +0300
+
+    #43 fix: change user id
+
+[33mcommit ea6e7c3f543e9cc2f9d7f6c38d1e53a778904208[m[33m ([m[1;31morigin/chat-with-user-info[m[33m)[m
+Merge: acf5559 7bb715a
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Tue Nov 28 14:13:57 2023 +0200
+
+    Merge pull request #47 from evakv0th/fixChatController
+    
+    Fix chat controller, add userController and user routes, deleted index.html (dont need it)
+
+[33mcommit 1a3d6261733083fd36c59bfb8e489a25f708aa43[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Tue Nov 28 12:03:57 2023 +0300
+
+    #43 return _id type
+
+[33mcommit 4ff048bb88fa7dd3a74d8153dff7602949bfb555[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Tue Nov 28 11:59:38 2023 +0300
+
+    #43 fix: ci error
+
+[33mcommit a9d206c6bffe1848fcb11369ae6e751c332f4298[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Tue Nov 28 11:46:27 2023 +0300
+
+    # 43 change user interface
+
+[33mcommit f5c1fc00fd69eb49d50c7d2c4f886dd6a7b463d4[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Tue Nov 28 01:48:00 2023 +0300
+
+    #43 Add members to team by username
+
+[33mcommit 7bb715ab12d08bfeb6545a6eb6b586cf0574d2d2[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Mon Nov 27 21:50:18 2023 +0200
+
+    #44: services 404 when wrong id
+
+[33mcommit ca21dedf85909f60db8f6189d1695abcb1a4a68e[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Mon Nov 27 22:42:07 2023 +0300
+
+    #41  Implement user router
+
+[33mcommit d3f9e2bb65c5321d99ba8046bc9c411d9b0b25e8[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Mon Nov 27 21:00:36 2023 +0200
+
+    #16: fix
+
+[33mcommit e019634501afa71c162eb21b35c775c8d548c3b4[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Mon Nov 27 21:00:06 2023 +0200
+
+    #16: fix
+
+[33mcommit 5a0bc707b524e5d699b22b5993e72eec7c96ecaa[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Mon Nov 27 20:58:48 2023 +0200
+
+    #16: chatControllerOOP, user endpoints
+
+[33mcommit acf5559edb905a10fa5f0793da5b50ac3311844f[m
+Merge: 7196b19 02bc12c
+Author: Alexandrina <71590061+suprugafad@users.noreply.github.com>
+Date:   Mon Nov 27 21:48:05 2023 +0300
+
+    Merge pull request #45 from evakv0th/fixViewChat
+    
+    #16: viewChat wasnt working on npm run build, added copyfiles when co…
+
+[33mcommit 7196b19abfe868990581d8c88c0ae8cc8300604f[m
+Merge: 515457e b3926d6
+Author: Alexandrina <71590061+suprugafad@users.noreply.github.com>
+Date:   Mon Nov 27 21:47:42 2023 +0300
+
+    Merge pull request #38 from evakv0th/ImplementValidationChecks
+    
+    #21 Implement validation checks
+
+[33mcommit 4a0909a1d18e8714314973a2300243ea7aea2d73[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Mon Nov 27 17:41:34 2023 +0300
+
+    #42 Implement game logic
+
+[33mcommit 02bc12cb96338aae4499d45fe985e6c966c71bc7[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Mon Nov 27 16:15:00 2023 +0200
+
+    #16: viewChat wasnt working on npm run build, added copyfiles when compiling
+
+[33mcommit b3926d662e4bafe744fcb8f48783404e66f8c1a1[m[33m ([m[1;31morigin/ImplementValidationChecks[m[33m)[m
+Merge: a49cebd 515457e
+Author: ruslan-andreev <84670531+ruslan-andreev@users.noreply.github.com>
+Date:   Mon Nov 27 16:36:19 2023 +0300
+
+    Merge branch 'dev' into ImplementValidationChecks
+
+[33mcommit 515457e637c88998c770b83c9be0d0a362e834dc[m
+Merge: 7ee21dc 4510c2e
+Author: Ilya Lisov <121865301+ilisau@users.noreply.github.com>
+Date:   Mon Nov 27 15:59:26 2023 +0300
+
+    Merge pull request #40 from evakv0th/#39
+    
+    #39 Implement teams router
+
+[33mcommit 7ee21dcb579ec824ba20beb9222994272bf403bb[m
+Merge: 5b7ccf9 ac59b78
+Author: Ilya Lisov <121865301+ilisau@users.noreply.github.com>
+Date:   Mon Nov 27 15:57:44 2023 +0300
+
+    Merge pull request #37 from evakv0th/DockerizeApp
+    
+    #29 Dockerize app feat: add Dockerfile
+
+[33mcommit 4510c2e12e76ef65bbbd3e9b1e7e9b325c578866[m[33m ([m[1;31morigin/#39[m[33m)[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Mon Nov 27 15:45:32 2023 +0300
+
+    #39 Implement teams router
+
+[33mcommit 5b7ccf98a0a96a98e66e8fa5268596583e447b1e[m
+Merge: fc8a643 7fc1319
+Author: Ilya Lisov <121865301+ilisau@users.noreply.github.com>
+Date:   Mon Nov 27 15:00:23 2023 +0300
+
+    Merge pull request #34 from evakv0th/APIDoc
+    
+    #5 Update documentation
+
+[33mcommit fc8a643916ba5847218070b08cbef05623b5cef5[m
+Merge: ca5f25e 3e14a3b
+Author: Ilya Lisov <121865301+ilisau@users.noreply.github.com>
+Date:   Mon Nov 27 14:59:11 2023 +0300
+
+    Merge pull request #36 from evakv0th/#31
+    
+    #31 Implement vocabulary lifecycle
+
+[33mcommit ac59b78b40600518e0fcdc171bbbbe75d7cd96a1[m[33m ([m[1;31morigin/DockerizeApp[m[33m)[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Mon Nov 27 12:50:59 2023 +0300
+
+    #29 Fix Dockerfile and docker-compose.yaml
+
+[33mcommit 7fc131970fd705e3358910c69d820ad18a8f8752[m[33m ([m[1;31morigin/APIDoc[m[33m)[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Mon Nov 27 12:31:58 2023 +0300
+
+    #5 Fix failing code
+
+[33mcommit f53705935846aabbb459b865c515ff7e726903f7[m
+Merge: 3f67d6e ca5f25e
+Author: Ilya Lisov <121865301+ilisau@users.noreply.github.com>
+Date:   Mon Nov 27 12:28:48 2023 +0300
+
+    Merge branch 'dev' into APIDoc
+
+[33mcommit 3e14a3b47db9b5de093b650ff4e3dfaea42295e2[m[33m ([m[1;31morigin/#31[m[33m)[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Mon Nov 27 12:08:56 2023 +0300
+
+    #31 Implement vocabulary lifecycle
+
+[33mcommit 3f67d6eab8876a76c1b3b00ad6a82da2fd62a88b[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Mon Nov 27 11:32:07 2023 +0300
+
+    #5 Fix failing code
+
+[33mcommit ca5f25e0a433f214f7ece94d24bd24178525cd3d[m
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Mon Nov 27 10:22:55 2023 +0200
+
+    Remove check fails
+
+[33mcommit 2dffe00c83d2709ff237f9893a17e506ab027d9e[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Mon Nov 27 11:17:14 2023 +0300
+
+    #5 Update documentation
+
+[33mcommit f327cc78acff34130af3b2d622e55f3ee0884d1b[m
+Merge: 4ed7a6e df25358
+Author: Alexandrina <71590061+suprugafad@users.noreply.github.com>
+Date:   Mon Nov 27 10:49:46 2023 +0300
+
+    Merge pull request #17 from evakv0th/APIDoc
+    
+    #5 API documentation
+
+[33mcommit 4ed7a6ebb832ab8f66376350911de52b7a314b28[m
+Merge: 30dd0dd 58205e6
+Author: Alexandrina <71590061+suprugafad@users.noreply.github.com>
+Date:   Mon Nov 27 10:47:12 2023 +0300
+
+    Merge pull request #27 from evakv0th/typesIssue
+    
+    Update the types issue
+
+[33mcommit df25358b467ccbb789cc84565159fa7f8fd0eb5e[m[33m ([m[1;32mAPIDoc[m[33m)[m
+Merge: f2c804a 30dd0dd
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Mon Nov 27 01:09:47 2023 +0100
+
+    #5: API documentation -> conflicts resolve
+
+[33mcommit 30dd0ddc09223942d7ed5d87997f4dd8ae9d7b4b[m
+Merge: 598a567 7bf2240
+Author: AdrianV <96334335+SaintAngeLs@users.noreply.github.com>
+Date:   Mon Nov 27 00:27:02 2023 +0100
+
+    Merge pull request #26 from evakv0th/chat-feat
+    
+    Chat with Socket.IO, ejs (supports multiple chats at the same time)
+
+[33mcommit 7bf22402260602466373b069cd948138bbcb3a74[m[33m ([m[1;31morigin/chat-feat[m[33m, [m[1;32mchat-feat[m[33m)[m
+Merge: 0190545 598a567
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Mon Nov 27 00:23:18 2023 +0100
+
+    #26: resolving the conflicts
+
+[33mcommit 857bc8db2e1b86441873b9e2a6c048a607f4e0e3[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Mon Nov 27 02:11:18 2023 +0300
+
+    #29 Dockerize app feat: add Dockerfile
+
+[33mcommit 01905453a75d9afb7456decc570c6af2e96240ca[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Mon Nov 27 00:24:55 2023 +0200
+
+    #16: cookie settings for production
+
+[33mcommit 9f0eb37b7094f134a6625e9fcb90f5e8e77491dc[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Mon Nov 27 00:16:02 2023 +0200
+
+    #16: badwords, console logs remove, limit to messages 50 in client side, removed callback from delete chat
+
+[33mcommit 58205e6e70dba18adca2c4681d54a2b5c0f91f26[m[33m ([m[1;31morigin/typesIssue[m[33m, [m[1;32mtypesIssue[m[33m)[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Sun Nov 26 22:05:49 2023 +0100
+
+    #25: cleating up to follow up the no-vars-unused
+
+[33mcommit ca62935b24d4602250c11ef571f2217ec63a2abc[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Sun Nov 26 22:01:02 2023 +0100
+
+    #25: update the game.repository and IGame with respect to 'any' type avoidance
+
+[33mcommit 598a567e91929be9e2b03d32aee8bb6845b83640[m[33m ([m[1;32mgameLobby[m[33m)[m
+Merge: ddacf34 232635c
+Author: AdrianV <96334335+SaintAngeLs@users.noreply.github.com>
+Date:   Sun Nov 26 21:37:59 2023 +0100
+
+    Merge pull request #18 from evakv0th/gameLobby
+    
+    #10: GameLobby
+
+[33mcommit 232635c033e2dc0c9ef8cbe4710d90bf96b89e2d[m[33m ([m[1;31morigin/gameLobby[m[33m)[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Sun Nov 26 21:31:36 2023 +0100
+
+    #10: update the index.ts
+
+[33mcommit 2a639e9b879b68a784931105ca6cf69587fe33f6[m
+Merge: 3a79336 ddacf34
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Sun Nov 26 21:29:19 2023 +0100
+
+    Merge remote-tracking branch 'remotes/origin/dev' into gameLobby
+
+[33mcommit 5cfd818583722be9faa9d1f7f4c5696f3cc758d9[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Sun Nov 26 21:05:01 2023 +0200
+
+    #16: added word checker function
+
+[33mcommit b6bf1865b3417d4bb7df12e93bdc39f961794059[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Sun Nov 26 14:53:11 2023 +0200
+
+    #16: fix for lint
+
+[33mcommit fa230f90d45408c9d674a7d1e854dcb92cb7fc86[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Sun Nov 26 14:43:58 2023 +0200
+
+    #16: some fixes for chat
+
+[33mcommit cc0b6aff8883a051b10b515e9cdb1683401cd069[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Sun Nov 26 12:47:18 2023 +0200
+
+    #16: chat clear, fix chats. usernames are WIP
+
+[33mcommit 7a607d5bb6b77b4d4b4672a8923409238031e753[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Sat Nov 25 23:24:44 2023 +0200
+
+    #16: added cookie for auth
+
+[33mcommit 29b6531419ce37ab3f4137a38c68292390be6e10[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Sat Nov 25 22:49:44 2023 +0200
+
+    #16: socket logic out of index.ts, when view chat - see all messages from chat. Chat stores msges
+
+[33mcommit 3a7933631fa5e46a7ce0e05b3becf46351559ceb[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Sat Nov 25 18:29:53 2023 +0100
+
+    #10: gameLobby: removing the unimportant ILobby
+
+[33mcommit fb8690de6cc833db0548f3dfa7940790576263a9[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Sat Nov 25 16:48:35 2023 +0200
+
+    #16: chats with different id have different messages
+
+[33mcommit ddacf3415924ed9cae67c80f2c22ae25dc52f1bd[m
+Merge: 03849d4 644d35e
+Author: Alexandrina <71590061+suprugafad@users.noreply.github.com>
+Date:   Sat Nov 25 17:43:55 2023 +0300
+
+    Merge pull request #23 from evakv0th/auth-login-fix
+    
+    Auth login fix
+
+[33mcommit 6e6d3bcdd75c8985c7165e5c211cb7e0ee12f824[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Sat Nov 25 16:13:05 2023 +0200
+
+    #16: added chat endpoints. next - to create chat socket with creating chat json info
+
+[33mcommit 92be224857cc06aa3f7667a866f91d67b287bdcb[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Sat Nov 25 14:29:46 2023 +0200
+
+    #16: basic simple chat
+
+[33mcommit a49cebd89c7f434ac257b2bbecf9d93439034471[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Sat Nov 25 10:48:33 2023 +0300
+
+    # 21 Imlement validation check add return type
+
+[33mcommit 9b407276deedc39fb3b8f8209a23412400ceb3f8[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Sat Nov 25 10:07:41 2023 +0300
+
+    #21 Implement validation checks add changes
+
+[33mcommit eb3f50e35aad9b11757658a148dd31f30acb9a05[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Sat Nov 25 03:09:02 2023 +0100
+
+    #10: lobby service resolving the issue related to lint
+
+[33mcommit a27208ab8ae54053d862412e18c8c87eeb188cff[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Sat Nov 25 04:03:47 2023 +0300
+
+    #21 Implement validation checks
+
+[33mcommit d5a54d352d08f38c55e987793f35c4c8b15020aa[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Sat Nov 25 00:23:06 2023 +0100
+
+    #10: gameLobby.service -> linterrors resolve
+
+[33mcommit d44950881fade8f3b58e51f1a5d1cbb15d7b8b19[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Sat Nov 25 00:08:35 2023 +0100
+
+    #10: gameLobby.service update
+
+[33mcommit 644d35e15f8718733c4620165806413a9e503885[m[33m ([m[1;31morigin/auth-login-fix[m[33m)[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Fri Nov 24 22:48:53 2023 +0200
+
+    #22: fix login post, not get
+
+[33mcommit 4a41a9614e5f80a97595bdfe8ee7164fb298fcea[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Fri Nov 24 21:00:27 2023 +0100
+
+    #19: testing -> new ITeam issues resolve
+
+[33mcommit e619caa7f2bb2b17c83b8d24fd0f9ec189a3011f[m
+Merge: e77e8c9 03849d4
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Fri Nov 24 20:54:53 2023 +0100
+
+    #19: testing -> team interface conflict resolve
+
+[33mcommit 03849d4279c0a2e11558ea67aabff910d327f9c3[m
+Merge: bbe1da8 96e39f9
+Author: Ilya Lisov <121865301+ilisau@users.noreply.github.com>
+Date:   Fri Nov 24 22:33:58 2023 +0300
+
+    Merge pull request #15 from evakv0th/#13
+    
+    #13 Implement repositories
+
+[33mcommit e77e8c9eb3314112ca854538f87d0210ef633dc5[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Fri Nov 24 19:38:07 2023 +0100
+
+    #10: gamelobby: generateUniqueLobbyId reference resolve
+
+[33mcommit bb73ca9a3dcfdad30bfe7c523e2ec19d5fb1be85[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Fri Nov 24 19:35:49 2023 +0100
+
+    #10: gamelobby: package-lock update
+
+[33mcommit 45669eb55300f2bd17f4f91f41d36f88f8574fe6[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Fri Nov 24 19:27:06 2023 +0100
+
+    #10: gamelobby -> ILooby temporary storrage update
+
+[33mcommit a9bbd7537351857ed9e0925ec60ba397e3ad7c10[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Fri Nov 24 19:18:51 2023 +0100
+
+    #10: gamelobby -> lobby.routes update
+
+[33mcommit f0d96a9def9882fbd9f75bfbbdf2fb995ca4149d[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Fri Nov 24 19:16:30 2023 +0100
+
+    #10: gamelobby -> lobby.controller update
+
+[33mcommit bf39457885e53e763a718e9c898344d02156ce9e[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Fri Nov 24 19:13:21 2023 +0100
+
+    #10: gamelobby -> lobby.serivice update
+
+[33mcommit 9fa350052644853feb0d935a6beac9e26d89dc92[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Fri Nov 24 19:05:11 2023 +0100
+
+    #10: gamelobby -> team interface added
+
+[33mcommit 28bade6856ed8c1d23d7ca82ea4caed8a7f7e3da[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Fri Nov 24 18:34:03 2023 +0100
+
+    #10: gamelobby: updating the inerface -> service update
+
+[33mcommit f2c804a4a177fc62c324c5ba633391988d98f567[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Fri Nov 24 16:32:25 2023 +0300
+
+    #5 Update contents
+
+[33mcommit eb58ba7eb99a32d97410ec9aed8091ccf4219904[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Fri Nov 24 13:53:42 2023 +0100
+
+    #10: gamelobby generating unique ID
+
+[33mcommit 96e39f985501a770f9a0d2852ea93b4dd10c31f1[m[33m ([m[1;31morigin/#13[m[33m)[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Fri Nov 24 15:45:00 2023 +0300
+
+    #13 Fix round interface
+
+[33mcommit d98376fcbd96d63ba1a59eba19bcd3c58c10559f[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Fri Nov 24 13:44:55 2023 +0100
+
+    #10: gamelobby initialising the endpoint  -> update
+
+[33mcommit e14ad5a5305502cbd3a0b504a1ace6dff6f1d18c[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Fri Nov 24 13:42:41 2023 +0100
+
+    #10: gameLobby routs  -> add
+
+[33mcommit dc1adb96f7619ebcc9b129db32c77b033bd99491[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Fri Nov 24 15:36:18 2023 +0300
+
+    #13 Implement basic repositories and services
+
+[33mcommit cb835853bf1d344456bcddf727bc310cd3c6270a[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Fri Nov 24 13:40:34 2023 +0100
+
+    #10: gameLobby controller  -> basic function with lack of error handling
+
+[33mcommit 901321c8dc67954ebf3630b18c3d91d814db2e00[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Fri Nov 24 13:38:26 2023 +0100
+
+    #10: gameLobby service -> basic, implementation only with the temporary storrage
+
+[33mcommit 83d8083c3bfa9f900804fd35476db90aa250d054[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Fri Nov 24 13:36:24 2023 +0100
+
+    #10: gameLobby inerface
+
+[33mcommit b698050ec56507122928e95f583d916786c2c1d1[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Fri Nov 24 14:56:56 2023 +0300
+
+    #13 Implement interfaces for each document type
+
+[33mcommit 6d6598c61f24df8660295d59328202751e8ba8f8[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Fri Nov 24 12:36:49 2023 +0300
+
+    #13 Implement User service and repository
+
+[33mcommit 34f054a01f37be0dffd03862cd977e5e86611893[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Fri Nov 24 11:44:54 2023 +0300
+
+    #13 Update database schema
+
+[33mcommit bbe1da87aacfb8eae24e6b0e2dec34e4e865196e[m
+Merge: 3f0ae95 b293c3c
+Author: Alexandrina <71590061+suprugafad@users.noreply.github.com>
+Date:   Fri Nov 24 09:12:22 2023 +0300
+
+    Merge pull request #11 from evakv0th/auth-feature
+    
+    #6: Auth feature with in-code array (without DB connection)
+
+[33mcommit 08f3de6d313e4e9c949157931de68bff1f3b1068[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Thu Nov 23 21:29:15 2023 +0300
+
+    # 5 add endpoints
+
+[33mcommit b293c3ccb7bbe73f4598b2d2f5e1f9cf76b3443a[m
+Merge: 646e5dd 3f0ae95
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Thu Nov 23 15:46:17 2023 +0200
+
+    merged db changes
+
+[33mcommit 3f0ae95d37120ddb11a26b2b17df90cf8cd927ec[m
+Merge: 11c0c8b e03ca4b
+Author: Ilya Lisov <121865301+ilisau@users.noreply.github.com>
+Date:   Thu Nov 23 16:11:31 2023 +0300
+
+    Merge pull request #14 from evakv0th/#12
+    
+    #12 Add docker compose and databases initialization
+
+[33mcommit e03ca4b1c70516e6dad4e36f1af0c8dd7b8c3035[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Thu Nov 23 14:51:11 2023 +0300
+
+    #12 Update docker-compose.yaml
+
+[33mcommit dec1337821297199cc4c3a4b983471e30b445530[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Thu Nov 23 12:04:20 2023 +0300
+
+    #12 Fix failing check
+
+[33mcommit 13dc1e71caac0ef29d19ef56e72fbbe197083a87[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Thu Nov 23 12:00:17 2023 +0300
+
+    #12 Add docker compose and databases initialization
+
+[33mcommit 646e5dda4c72177174e4246c4327738fe592b7c3[m
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Thu Nov 23 00:12:13 2023 +0200
+
+    #6: deleted protectedRoute from README.md
+
+[33mcommit 7898c3f15b839c8a83e24b5e3594cd292d9cf209[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Wed Nov 22 23:42:24 2023 +0200
+
+    #6: removed protectedRoute endpoint, expire time of tokens are in .env now
+
+[33mcommit 0effc7b3a621601442a57d645c139aeb2e4811f9[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Wed Nov 22 21:56:24 2023 +0200
+
+    #6: added build for package.json
+
+[33mcommit 186120eac5eb6175588f82c3b97459047691873d[m
+Merge: 3b8d015 9252dd6
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Wed Nov 22 21:47:13 2023 +0200
+
+    Merge branch 'auth-feature' of https://github.com/evakv0th/Alias-solvd-team2 into auth-feature
+
+[33mcommit 3b8d0156a2001110d53bb0022aa2aeb58bac2f24[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Wed Nov 22 21:47:02 2023 +0200
+
+    #6: small fix
+
+[33mcommit 9252dd6fe422c4c4f689f55a07726d1d04dd8562[m
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Wed Nov 22 21:45:53 2023 +0200
+
+    #6: Update README.md
+
+[33mcommit bfea755254625c5bf41e76e3c2b100713f3dd386[m
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Wed Nov 22 21:43:49 2023 +0200
+
+    #6: Update README.md
+
+[33mcommit 993ad3e2eb677b5e21e18b0151871fc5a0770fbe[m
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Wed Nov 22 21:42:53 2023 +0200
+
+    Update README.md
+
+[33mcommit 67a1cf40ad709557b91f08b5013f289367b2d802[m
+Merge: c15714c 11c0c8b
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Wed Nov 22 21:27:51 2023 +0200
+
+    Merge branch 'dev' into auth-feature
+
+[33mcommit c15714cb3c4f51059070cf7a23b7a871e4750539[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Wed Nov 22 19:45:39 2023 +0200
+
+    #6: used .env for secret keys
+
+[33mcommit 11c0c8bf0fe7bbd2360a1e7ba2fd209f97405309[m
+Merge: 3787bdd c1bf302
+Author: Alexandrina <71590061+suprugafad@users.noreply.github.com>
+Date:   Wed Nov 22 20:39:22 2023 +0300
+
+    Merge pull request #9 from evakv0th/cicdFV
+    
+    #2: Ci/CD
+
+[33mcommit 527831a89689bbc7031b8825650fb153e389b0ac[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Wed Nov 22 19:38:40 2023 +0200
+
+    #6: finished auth logic and added middlewares
+
+[33mcommit c1bf302759a1396cb2aba78e90d91e6fb48ce091[m[33m ([m[1;31morigin/cicdFV[m[33m, [m[1;32mcicdFV[m[33m)[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Wed Nov 22 17:55:07 2023 +0100
+
+    #2: remove the run test script
+
+[33mcommit 6159819aae1e22c94e47eceb414a8a7e739b17c1[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Wed Nov 22 17:46:57 2023 +0100
+
+    #2: Update the npm test
+
+[33mcommit 3787bdd7b95bddc15bfd2489eb64bf223023e285[m
+Merge: 15aaa10 fc82083
+Author: AdrianV <96334335+SaintAngeLs@users.noreply.github.com>
+Date:   Wed Nov 22 17:41:49 2023 +0100
+
+    Merge pull request #4 from evakv0th/cicdFV
+    
+    #2 CI/CD
+
+[33mcommit fc82083a628fccc379dced44228965d223fe0d38[m
+Merge: 95383e5 15aaa10
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Wed Nov 22 17:39:22 2023 +0100
+
+    #2: comflics resolve
+
+[33mcommit 95383e573351c46f4f8777eccd4e273e74f24249[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Wed Nov 22 17:18:05 2023 +0100
+
+    #2: resolving the case if the npm build is absent
+
+[33mcommit 5cef46dbcc5faaed37939f180f9412d170e23304[m[33m ([m[1;31morigin/auth-feature[m[33m)[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Wed Nov 22 17:20:09 2023 +0200
+
+    #6: folder exceptions, register route with in-code array
+
+[33mcommit 15aaa10552678eaebb5eb707915c0c35d387da44[m
+Merge: 4ffbe65 1d85584
+Author: Ilya Lisov <121865301+ilisau@users.noreply.github.com>
+Date:   Wed Nov 22 17:44:57 2023 +0300
+
+    Merge pull request #8 from evakv0th/#7
+    
+    #7 Implement database schema and update README.md
+
+[33mcommit 1d85584f5da4f0c591ca75e84e8f915dccfaa1c9[m
+Author: Ilya Lisov <ilya.lisov.yt@gmail.com>
+Date:   Wed Nov 22 11:36:44 2023 +0300
+
+    #7 Implement database schema and update README.md
+
+[33mcommit 9d3f345f2caae6191ab85843db9a2cff06d109f8[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Wed Nov 22 03:08:45 2023 +0100
+
+    #2: README.md remove
+
+[33mcommit f8a0977324180983d3640e4f24fb09c5b803a9f0[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Wed Nov 22 02:14:14 2023 +0100
+
+    #2: adding the dependencies caching
+
+[33mcommit 2d476c22d3f4f24ca2f3ba3662a3041b65ecba80[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Wed Nov 22 02:04:55 2023 +0100
+
+    #2: update the inconsistency with spacing
+
+[33mcommit 4ffbe654159d79403b637d7eb79d53bbf75dd075[m
+Merge: b401ccf 82a5891
+Author: Alexandrina <71590061+suprugafad@users.noreply.github.com>
+Date:   Tue Nov 21 20:46:47 2023 +0300
+
+    Merge pull request #3 from evakv0th/setupProject
+    
+    Setup project
+
+[33mcommit 82a589102d5fd743d8451b19c0b5026771da5f9c[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Tue Nov 21 17:07:20 2023 +0200
+
+    #1: deleted comments from tsconfig
+
+[33mcommit 26eb3669d3d92a9421a06a19d659a9250284db60[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Tue Nov 21 12:23:03 2023 +0200
+
+    #1: node version added to package.json
+
+[33mcommit b82de3f81340a9dd86e558affc36409ccadef49b[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Tue Nov 21 03:23:56 2023 +0300
+
+    #5 APIDoc start api documentation
+
+[33mcommit dedfbb493a75f915a52b95d7e2722064483510d3[m
+Author: ruslan-andreev <ruslanandreev.tut@gmail.com>
+Date:   Tue Nov 21 03:05:43 2023 +0300
+
+    APIDoc start api documentation #5
+
+[33mcommit fd01549f92445a255b1564dbfe2e76cfcd58a2ea[m[33m ([m[1;32m2-сicd[m[33m)[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Tue Nov 21 00:20:19 2023 +0100
+
+    #2 CI/CD: fix
+
+[33mcommit 014ac490178d462413ece9cffc2037ae83d09d7d[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Tue Nov 21 00:15:56 2023 +0100
+
+    #2 CI/CD: fix(test)
+
+[33mcommit 9bad9ce290e123f3b5bda1e7e3316a4eb31d357c[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Tue Nov 21 00:06:47 2023 +0100
+
+    #2 CI/CD: fix
+
+[33mcommit e9a438e1d1823baad5d2fa8cb29a7b262c6a3460[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Tue Nov 21 00:02:56 2023 +0100
+
+    #2 CI/CD
+
+[33mcommit 7f819b4d9109d45b32eaef9d2def8b6005221904[m[33m ([m[1;31morigin/setupProject[m[33m, [m[1;32msetupProject[m[33m)[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Mon Nov 20 21:28:07 2023 +0200
+
+    #1 Setup Project: fix
+
+[33mcommit f45320d09c035c4baca99a6af9a5f9e7dc3c760c[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Mon Nov 20 21:24:15 2023 +0200
+
+    #1 Setup Project: fix
+
+[33mcommit f851becc10e76814273e872a6e30f3768f40a741[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Mon Nov 20 21:15:50 2023 +0200
+
+    #1 Setup Project
+
+[33mcommit 2d7846ba6dffd692760e9c18ba9819a69c5d0608[m
+Author: kvothe eva <evakv0th@gmail.com>
+Date:   Mon Nov 20 21:06:51 2023 +0200
+
+    initial commit
+
+[33mcommit b401ccff385459502a8a69546125a5f52a8db08b[m
+Author: Andrii Voznesenskyi <01174367@pw.edu.pl>
+Date:   Mon Nov 20 17:03:16 2023 +0100
+
+    Updating the README.md
+
+[33mcommit 34361349fec52276d43ca2ee852c64e5d7c05fc5[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Sun Nov 19 16:13:11 2023 +0200
+
+    Update README.md
+
+[33mcommit c524e483ec9b793d742b8c9bb60a048c4e8dcaff[m
+Author: Glib Kvothe <116874894+evakv0th@users.noreply.github.com>
+Date:   Sun Nov 19 16:10:23 2023 +0200
+
+    Initial commit
