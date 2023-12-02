@@ -3,9 +3,16 @@ import * as authService from '../../services/auth.service';
 import HttpStatusCode from '../../application/utils/exceptions/statusCode';
 import HttpException from '../../application/utils/exceptions/http-exceptions';
 import app, { closeServer, startServer } from '../..';
+import * as jwt from 'jsonwebtoken';
+import { generateAccessToken } from '../../application/utils/tokenForAuth/generateToken';
 
 jest.mock('../../services/auth.service');
 jest.mock('jsonwebtoken');
+jest.mock('../../application/utils/tokenForAuth/generateToken', () => ({
+    ...jest.requireActual('../../application/utils/tokenForAuth/generateToken'),
+    generateAccessToken: jest.fn(),
+}));
+
 
 describe('Auth Controller', () => {
     describe('Auth Controller - register function', () => {
@@ -120,6 +127,89 @@ describe('Auth Controller', () => {
         });
 
     });
+
+    describe('Auth Controller - refresh function', () => {
+        beforeAll(async () => {
+            await startServer(); 
+        });
+
+        afterAll(async () => {
+            await closeServer(); 
+        });
+
+        const refreshToken = 'valid-refresh-token';
+
+        it('should refresh access token successfully', async () => {
+            const newAccessToken = 'new-access-token';
+            const decodedToken = { id: 'user-id', username: 'user' };
+
+            jest.spyOn(jwt, 'verify').mockImplementation((token, secretOrPublicKey) => {
+                if (token === 'valid-refresh-token') {
+                    return { id: 'user-id', username: 'user' }; 
+                } else {
+                    throw new jwt.JsonWebTokenError('Invalid token');
+                }
+            });
+
+            (generateAccessToken as jest.Mock).mockReturnValue(newAccessToken);
+
+            const response = await request(app)
+                .post('/api/v1/auth/refresh')
+                .send({ refreshToken });
+
+            expect(response.status).toBe(HttpStatusCode.OK);
+            expect(response.body.accessToken).toBe(newAccessToken);
+        });
+
+        it('should return a 400 status if refresh token is missing', async () => {
+            const response = await request(app)
+                .post('/api/v1/auth/refresh')
+                .send({});
+
+            expect(response.status).toBe(HttpStatusCode.BAD_REQUEST);
+            expect(response.body.error).toBe('Refresh token is missing');
+        });
+
+        it('should return a 401 status if the token has expired', async () => {
+            jest.spyOn(jwt, 'verify').mockImplementation(() => {
+                throw new jwt.TokenExpiredError('Token expired', new Date());
+            });
+
+            const response = await request(app)
+                .post('/api/v1/auth/refresh')
+                .send({ refreshToken });
+
+            expect(response.status).toBe(HttpStatusCode.UNAUTHORIZED);
+            expect(response.body.error).toBe('Token has expired');
+        });
+
+        it('should return a 401 status if the token is invalid', async () => {
+            jest.spyOn(jwt, 'verify').mockImplementation(() => {
+                throw new jwt.JsonWebTokenError('Invalid token');
+            });
+
+            const response = await request(app)
+                .post('/api/v1/auth/refresh')
+                .send({ refreshToken });
+
+            expect(response.status).toBe(HttpStatusCode.UNAUTHORIZED);
+            expect(response.body.error).toBe('Invalid token');
+        });
+
+        it('should return a 500 status for internal server error', async () => {
+            jest.spyOn(jwt, 'verify').mockImplementation(() => {
+                throw new Error('Internal Server Error');
+            });
+
+            const response = await request(app)
+                .post('/api/v1/auth/refresh')
+                .send({ refreshToken });
+
+            expect(response.status).toBe(HttpStatusCode.INTERNAL_SERVER_ERROR);
+            expect(response.body.error).toBe('Internal Server Error');
+        });
+    });
+
 });
 
   
