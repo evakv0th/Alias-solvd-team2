@@ -31,18 +31,11 @@ export function validateJoinLobbyRoute(
   next: NextFunction
 ): Response | void {
   const gameId = req.params.gameId; 
-  const options = req.body.options;
 
   if (!gameId || gameId === " ") {
     return res
     .status(HttpStatusCode.BAD_REQUEST)
     .json({ error: paramsErrorMessage('gameId') }); 
-  }
-
-  if (!options) {
-    return res
-    .status(HttpStatusCode.BAD_REQUEST)
-    .json({ error: bodyErrorMessage('options') }); 
   }
 
   next();
