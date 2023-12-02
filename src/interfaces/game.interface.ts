@@ -3,8 +3,6 @@ export interface IGame {
   hostId: string;
   createdAt: Date | undefined;
   teams: {
-    //TODO remove members here
-    members: string[];
     teamId: string;
     score: number;
   }[];
@@ -20,8 +18,6 @@ export interface IGameCreateSchema {
 }
 
 export interface GameOptions {
-  //TODO remove maxPlayersPerTeam
-  maxPlayersPerTeam: any;
   goal: number;
   roundTime: number;
   vocabularyId: string;

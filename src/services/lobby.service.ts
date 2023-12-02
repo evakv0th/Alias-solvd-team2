@@ -2,111 +2,178 @@ import {gameRepository} from "../repositories/game.repository";
 import {GameOptions, IGame, IGameCreateSchema} from "../interfaces/game.interface";
 import HttpException from "../application/utils/exceptions/http-exceptions";
 import HttpStatusCode from "../application/utils/exceptions/statusCode";
+import { ITeamCreateSchema } from "../interfaces/team.interface";
+import { teamService } from "./team.service";
+import { teamRepository } from "../repositories/team.repository";
 
-const MAX_TEAMS = 10 // TODO: REMOVE THE MAGICAL_INAPPROPRIACY
+class LobbyService 
+{
+  private teamMembers: Map<string, Set<string>> = new Map();
 
-class LobbyService {
-  async createLobby(hostId: string, options: GameOptions): Promise<string> {
-    const gameCreateSchema: IGameCreateSchema = {
-      hostId: hostId,
-      options: options,
-      teams: [],
-    };
-    const gameId = await gameRepository.create(gameCreateSchema);
-    if (!gameId) {
-      throw new HttpException(HttpStatusCode.INTERNAL_SERVER_ERROR, 'Lobby could not be created.');
+  async createLobby(hostId: string, options: GameOptions): Promise<string> 
+  {
+    try 
+    {
+      const gameCreateSchema: IGameCreateSchema = {
+        hostId: hostId,
+        options: options,
+        teams: [],
+      };
+
+      const gameId = await gameRepository.create(gameCreateSchema);
+
+      if (!gameId) 
+      {
+        throw new HttpException(HttpStatusCode.INTERNAL_SERVER_ERROR, 'Lobby could not be created.');
+      }
+
+      return gameId;
+    } 
+    catch (error) 
+    {
+      let message = 'Unknown error';
+      if (error instanceof Error) 
+      {
+        message = error.message;
+      }
+      throw new HttpException(HttpStatusCode.INTERNAL_SERVER_ERROR, 'Error creating lobby: ' + message);
     }
-
-    return gameId;
   }
 
   async joinLobby(userId: string, gameId: string): Promise<IGame> 
   {
-    const game = await gameRepository.getById(gameId);
-    if (!game) 
+    try 
     {
-      throw new HttpException(HttpStatusCode.NOT_FOUND, 'Lobby not found.');
-    }
-  
-    const isUserInLobby = game.teams.some(team => team.members.includes(userId));
-    if (isUserInLobby) {
-      throw new HttpException(HttpStatusCode.BAD_REQUEST, 'User already in the lobby.');
-    }
+      const game = await gameRepository.getById(gameId);
 
-    let assigned = false;
-    for (const team of game.teams) {
-      if (team.members.length < game.options.maxPlayersPerTeam) {
-        team.members.push(userId);
-        assigned = true;
-        break;
+      if (!game) 
+      {
+        throw new HttpException(HttpStatusCode.NOT_FOUND, 'Lobby not found.');
       }
-    }
     
-    if (!assigned) {
-      if (game.teams.length < MAX_TEAMS) {
-        const newTeam = {
-          teamId: `team-${game.teams.length + 1}`,
-          score: 0,
-          members: [userId]
-        };
-        game.teams.push(newTeam);
-      } else {
-        throw new HttpException(HttpStatusCode.BAD_REQUEST, 'All teams are full, and no more teams can be created.');
+      const isUserInLobby = Array.from(this.teamMembers.values()).some(members => members.has(userId));
+
+      if (isUserInLobby) 
+      {
+        throw new HttpException(HttpStatusCode.BAD_REQUEST, 'User already in the lobby.');
       }
+
+      let leastPopulatedTeam = null;
+      let minMembersCount = Infinity;
+
+      for (const team of game.teams) 
+      {
+        const members = this.teamMembers.get(team.teamId) ?? new Set<string>();
+        if (members.size < minMembersCount) 
+        {
+          leastPopulatedTeam = team.teamId;
+          minMembersCount = members.size;
+        }
+      }
+
+      if (!leastPopulatedTeam || game.teams.length === 0) 
+      {
+        const newTeamData: ITeamCreateSchema = {
+          name: `Team ${game.teams.length + 1}`,
+          hostId: userId
+        };
+        const newTeamId = await teamService.create(newTeamData);
+        game.teams.push({ teamId: newTeamId, score: 0 });
+        this.teamMembers.set(newTeamId, new Set([userId]));
+      } 
+      else 
+      {
+        this.teamMembers.get(leastPopulatedTeam)?.add(userId);
+      }
+
+      await gameRepository.update(game);
+
+      return gameRepository.getById(gameId);
+    } 
+    catch (error) 
+    {
+      let message = 'Unknown error';
+      if (error instanceof Error) 
+      {
+        message = error.message;
+      }
+      throw new HttpException(HttpStatusCode.INTERNAL_SERVER_ERROR, 'Error joining lobby: ' + message);
     }
-
-    return gameRepository.update(game);
   }
-
 
   async selectTeam(userId: string, gameId: string, teamId: string): Promise<IGame> 
   {
-    const game = await gameRepository.getById(gameId);
-    if (!game) 
-    {
-      throw new HttpException(HttpStatusCode.NOT_FOUND, 'Lobby not found.');
-    }
-    
-    const team = game.teams.find(t => t.teamId === teamId);
-    if (!team) {
-      throw new HttpException(HttpStatusCode.BAD_REQUEST, 'Team does not exist.');
-    }
-    
-    if (team.members.length >= game.options.maxPlayersPerTeam) {
-      throw new HttpException(HttpStatusCode.BAD_REQUEST, 'Team is full.');
-    }
-    
-    game.teams.forEach(t => {
-      const index = t.members.indexOf(userId);
-      if (index !== -1) {
-        t.members.splice(index, 1);
+    try {
+      const game = await gameRepository.getById(gameId);
+
+      if (!game) 
+      {
+        throw new HttpException(HttpStatusCode.NOT_FOUND, 'Lobby not found.');
       }
-    });
 
-    team.members.push(userId);
+      const team = await teamRepository.getById(teamId);
+      if (!team) {
+        throw new HttpException(HttpStatusCode.NOT_FOUND, 'Team not found.');
+      }
 
-    return gameRepository.update(game);
+      game.teams.forEach((team) => {
+        const members = this.teamMembers.get(team.teamId) ?? new Set<string>();
+        if (members.has(userId)) 
+        {
+          members.delete(userId);
+          this.teamMembers.set(team.teamId, members);
+        }
+      });
+
+      const members = this.teamMembers.get(teamId) ?? new Set<string>();
+      members.add(userId);
+      this.teamMembers.set(teamId, members);
+
+      team.members = Array.from(members);
+      await teamRepository.update(team);
+
+      return await gameRepository.update(game);
+    } 
+    catch (error) 
+    {
+      let message = 'Unknown error';
+      if (error instanceof Error) 
+      {
+        message = error.message;
+      }
+      throw new HttpException(HttpStatusCode.INTERNAL_SERVER_ERROR, 'Error selecting team: ' + message);
+    }
   }
 
   
   async leaveLobby(userId: string, gameId: string): Promise<IGame> 
   {
-    const game = await gameRepository.getById(gameId);
-    if (!game) 
-    {
-      throw new HttpException(HttpStatusCode.NOT_FOUND, 'Lobby not found.');
-    }
+    try {
+      const game = await gameRepository.getById(gameId);
 
-    game.teams.forEach(team => {
-      const index = team.members.indexOf(userId);
-      if (index !== -1) {
-        team.members.splice(index, 1);
+      if (!game) 
+      {
+        throw new HttpException(HttpStatusCode.NOT_FOUND, 'Lobby not found.');
       }
-    });
 
-    game.teams = game.teams.filter(team => team.members.length > 0);
-    
-    return gameRepository.update(game);
+      this.teamMembers.forEach((members) => {
+        if (members.has(userId)) 
+        {
+          members.delete(userId);
+        }
+      });
+
+      return gameRepository.update(game);
+    } 
+    catch (error) 
+    {
+      let message = 'Unknown error';
+      if (error instanceof Error)
+      {
+        message = error.message;
+      }
+      throw new HttpException(HttpStatusCode.INTERNAL_SERVER_ERROR, 'Error leaving lobby: ' + message);
+    }
   }
 }
 
