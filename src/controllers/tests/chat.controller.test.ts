@@ -4,6 +4,8 @@ import { chatController } from '../../controllers/chat.controller';
 import HttpException from '../../application/utils/exceptions/http-exceptions';
 import HttpStatusCode from '../../application/utils/exceptions/statusCode';
 import { IUser } from '../../interfaces/user.interface';
+import { userService } from '../../services/user.service';
+import { RequestWithUser } from '../../application/middlewares/authenticateToken';
 
 jest.mock('../../services/chat.service');
 
@@ -19,6 +21,11 @@ type MockResponse = Partial<Response> & {
   send: jest.Mock<any, any>;
   render: jest.Mock<any, any>;
 };
+jest.mock('../../services/user.service', () => ({
+  userService: {
+    existsByUsername: jest.fn(),
+  },
+}));
 
 const mockRequest = (params = {}, body = {}, user?: IUser): MockRequest => ({
     params,
@@ -120,15 +127,21 @@ describe('ChatController.create', () => {
   
 describe('ChatController.view', () => {
     it('should render the chat view if chat exists', async () => {
-        const mockUser: IUser = { _id: 'userId', username: 'testUser', password: 'password', createdAt: new Date(), stats: {roundsPlayed: 0, wordsGuessed: 0}};
-        const req = mockRequest({ id: 'chatId' }, {}, mockUser);
-        const res = mockResponse();
+      const mockUser: IUser = {
+        _id: 'userId',
+        username: 'testUser',
+        password: 'password',
+        createdAt: new Date(),
+        stats: { roundsPlayed: 0, wordsGuessed: 0 },
+      };
+      const req = mockRequest({ id: 'chatId' }, {}, mockUser); // Ensure mockUser is correctly set here
+      const res = mockResponse();
 
-        (chatService.exists as jest.Mock).mockResolvedValue(true);
+      (chatService.exists as jest.Mock).mockResolvedValue(true);
 
-        await chatController.view(req as ExtendedRequest, res as Response);
+      await chatController.view(req as RequestWithUser, res as Response);
 
-        expect(res.render).toHaveBeenCalledWith('chat', { user: req.user, chatId: 'chatId' });
+      expect(res.render).toHaveBeenCalledWith('chat', { user: mockUser, chatId: 'chatId' });
     });
 
     it('should handle errors if chat does not exist', async () => {
@@ -141,6 +154,6 @@ describe('ChatController.view', () => {
         await chatController.view(req as ExtendedRequest, res as Response);
 
         expect(res.status).toHaveBeenCalledWith(HttpStatusCode.NOT_FOUND);
-        expect(res.send).toHaveBeenCalledWith('chat not found, please check your id');
+        expect(res.send).toHaveBeenCalledWith('Chat not found, please check your id');
     });
 });

@@ -1,4 +1,5 @@
 import { roundRepository } from "../../repositories/round.repository";
+import { chatService } from "../chat.service";
 import { gameService } from "../game.service";
 import { roundService } from "../round.service";
 import { teamService } from "../team.service";
@@ -8,6 +9,8 @@ jest.mock('../../repositories/round.repository');
 jest.mock('../game.service');
 jest.mock('../user.service');
 jest.mock('../team.service');
+jest.mock('../chat.service');
+
 
 describe('RoundService', () => {
 
@@ -90,21 +93,22 @@ describe('RoundService', () => {
     describe('create', () => {
         it('should create a round', async () => {
             const roundData = {
-                hostId: 'host123',
-                teamId: 'team123',
-                chatId: 'chat123',
-                finishedAt: new Date(),
-                currentWord: 'exampleWord',
+              hostId: 'host123',
+              teamId: 'team123',
+              chatId: 'chat123',
+              finishedAt: new Date(),
+              currentWord: 'exampleWord',
             };
             (userService.exists as jest.Mock).mockResolvedValue(true);
             (teamService.exists as jest.Mock).mockResolvedValue(true);
+            (chatService.exists as jest.Mock).mockResolvedValue(true); 
             (roundRepository.create as jest.Mock).mockResolvedValue('round123');
         
             const result = await roundService.create(roundData);
         
             expect(result).toBe('round123');
             expect(roundRepository.create).toHaveBeenCalledWith(roundData);
-        });
+          });
       
         it('should throw an error if host does not exist', async () => {
             const roundData = {
