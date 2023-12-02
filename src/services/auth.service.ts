@@ -3,7 +3,6 @@ import HttpException from '../application/utils/exceptions/http-exceptions';
 import HttpStatusCode from '../application/utils/exceptions/statusCode';
 import {generateAccessToken, generateRefreshToken,} from '../application/utils/tokenForAuth/generateToken';
 import {userService} from './user.service';
-import util from "util";
 import bcrypt from "bcrypt";
 
 export async function register(newUser: IUserCreateSchema): Promise<IUserCreateSchema> {
@@ -26,6 +25,7 @@ export async function register(newUser: IUserCreateSchema): Promise<IUserCreateS
   return newUser;
 }
 
+
 export async function login(credentials: IUserCreateSchema): Promise<{
   accessToken: string;
   refreshToken: string;
@@ -41,9 +41,15 @@ export async function login(credentials: IUserCreateSchema): Promise<{
   }
 
   const user = await userService.getByUsername(username);
-  const passwordMatch = await util.promisify(bcrypt.compare)(password, user.password);
+  if (!user) {
+    throw new HttpException(
+      HttpStatusCode.UNAUTHORIZED,
+      `Wrong username or password`,
+    );
+  }
 
-  if (!user || !passwordMatch) {
+  const passwordMatch = await bcrypt.compare(password, user.password);
+  if (!passwordMatch) {
     throw new HttpException(
       HttpStatusCode.UNAUTHORIZED,
       `Wrong username or password`,
