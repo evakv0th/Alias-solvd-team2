@@ -85,17 +85,14 @@ describe('addMemberByName', () => {
         const mockUser = { _id: 'userId', username: 'newUser' };
         const mockTeam = { _id: 'teamId', members: [], hostId: 'hostUserId' };
 
-        // Set up mocks to return appropriate values
         (userService.getByUsername as jest.Mock).mockResolvedValue(mockUser);
         (teamService.getById as jest.Mock).mockResolvedValue(mockTeam);
 
-        // The team after the user is added
         const updatedTeam = { ...mockTeam, members: [...mockTeam.members, mockUser._id] };
         (teamService.update as jest.Mock).mockResolvedValue(updatedTeam);
         
         await teamController.addMemberByName(req, res);
 
-        // Add a console.log to debug the mock function's call
         console.log("teamService.update mock call:", (teamService.update as jest.Mock).mock.calls);
 
         expect(res.status).toHaveBeenCalledWith(HttpStatusCode.OK);
@@ -115,3 +112,40 @@ describe('addMemberByName', () => {
     });
 
 });
+
+describe('create', () => {
+    it('should create a team successfully', async () => {
+        const req = mockRequest({}, { name: 'New Team' }, { _id: 'userId' });
+        const res = mockResponse();
+        const mockTeam = { _id: 'teamId', name: 'New Team', members: [], hostId: 'userId' };
+
+        (teamService.create as jest.Mock).mockResolvedValue('teamId');
+        (teamService.getById as jest.Mock).mockResolvedValue(mockTeam);
+
+        await teamController.create(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(HttpStatusCode.CREATED);
+        expect(res.json).toHaveBeenCalledWith(mockTeam);
+    });
+
+    it('should handle missing team name error', async () => {
+        const req = mockRequest({}, {}, { _id: 'userId' });
+        const res = mockResponse();
+
+        await teamController.create(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(HttpStatusCode.BAD_REQUEST);
+    });
+
+    it('should handle server error during team creation', async () => {
+        const req = mockRequest({}, { name: 'New Team' }, { _id: 'userId' });
+        const res = mockResponse();
+
+        (teamService.create as jest.Mock).mockRejectedValue(new Error('Server error'));
+
+        await teamController.create(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(HttpStatusCode.INTERNAL_SERVER_ERROR);
+    });
+});
+

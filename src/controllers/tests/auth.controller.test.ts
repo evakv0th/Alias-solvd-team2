@@ -141,9 +141,8 @@ describe('Auth Controller', () => {
 
         it('should refresh access token successfully', async () => {
             const newAccessToken = 'new-access-token';
-            const decodedToken = { id: 'user-id', username: 'user' };
 
-            jest.spyOn(jwt, 'verify').mockImplementation((token, secretOrPublicKey) => {
+            jest.spyOn(jwt, 'verify').mockImplementation((token) => {
                 if (token === 'valid-refresh-token') {
                     return { id: 'user-id', username: 'user' }; 
                 } else {
