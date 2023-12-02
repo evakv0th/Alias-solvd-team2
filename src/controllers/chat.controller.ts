@@ -4,7 +4,6 @@ import { IChat } from '../interfaces/chat.interface';
 import HttpException from '../application/utils/exceptions/http-exceptions';
 import HttpStatusCode from '../application/utils/exceptions/statusCode';
 import { RequestWithUser } from '../application/middlewares/authenticateToken';
-import { userService } from '../services/user.service';
 
 class ChatController {
   async getById(req: Request, res: Response): Promise<void> {
