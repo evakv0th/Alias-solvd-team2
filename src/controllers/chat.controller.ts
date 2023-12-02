@@ -75,19 +75,20 @@ class ChatController {
   }
 
   async view(req: RequestWithUser, res: Response): Promise<void> {
-    const id = req.params.id;
-    const user = req.params.userName;
+    const chatId = req.params.id;
 
     try {
-      if (!(await chatService.exists(id))) {
-        res.status(HttpStatusCode.NOT_FOUND).send('chat  not found, please check your id');
-        return;
-      } else if (!(await userService.existsByUsername(user))) {
-        res.status(HttpStatusCode.NOT_FOUND).send('username not found, please check your username');
+      if (!(await chatService.exists(chatId))) {
+        res.status(HttpStatusCode.NOT_FOUND).send('Chat not found, please check your id');
         return;
       }
 
-      res.render('chat', { user: user, chatId: req.params.id });
+      if (!req.user) {
+        res.status(HttpStatusCode.FORBIDDEN).send('You must be logged in to view this chat');
+        return;
+      }
+
+      res.render('chat', { user: req.user, chatId: chatId });
     } catch (error) {
       if (error instanceof HttpException) {
         res.status(error.status).json({ error: error.message });
