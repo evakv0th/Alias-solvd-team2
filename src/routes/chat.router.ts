@@ -15,6 +15,7 @@ chatRouter.post('/', authenticateToken, chatController.create);
 chatRouter.patch('/:id', authenticateToken, validateUpdateChatRoute, chatController.update);
 chatRouter.delete('/:id', authenticateToken, validateDeleteChatRoute, chatController.delete);
 
-chatRouter.get('/:id/view', validateViewChatRoute, chatController.view);
+chatRouter.get('/:id/view/:userName', validateViewChatRoute, chatController.view);
+
 
 export default chatRouter;

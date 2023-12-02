@@ -1,15 +1,16 @@
-import {Server} from 'socket.io';
+import { Server } from 'socket.io';
 import isForbidden from './application/utils/wordChecker/wordChecker';
 import badwordsArray from 'badwords/array';
-import {chatService} from "./services/chat.service";
+import { chatService } from './services/chat.service';
+import { userService } from './services/user.service';
 
 export const setupSocket = (io: Server) => {
   io.on('connection', (socket) => {
     console.log('a user connected');
 
-    socket.on('join', async (chatId) => {
+    socket.on('join', async ({ chatId, username }) => {
       socket.join(chatId);
-      console.log(`User joined chat ${chatId}`);
+      console.log(`User ${username} joined chat ${chatId}`);
       try {
         const chat = await chatService.getById(chatId);
         if (chat.messages.length >= 50) {
@@ -33,32 +34,30 @@ export const setupSocket = (io: Server) => {
     });
 
     socket.on('chat message', async (msg, chatId) => {
-      console.log(`message: ${msg} in chat ${chatId}`);
+      const match = msg.match(/^([^:]+): (.+)$/);
+      const username = match[1];
+      const msgValue = match[2];
+      console.log(`message: ${msgValue} from ${username} in chat ${chatId}`);
 
       try {
         const chat = await chatService.getById(chatId);
-        const msgWithoutjunk = msg.replace(/[^a-zA-Z\s0-9]/g, '');
+        const user = await userService.getByUsername(username);
+        const msgWithoutjunk = msgValue.replace(/[^a-zA-Z\s0-9]/g, '');
         const wordsToCheck = msgWithoutjunk.split(' ');
         let stateForMsgAdd = true;
         for (const word of wordsToCheck) {
           if (badwordsArray.includes(word)) {
-            io.to(chatId).emit(
-              'chat message',
-              `This message has been blocked (it contains inappropriate content).`,
-            );
+            io.to(chatId).emit('chat message', `This message has been blocked (it contains inappropriate content).`);
             return;
           } else if (isForbidden('happy', word)) {
-            io.to(chatId).emit(
-              'chat message',
-              `This message has been blocked (it has similar word to guessedWord).`,
-            );
+            io.to(chatId).emit('chat message', `This message has been blocked (it has similar word to guessedWord).`);
             stateForMsgAdd = false;
           }
         }
         if (stateForMsgAdd) {
           chat.messages.push({
             createdAt: new Date(),
-            userId: 'test',
+            userId: user._id as string,
             message: msg,
           });
 
