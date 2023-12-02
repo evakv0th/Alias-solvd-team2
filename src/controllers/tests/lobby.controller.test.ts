@@ -42,15 +42,15 @@ describe('LobbyController', () => {
             const userId = 'user123';
             const gameId = 'game123';
             const mockGame = { id: gameId, players: [userId] };
-    
+
             (lobbyService.joinLobby as jest.Mock).mockResolvedValue(mockGame);
-    
+
             const response = await request(app)
                 .post(`/api/v1/lobby/join/${gameId}`)
                 .send({ userId });
     
             expect(response.status).toBe(HttpStatusCode.OK);
-            expect(response.body).toEqual(mockGame);
+            expect(response.body).toEqual(mockGame); 
         });
     
         it('should handle errors when joining a lobby', async () => {
