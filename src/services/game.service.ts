@@ -1,16 +1,16 @@
-import {gameRepository} from '../repositories/game.repository';
-import {IGame, IGameCreateSchema} from '../interfaces/game.interface';
-import {vocabularyService} from './vocabulary.service';
-import {roundService} from './round.service';
-import {IRound, IRoundCreateSchema} from '../interfaces/round.interface';
-import {chatService} from './chat.service';
-import {teamService} from './team.service';
-import {userService} from "./user.service";
-import HttpException from "../application/utils/exceptions/http-exceptions";
-import HttpStatusCode from "../application/utils/exceptions/statusCode";
+import { gameRepository } from '../repositories/game.repository';
+import { IGame, IGameCreateSchema } from '../interfaces/game.interface';
+import { vocabularyService } from './vocabulary.service';
+import { roundService } from './round.service';
+import { IRound, IRoundCreateSchema } from '../interfaces/round.interface';
+import { chatService } from './chat.service';
+import { teamService } from './team.service';
+import { userService } from './user.service';
+import HttpException from '../application/utils/exceptions/http-exceptions';
+import HttpStatusCode from '../application/utils/exceptions/statusCode';
+import { eventEmitter } from '../socketSetup';
 
 class GameService {
-
   async getById(id: string): Promise<IGame> {
     return gameRepository.getById(id);
   }
@@ -22,7 +22,7 @@ class GameService {
   async create(game: IGameCreateSchema): Promise<string> {
     const hostExists = await userService.exists(game.hostId);
     if (!hostExists) {
-      throw new HttpException(HttpStatusCode.NOT_FOUND, "Host of game is not found.");
+      throw new HttpException(HttpStatusCode.NOT_FOUND, 'Host of game is not found.');
     }
     for (const teamId of game.teams) {
       const teamExists = await teamService.exists(teamId);
@@ -63,7 +63,7 @@ class GameService {
     let word;
     do {
       word = vocabulary.words[Math.floor(Math.random() * vocabulary.words.length)];
-    } while (await this.wordWasUsedInGame(word, game._id!, uniquenessThreshold))
+    } while (await this.wordWasUsedInGame(word, game._id!, uniquenessThreshold));
     return word;
   }
 
@@ -73,19 +73,22 @@ class GameService {
     if (wordsUsed > threshold) {
       return false;
     }
-    return rounds.some(round => round.words.map(obj => obj.word).includes(word));
+    return rounds.some((round) => round.words.map((obj) => obj.word).includes(word));
   }
 
-  async start(id: string): Promise<string> {
+  async start(id: string): Promise<{ chatId: string; randomWord: string }> {
     await gameRepository.start(id);
     const game = await this.getById(id);
-    const { roundId, chatId } = await this.createRound(game);
+    const { roundId, chatId, randomWord } = await this.createRound(game);
     game.rounds.push(roundId);
     await this.update(game);
-    return chatId
+    const host = await userService.getById(game.hostId);
+    console.log('Emitting "start round" event:', { chatId, randomWord, id, targetUser: host.username });
+    eventEmitter.emit('start round', { chatId, randomWord, id, targetUser: host.username });
+    return { chatId, randomWord };
   }
 
-  private async createRound(game: IGame): Promise<{ roundId: string; chatId: string }> {
+  private async createRound(game: IGame): Promise<{ roundId: string; chatId: string; randomWord: string }> {
     const chatId = await chatService.create();
     const hostId = await this.getHostIdFromTeam(game.currentTeam, game._id!);
     const randomWord = await this.getRandomWord(game._id!);
@@ -97,7 +100,7 @@ class GameService {
       currentWord: randomWord,
     } as IRoundCreateSchema);
     await userService.incrementRoundsPlayed(hostId);
-    return { roundId, chatId };
+    return { roundId, chatId, randomWord };
   }
 
   async handleFinishedRound(id: string, round: IRound) {
@@ -112,7 +115,7 @@ class GameService {
   private async getHostIdFromTeam(id: string, gameId: string): Promise<string> {
     const team = await teamService.getById(id);
     let rounds = await roundService.getAllByGameId(gameId);
-    rounds = rounds.filter(round => round.teamId === id);
+    rounds = rounds.filter((round) => round.teamId === id);
     return team.members[rounds.length % team.members.length];
   }
 
@@ -125,7 +128,6 @@ class GameService {
   private getScoreFromRound(round: IRound): number {
     return round.words.filter((word) => word.guessed).length;
   }
-  
 }
 
 export const gameService = new GameService();

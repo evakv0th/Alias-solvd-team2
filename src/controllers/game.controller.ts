@@ -28,10 +28,8 @@ export async function start(req: RequestWithUser, res: Response): Promise<Respon
   const user = req.user;
   const game = await gameService.getById(id);
   if (game.hostId === user?._id) {
-    const chatId = await gameService.start(id);
-    return res
-      .send(`Link to chat: http://localhost:3000/api/v1/chats/${chatId}/view/${user.username}`)
-      .status(HttpStatusCode.OK);
+    const { chatId, randomWord } = await gameService.start(id);
+    return res.send(`Link to chat: http://localhost:3000/api/v1/chats/${chatId}/view/${user.username}, ${randomWord}`).status(HttpStatusCode.OK);
   } else {
     return res.status(HttpStatusCode.UNAUTHORIZED).json(new HttpException(HttpStatusCode.UNAUTHORIZED, 'Only game host can start game.'));
   }

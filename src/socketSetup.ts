@@ -3,12 +3,24 @@ import isForbidden from './application/utils/wordChecker/wordChecker';
 import badwordsArray from 'badwords/array';
 import { chatService } from './services/chat.service';
 import { userService } from './services/user.service';
+import EventEmitter from 'events';
+import { gameService } from './services/game.service';
+
+export const eventEmitter = new EventEmitter();
+let guessingWord: string;
+let gameId: string;
+let hostUsername: string;
 
 export const setupSocket = (io: Server) => {
   io.on('connection', (socket) => {
     console.log('a user connected');
 
     socket.on('join', async ({ chatId, username }) => {
+      (socket as any).username = username;
+
+      if ((socket as any).username === hostUsername) {
+        socket.emit('you are host', { guessingWord });
+      }
       socket.join(chatId);
       console.log(`User ${username} joined chat ${chatId}`);
       try {
@@ -33,6 +45,12 @@ export const setupSocket = (io: Server) => {
       console.log(`User left chat ${chatId}`);
     });
 
+    eventEmitter.on('start round', ({ chatId, randomWord, id, targetUser }) => {
+      guessingWord = randomWord;
+      gameId = id;
+      hostUsername = targetUser;
+      io.to(chatId).emit('round started', { randomWord, id, targetUser, guessingWord });
+    });
     socket.on('chat message', async (msg, chatId) => {
       const match = msg.match(/^([^:]+): (.+)$/);
       const username = match[1];
@@ -44,12 +62,28 @@ export const setupSocket = (io: Server) => {
         const user = await userService.getByUsername(username);
         const msgWithoutjunk = msgValue.replace(/[^a-zA-Z\s0-9]/g, '');
         const wordsToCheck = msgWithoutjunk.split(' ');
+
         let stateForMsgAdd = true;
         for (const word of wordsToCheck) {
           if (badwordsArray.includes(word)) {
             io.to(chatId).emit('chat message', `This message has been blocked (it contains inappropriate content).`);
             return;
-          } else if (isForbidden('happy', word)) {
+          } else if (msgValue.startsWith('word is:')) {
+            if (username === hostUsername) {
+              io.to(chatId).emit('chat message', `Hosts cannot guess words! They only describe it.`);
+              return;
+            }
+            const match = msgValue.match(/^word is: (.+)$/);
+            const guessedWord = match ? match[1] : null;
+
+            console.log(guessedWord);
+            if (guessedWord?.toLowerCase() === guessingWord?.toLowerCase()) {
+              io.to(chatId).emit('chat message', `Congratulations to ${username} for guessing the word -  ${guessedWord}!`);
+              guessingWord = await gameService.getRandomWord(gameId);
+              io.emit('update guessing word', { guessingWord });
+              return;
+            }
+          } else if (isForbidden(guessingWord, word)) {
             io.to(chatId).emit('chat message', `This message has been blocked (it has similar word to guessedWord).`);
             stateForMsgAdd = false;
           }

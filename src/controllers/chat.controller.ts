@@ -76,18 +76,17 @@ class ChatController {
 
   async view(req: RequestWithUser, res: Response): Promise<void> {
     const id = req.params.id;
-    const user = req.params.userName;
+    const username = req.params.userName;
 
     try {
       if (!(await chatService.exists(id))) {
         res.status(HttpStatusCode.NOT_FOUND).send('chat  not found, please check your id');
         return;
-      } else if (!(await userService.existsByUsername(user))) {
-        res.status(HttpStatusCode.NOT_FOUND).send('username not found, please check your username');
-        return;
+      } else if (!(await userService.existsByUsername(username))) {
+        res.status(HttpStatusCode.NOT_FOUND).send('user not found, please check you username');
       }
 
-      res.render('chat', { user: user, chatId: req.params.id });
+      res.render('chat', { user: username, chatId: req.params.id });
     } catch (error) {
       if (error instanceof HttpException) {
         res.status(error.status).json({ error: error.message });

@@ -7,6 +7,13 @@
     <link rel="stylesheet" type="text/css" href="/chat.css" />
   </head>
   <body>
+    <div>
+      <p>Commands:</p>
+      <p>word is: *guessing words* - try to guess the word. If success - new word will be q`ed (host cannot guess the word)</p>
+      <p>clear-messages-admin - clears messages in this chat.</p>
+    </div>
+    <div id="show-word-container"></div>
+
     <div id="chat-container">
       <!-- Display chat messages here -->
       <ul id="messages"></ul>
@@ -33,6 +40,7 @@
         console.error('Chat ID is missing in the URL');
       }
 
+      const showWordContainer = document.getElementById('show-word-container');
       const messages = document.getElementById('messages');
       const form = document.getElementById('form');
       const input = document.getElementById('input');
@@ -42,7 +50,9 @@
         if (input.value && chatId) {
           const message = input.value.trim().toLowerCase();
 
-          if (message.startsWith('clear-messages-admin')) {
+          if (message.startsWith('Word is:')) {
+            socket.emit('check guessing word', message, chatId);
+          } else if (message.startsWith('clear-messages-admin')) {
             socket.emit('admin clear messages', chatId);
             input.value = '';
           } else if (username) {
@@ -54,6 +64,31 @@
           console.error('Either input value is empty or chatId is undefined');
         }
       });
+
+      let isHost = false;
+
+      socket.on('you are host', ({ guessingWord }) => {
+        isHost = true;
+
+        showWordContainer.textContent = `You are the host. Describe the word: ${guessingWord}`;
+      });
+
+      socket.on('round started', ({ randomWord }) => {
+        console.log('Round started with random word:', randomWord);
+        // Please keep these 4 lines, for some reason if i delete them it stops working :)
+        if (isHost) {
+          showWordContainer.textContent = '1111';
+        } else {
+          showWordContainer.textContent = '222.';
+        }
+      });
+
+      socket.on('update guessing word', ({ guessingWord }) => {
+        if (isHost) {
+          showWordContainer.textContent = `The current word to guess is: ${guessingWord}`;
+        }
+      });
+
       socket.on('chat message', function (msg) {
         const item = document.createElement('li');
         item.textContent = msg;
