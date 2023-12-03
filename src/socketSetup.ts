@@ -5,11 +5,15 @@ import { chatService } from './services/chat.service';
 import { userService } from './services/user.service';
 import EventEmitter from 'events';
 import { gameService } from './services/game.service';
+import { roundService } from './services/round.service';
+import { teamService } from './services/team.service';
 
 export const eventEmitter = new EventEmitter();
 let guessingWord: string;
 let gameId: string;
 let hostUsername: string;
+let currentRoundId: string;
+let currentChatId: string;
 
 export const setupSocket = (io: Server) => {
   io.on('connection', (socket) => {
@@ -18,6 +22,7 @@ export const setupSocket = (io: Server) => {
     socket.on('join', async ({ chatId, username }) => {
       (socket as any).username = username;
 
+      currentChatId = chatId;
       if ((socket as any).username === hostUsername) {
         socket.emit('you are host', { guessingWord });
       }
@@ -45,12 +50,47 @@ export const setupSocket = (io: Server) => {
       console.log(`User left chat ${chatId}`);
     });
 
-    eventEmitter.on('start round', ({ chatId, randomWord, id, targetUser }) => {
+    eventEmitter.on('start round', async ({ chatId, randomWord, id, targetUser, roundId }) => {
       guessingWord = randomWord;
       gameId = id;
       hostUsername = targetUser;
-      io.to(chatId).emit('round started', { randomWord, id, targetUser, guessingWord });
+      currentRoundId = roundId;
+      io.to(chatId).emit('round started', { randomWord, id, targetUser, guessingWord, roundId });
     });
+
+    eventEmitter.on('start round', async () => {
+      const game = await gameService.getById(gameId);
+      setTimeout(async () => {
+        try {
+          const round = await roundService.getById(currentRoundId);
+          const game = await gameService.getById(gameId);
+          const team1 = await teamService.getById(game.teams[0].teamId);
+          const team2 = await teamService.getById(game.teams[1].teamId);
+          await gameService.handleFinishedRound(gameId, round);
+          console.log(game.teams[0].score, game.teams[1].score, `team scores`);
+          if (game.teams[0].score >= game.options.goal) {
+            socket.to(currentChatId).emit('Round end', `${team1.name} WON!!!`);
+          } else if (game.teams[1].score >= game.options.goal) {
+            socket.to(currentChatId).emit('Round end', `${team2.name} WON!!!`);
+          } else {
+            const { chatId, randomWord } = await gameService.start(gameId);
+            console.log('Emitting "start round" event:', { chatId, randomWord, id: gameId });
+            const currentTeam = await teamService.getById(game.currentTeam);
+            socket
+              .to(currentChatId)
+              .emit(
+                'Round end',
+                `Round ended! Now its time to guess for team ${
+                  currentTeam.name
+                }. Link to the next round chat: http://localhost:3000/api/v1/chats/${chatId}/view/${(socket as any).username}`,
+              );
+          }
+        } catch (error) {
+          console.error('Error starting round:', error);
+        }
+      }, game.options.roundTime * 1000);
+    });
+
     socket.on('chat message', async (msg, chatId) => {
       const match = msg.match(/^([^:]+): (.+)$/);
       const username = match[1];
@@ -58,8 +98,12 @@ export const setupSocket = (io: Server) => {
       console.log(`message: ${msgValue} from ${username} in chat ${chatId}`);
 
       try {
+        console.log(currentRoundId, chatId);
         const chat = await chatService.getById(chatId);
         const user = await userService.getByUsername(username);
+        const round = await roundService.getById(currentRoundId);
+        const game = await gameService.getById(gameId);
+        const currentTeam = await teamService.getById(game.currentTeam);
         const msgWithoutjunk = msgValue.replace(/[^a-zA-Z\s0-9]/g, '');
         const wordsToCheck = msgWithoutjunk.split(' ');
 
@@ -72,6 +116,9 @@ export const setupSocket = (io: Server) => {
             if (username === hostUsername) {
               io.to(chatId).emit('chat message', `Hosts cannot guess words! They only describe it.`);
               return;
+            } else if (!currentTeam.members.includes(user._id as string)) {
+              io.to(chatId).emit('chat message', `Only member from team ${currentTeam.name} can guess right now! Stop ${username}`);
+              return;
             }
             const match = msgValue.match(/^word is: (.+)$/);
             const guessedWord = match ? match[1] : null;
@@ -79,6 +126,7 @@ export const setupSocket = (io: Server) => {
             console.log(guessedWord);
             if (guessedWord?.toLowerCase() === guessingWord?.toLowerCase()) {
               io.to(chatId).emit('chat message', `Congratulations to ${username} for guessing the word -  ${guessedWord}!`);
+              round.words.push({ word: guessingWord, guessed: true });
               guessingWord = await gameService.getRandomWord(gameId);
               io.emit('update guessing word', { guessingWord });
               return;
@@ -104,6 +152,13 @@ export const setupSocket = (io: Server) => {
       }
     });
 
+    socket.on('skip word', async (chatId) => {
+      const round = await roundService.getById(currentRoundId);
+      round.words.push({ word: guessingWord, guessed: false });
+      io.to(chatId).emit('chat message', `Guessing word was skipped - ${guessingWord}`);
+      guessingWord = await gameService.getRandomWord(gameId);
+      io.emit('update guessing word', { guessingWord });
+    });
     socket.on('admin clear messages', async (chatId) => {
       try {
         const chat = await chatService.getById(chatId);

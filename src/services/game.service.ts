@@ -83,8 +83,8 @@ class GameService {
     game.rounds.push(roundId);
     await this.update(game);
     const host = await userService.getById(game.hostId);
-    console.log('Emitting "start round" event:', { chatId, randomWord, id, targetUser: host.username });
-    eventEmitter.emit('start round', { chatId, randomWord, id, targetUser: host.username });
+    console.log('Emitting "start round" event:', { chatId, randomWord, id, targetUser: host.username, roundId });
+    eventEmitter.emit('start round', { chatId, randomWord, id, targetUser: host.username, roundId });
     return { chatId, randomWord };
   }
 
@@ -107,6 +107,7 @@ class GameService {
     const game = await this.getById(id);
     let teamIndex = game.teams.findIndex((team) => team.teamId === round.teamId);
     game.teams[teamIndex].score += this.getScoreFromRound(round);
+    console.log(game.teams[teamIndex].score, 'game service!!!')
     teamIndex = (teamIndex + 1) % game.teams.length;
     game.currentTeam = game.teams[teamIndex].teamId;
     await this.update(game);

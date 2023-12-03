@@ -11,9 +11,10 @@
       <p>Commands:</p>
       <p>word is: *guessing words* - try to guess the word. If success - new word will be q`ed (host cannot guess the word)</p>
       <p>clear-messages-admin - clears messages in this chat.</p>
+      <button id="skip-word-button">Skip Word</button>
     </div>
     <div id="show-word-container"></div>
-
+    <hr />
     <div id="chat-container">
       <!-- Display chat messages here -->
       <ul id="messages"></ul>
@@ -44,6 +45,7 @@
       const messages = document.getElementById('messages');
       const form = document.getElementById('form');
       const input = document.getElementById('input');
+      const skipWordButton = document.getElementById('skip-word-button');
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -55,6 +57,8 @@
           } else if (message.startsWith('clear-messages-admin')) {
             socket.emit('admin clear messages', chatId);
             input.value = '';
+          } else if (message.startsWith('skip word')) {
+            socket.emit('skip word', chatId);
           } else if (username) {
             console.log(`${username}: ${message} : ${chatId}`);
             socket.emit('chat message', `${username}: ${message}`, chatId);
@@ -65,6 +69,14 @@
         }
       });
 
+      skipWordButton.addEventListener('click', function () {
+        if (chatId) {
+          socket.emit('skip word', chatId);
+        } else {
+          console.error('chatId is undefined');
+        }
+      });
+      
       let isHost = false;
 
       socket.on('you are host', ({ guessingWord }) => {
@@ -91,6 +103,11 @@
 
       socket.on('chat message', function (msg) {
         const item = document.createElement('li');
+        item.textContent = msg;
+        messages.appendChild(item);
+      });
+      socket.on('Round end', function (msg) {
+        const item = document.createElement('h3');
         item.textContent = msg;
         messages.appendChild(item);
       });
