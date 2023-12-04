@@ -3,10 +3,15 @@ import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import HttpStatusCode from '../../utils/exceptions/statusCode';
 import { RequestWithUser, authenticateToken } from '../authenticateToken';
+import * as tokenUtils from '../../utils/tokenForAuth/generateToken';
 
 
 jest.mock('jsonwebtoken', () => ({
   verify: jest.fn(),
+}));
+
+jest.mock('../../utils/tokenForAuth/generateToken', () => ({
+  secretKey: 'mockSecretKey',
 }));
 
 describe("authenticateToken Middleware", () => {
@@ -29,12 +34,13 @@ describe("authenticateToken Middleware", () => {
     const token = "validToken";
     mockRequest.header = jest.fn().mockReturnValue(`Bearer ${token}`);
     (jwt.verify as jest.Mock).mockReturnValue({ userId: "123", username: "testUser" });
-
+  
     await authenticateToken(mockRequest as RequestWithUser, mockResponse as Response, nextFunction);
-
-    expect(jwt.verify).toHaveBeenCalledWith(token, expect.any(String));
+  
+    expect(jwt.verify).toHaveBeenCalledWith(token, 'mockSecretKey');
     expect(nextFunction).toHaveBeenCalled();
   });
+  
 
   it("should return 401 if token is missing", async () => {
     await authenticateToken(mockRequest as RequestWithUser, mockResponse as Response, nextFunction);

@@ -5,6 +5,7 @@ import { userService } from '../user.service';
 import { GameService } from '../game.service';
 import HttpException from '../../application/utils/exceptions/http-exceptions';
 import { IGame, IGameCreateSchema } from '../../interfaces/game.interface';
+import { vocabularyService } from '../vocabulary.service'; 
 
 jest.mock('../../repositories/game.repository');
 jest.mock('../vocabulary.service');
@@ -23,17 +24,32 @@ describe('GameService', () => {
 
   describe('create', () => {
     it('should create a new game if host and teams exist', async () => {
-      const mockGame = { hostId: 'hostId', teams: ['team1', 'team2'], options: { maxPlayersPerTeam: 10, goal: 10, roundTime: 100,  vocabularyId: '0' } };
+      const mockGameCreate: IGameCreateSchema = {
+        hostId: 'host123',
+        teams: ['team1', 'team2'],
+        options: {
+          goal: 100,
+          roundTime: 60,
+          vocabularyId: 'vocab123',
+        },
+      };
+
       (userService.exists as jest.Mock).mockResolvedValue(true);
       (teamService.exists as jest.Mock).mockResolvedValue(true);
-      (gameRepository.create as jest.Mock).mockResolvedValue('gameId');
+      (vocabularyService.exists as jest.Mock).mockResolvedValue(true);
 
-      const result = await gameService.create(mockGame);
+      (gameRepository.create as jest.Mock).mockResolvedValue('game123');
 
-      expect(userService.exists).toHaveBeenCalledWith('hostId');
-      expect(teamService.exists).toHaveBeenCalledTimes(2);
-      expect(gameRepository.create).toHaveBeenCalledWith(mockGame);
-      expect(result).toBe('gameId');
+      const result = await gameService.create(mockGameCreate);
+
+      expect(userService.exists).toHaveBeenCalledWith(mockGameCreate.hostId);
+      expect(teamService.exists).toHaveBeenCalledTimes(mockGameCreate.teams.length);
+      mockGameCreate.teams.forEach(teamId => {
+        expect(teamService.exists).toHaveBeenCalledWith(teamId);
+      });
+      expect(vocabularyService.exists).toHaveBeenCalledWith(mockGameCreate.options.vocabularyId);
+      expect(gameRepository.create).toHaveBeenCalledWith(mockGameCreate);
+      expect(result).toBe('game123');
     });
 
     it('should throw an error if host does not exist', async () => {
