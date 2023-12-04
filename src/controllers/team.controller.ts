@@ -10,12 +10,36 @@ export async function create(
   req: RequestWithUser,
   res: Response,
 ): Promise<Response | void> {
-  const team = {
-    name: req.body.name,
-    hostId: req.user!._id,
-  } as ITeamCreateSchema;
-  const id = await teamService.create(team);
-  return res.status(HttpStatusCode.CREATED).json(await teamService.getById(id));
+  try{
+    if (!req.body.name) {
+      return res.status(HttpStatusCode.BAD_REQUEST)
+        .json({ error: 'Team name is required' });
+    }
+    
+    if (!req.user || !req.user._id) {
+      return res.status(HttpStatusCode.BAD_REQUEST)
+        .json({ error: 'Host ID is required' });
+    }
+    
+    const team: ITeamCreateSchema = {
+      name: req.body.name,
+      hostId: req.user._id,
+    };
+
+    const id = await teamService.create(team);
+    const newTeam = await teamService.getById(id);
+    
+    return res.status(HttpStatusCode.CREATED).json(newTeam);
+  } catch (error) {
+    if (error instanceof HttpException) {
+      return res.status(error.status).json({ error: error.message });
+    } else {
+      console.error('Server error during team creation:', error);
+      return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        error: 'Internal Server Error',
+      });
+    }
+  }
 }
 
 export async function getById(
