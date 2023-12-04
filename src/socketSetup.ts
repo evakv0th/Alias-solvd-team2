@@ -63,6 +63,7 @@ export const setupSocket = (io: Server) => {
       setTimeout(async () => {
         try {
           const round = await roundService.getById(currentRoundId);
+          console.log(round.words, 'WORDS OBJECT!!!!');
           const game = await gameService.getById(gameId);
           const team1 = await teamService.getById(game.teams[0].teamId);
           const team2 = await teamService.getById(game.teams[1].teamId);
@@ -78,17 +79,12 @@ export const setupSocket = (io: Server) => {
             const currentTeam = await teamService.getById(game.currentTeam);
             socket
               .to(currentChatId)
-              .emit(
-                'Round end',
-                `Round ended! Now its time to guess for team ${
-                  currentTeam.name
-                }. Link to the next round chat: http://localhost:3000/api/v1/chats/${chatId}/view/${(socket as any).username}`,
-              );
+              .emit('Round end', `Round ended! Now its time to guess for team ${currentTeam.name}. Link to the next chatId: ${chatId}`);
           }
         } catch (error) {
           console.error('Error starting round:', error);
         }
-      }, game.options.roundTime * 1000);
+      }, game.options.roundTime * 300);
     });
 
     socket.on('chat message', async (msg, chatId) => {
@@ -127,6 +123,7 @@ export const setupSocket = (io: Server) => {
             if (guessedWord?.toLowerCase() === guessingWord?.toLowerCase()) {
               io.to(chatId).emit('chat message', `Congratulations to ${username} for guessing the word -  ${guessedWord}!`);
               round.words.push({ word: guessingWord, guessed: true });
+              await roundService.update(round);
               guessingWord = await gameService.getRandomWord(gameId);
               io.emit('update guessing word', { guessingWord });
               return;
@@ -155,6 +152,7 @@ export const setupSocket = (io: Server) => {
     socket.on('skip word', async (chatId) => {
       const round = await roundService.getById(currentRoundId);
       round.words.push({ word: guessingWord, guessed: false });
+      await roundService.update(round);
       io.to(chatId).emit('chat message', `Guessing word was skipped - ${guessingWord}`);
       guessingWord = await gameService.getRandomWord(gameId);
       io.emit('update guessing word', { guessingWord });
