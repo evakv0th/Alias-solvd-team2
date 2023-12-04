@@ -3,10 +3,17 @@ import {ITeam, ITeamCreateSchema} from '../interfaces/team.interface';
 import {userService} from "./user.service";
 import HttpException from "../application/utils/exceptions/http-exceptions";
 import HttpStatusCode from "../application/utils/exceptions/statusCode";
+import {gameService} from "./game.service";
 
 class TeamService {
   async getById(id: string): Promise<ITeam> {
     return teamRepository.getById(id);
+  }
+
+  async getAllByGameId(gameId: string): Promise<ITeam[]> {
+    const game = await gameService.getById(gameId);
+    const teams = game.teams.map((team) => this.getById(team.teamId));
+    return Promise.all(teams);
   }
 
   async exists(id: string): Promise<boolean> {

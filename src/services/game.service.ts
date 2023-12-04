@@ -24,6 +24,16 @@ class GameService {
     if (!hostExists) {
       throw new HttpException(HttpStatusCode.NOT_FOUND, "Host of game is not found.");
     }
+    const vocabularyExists = await vocabularyService.exists(game.options.vocabularyId);
+    if (!vocabularyExists) {
+      throw new HttpException(HttpStatusCode.NOT_FOUND, "Vocabulary of game is not found.");
+    }
+    if (game.options.roundTime <= 0) {
+      throw new HttpException(HttpStatusCode.BAD_REQUEST, "Round time can't be negative.");
+    }
+    if (game.options.goal <= 0) {
+      throw new HttpException(HttpStatusCode.BAD_REQUEST, "Goal of game can't be negative.");
+    }
     for (const teamId of game.teams) {
       const teamExists = await teamService.exists(teamId);
       if (!teamExists) {
@@ -125,7 +135,16 @@ class GameService {
   private getScoreFromRound(round: IRound): number {
     return round.words.filter((word) => word.guessed).length;
   }
-  
+
+  async hasAccess(id: string, userId: string): Promise<boolean> {
+    const game = await gameService.getById(id);
+    if (game.hostId === userId) {
+      return true;
+    }
+    const teams = await teamService.getAllByGameId(id);
+    return teams.some(team => team.members.includes(userId));
+  }
+
 }
 
 export const gameService = new GameService();
