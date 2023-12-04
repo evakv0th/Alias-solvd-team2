@@ -16,6 +16,11 @@ jest.mock('../user.service', () => ({
   },
 }));
 
+jest.mock('../application/utils/tokenForAuth/generateToken', () => ({
+  generateAccessToken: jest.fn().mockReturnValue('mockAccessToken'),
+  generateRefreshToken: jest.fn().mockReturnValue('mockRefreshToken'),
+}));
+
 
 describe('Auth Service', () => {
   describe('register', () => {
@@ -74,8 +79,9 @@ describe('Auth Service', () => {
       (bcrypt.compare as jest.Mock).mockResolvedValue(true);
 
       const result = await authService.login({ username: 'testUser', password: 'password' });
-      expect(result).toHaveProperty('accessToken');
-      expect(result).toHaveProperty('refreshToken');
+
+      expect(result).toHaveProperty('accessToken', 'mockAccessToken');
+      expect(result).toHaveProperty('refreshToken', 'mockRefreshToken');
       expect(result).toHaveProperty('id', 'userId');
     });
 });
