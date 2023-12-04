@@ -3,7 +3,6 @@ import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import HttpStatusCode from '../../utils/exceptions/statusCode';
 import { RequestWithUser, authenticateToken } from '../authenticateToken';
-import * as tokenUtils from '../../utils/tokenForAuth/generateToken';
 
 
 jest.mock('jsonwebtoken', () => ({
