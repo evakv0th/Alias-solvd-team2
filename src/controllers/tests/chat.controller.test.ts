@@ -4,8 +4,6 @@ import { chatController } from '../../controllers/chat.controller';
 import HttpException from '../../application/utils/exceptions/http-exceptions';
 import HttpStatusCode from '../../application/utils/exceptions/statusCode';
 import { IUser } from '../../interfaces/user.interface';
-import { userService } from '../../services/user.service';
-import { RequestWithUser } from '../../application/middlewares/authenticateToken';
 
 jest.mock('../../services/chat.service');
 

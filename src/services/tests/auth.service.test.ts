@@ -45,13 +45,9 @@ describe('Auth Service', () => {
       jest.clearAllMocks();
     });
   
-    
-    const mockUser = { _id: 'userId', username: 'testUser', password: 'password' };
-
     it('should throw an error if username or password is not provided', async () => {
       await expect(authService.login({ username: '', password: '' })).rejects.toThrow(HttpException);
     });
-
    
     it('should throw an error if userService throws an error', async () => {
       (userService.getByUsername as jest.Mock).mockRejectedValue(new HttpException(HttpStatusCode.BAD_REQUEST, 'User not found'));

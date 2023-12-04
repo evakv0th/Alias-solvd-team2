@@ -32,14 +32,6 @@ describe('RoundService', () => {
         words: [mockRoundWord, { word: 'anotherWord', guessed: true }]
     };
 
-    const mockRoundCreateData = {
-        teamId: 'team123',
-        hostId: 'host123',
-        chatId: 'chat123',
-        finishedAt: new Date(),
-        currentWord: 'exampleWord',
-    };
-
     describe('getById', () => {
         it('should return a round by its id', async () => {
           const roundId = 'round123';
