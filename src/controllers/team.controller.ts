@@ -28,7 +28,7 @@ export async function create(
 
     const id = await teamService.create(team);
     const newTeam = await teamService.getById(id);
-
+    
     return res.status(HttpStatusCode.CREATED).json(newTeam);
   } catch (error) {
     if (error instanceof HttpException) {
