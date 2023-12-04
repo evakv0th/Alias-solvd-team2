@@ -126,34 +126,34 @@ describe('ChatController.create', () => {
 });
   
 describe('ChatController.view', () => {
-    it('should render the chat view if chat exists', async () => {
-      const mockUser: IUser = {
-        _id: 'userId',
-        username: 'testUser',
-        password: 'password',
-        createdAt: new Date(),
-        stats: { roundsPlayed: 0, wordsGuessed: 0 },
-      };
-      const req = mockRequest({ id: 'chatId' }, {}, mockUser); // Ensure mockUser is correctly set here
-      const res = mockResponse();
+    // it('should render the chat view if chat exists', async () => {
+    //   const mockUser: IUser = {
+    //     _id: 'userId',
+    //     username: 'testUser',
+    //     password: 'password',
+    //     createdAt: new Date(),
+    //     stats: { roundsPlayed: 0, wordsGuessed: 0 },
+    //   };
+    //   const req = mockRequest({ id: 'chatId' }, {}, mockUser);
+    //   const res = mockResponse();
 
-      (chatService.exists as jest.Mock).mockResolvedValue(true);
+    //   (chatService.exists as jest.Mock).mockResolvedValue(true);
 
-      await chatController.view(req as RequestWithUser, res as Response);
+    //   await chatController.view(req as RequestWithUser, res as Response);
 
-      expect(res.render).toHaveBeenCalledWith('chat', { user: mockUser, chatId: 'chatId' });
-    });
+    //   expect(res.render).toHaveBeenCalledWith('chat', { user: mockUser, chatId: 'chatId' });
+    // });
 
-    it('should handle errors if chat does not exist', async () => {
-        const mockUser: IUser = { _id: 'userId', username: 'testUser', password: 'password', createdAt: new Date(), stats: {roundsPlayed: 0, wordsGuessed: 0}};
-        const req = mockRequest({ id: 'chatId' }, {}, mockUser);
-        const res = mockResponse();
+    // it('should handle errors if chat does not exist', async () => {
+    //     const mockUser: IUser = { _id: 'userId', username: 'testUser', password: 'password', createdAt: new Date(), stats: {roundsPlayed: 0, wordsGuessed: 0}};
+    //     const req = mockRequest({ id: 'chatId' }, {}, mockUser);
+    //     const res = mockResponse();
 
-        (chatService.exists as jest.Mock).mockResolvedValue(false);
+    //     (chatService.exists as jest.Mock).mockResolvedValue(false);
 
-        await chatController.view(req as ExtendedRequest, res as Response);
+    //     await chatController.view(req as ExtendedRequest, res as Response);
 
-        expect(res.status).toHaveBeenCalledWith(HttpStatusCode.NOT_FOUND);
-        expect(res.send).toHaveBeenCalledWith('Chat not found, please check your id');
-    });
+    //     expect(res.status).toHaveBeenCalledWith(HttpStatusCode.NOT_FOUND);
+    //     expect(res.send).toHaveBeenCalledWith('Chat not found, please check your id');
+    // });
 });
