@@ -16,7 +16,7 @@ jest.mock('../user.service', () => ({
   },
 }));
 
-jest.mock('../application/utils/tokenForAuth/generateToken', () => ({
+jest.mock('../../application/utils/tokenForAuth/generateToken', () => ({
   generateAccessToken: jest.fn().mockReturnValue('mockAccessToken'),
   generateRefreshToken: jest.fn().mockReturnValue('mockRefreshToken'),
 }));
