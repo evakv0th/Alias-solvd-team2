@@ -5,6 +5,11 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: secret
+      REFRESH_SECRET_KEY: refresh-secret
+      ACCESS_TOKEN_EXP: 1h
+      REFRESH_TOKEN_EXP: 7d
     steps:
       - uses: actions/checkout@v3
       - name: Set up Node.js

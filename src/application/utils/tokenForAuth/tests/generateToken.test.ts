@@ -4,15 +4,6 @@ import { generateAccessToken, generateRefreshToken } from '../generateToken';
 
 jest.mock('jsonwebtoken');
 
-jest.mock('../generateToken', () => {
-  return {
-    secretKey: 'mock_secret_key',
-    refreshTokenSecretKey: 'mock_refresh_secret_key',
-    generateAccessToken: jest.requireActual('../generateToken').generateAccessToken,
-    generateRefreshToken: jest.requireActual('../generateToken').generateRefreshToken,
-  };
-});
-
 
 describe('Token Generation', () => {
     const user: IUser = {
@@ -26,8 +17,14 @@ describe('Token Generation', () => {
         },
       };
     
-      beforeEach(() => {
+    beforeEach(() => {
         (jwt.sign as jest.Mock).mockClear();
+    
+        process.env.SECRET_KEY = 'secret';
+        process.env.REFRESH_SECRET_KEY = 'refresh-secret';
+        process.env.ACCESS_TOKEN_EXP = '1h';
+        process.env.REFRESH_TOKEN_EXP = '7d';
+
         (jwt.sign as jest.Mock).mockImplementation((payload, secretOrPrivateKey) => {
           return `mocked_token_for_${payload.userId}_with_secret_${secretOrPrivateKey}`;
         });
