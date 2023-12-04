@@ -23,7 +23,7 @@ describe('Token Generation', () => {
         process.env.REFRESH_SECRET_KEY = 'refresh-secret';
         process.env.ACCESS_TOKEN_EXP = '1h';
         process.env.REFRESH_TOKEN_EXP = '7d';
-    
+
         (jwt.sign as jest.Mock).mockImplementation((payload, secretOrPrivateKey) => {
           if (typeof secretOrPrivateKey !== 'string') {
             throw new Error('The secret or private key must be a string');
@@ -33,24 +33,23 @@ describe('Token Generation', () => {
         });
       });
     
-    it('should generate an access token', () => {
+      it('should generate an access token', () => {
         const token = generateAccessToken(user);
-        generateAccessToken(user);
         expect(jwt.sign).toHaveBeenCalledWith(
           { userId: user._id, username: user.username },
-          process.env.SECRET_KEY,
-          { expiresIn: process.env.ACCESS_TOKEN_EXP },
+          'secret',
+          { expiresIn: '1h' },
         );
-        expect(token).toBe(`mocked_token_for_${user._id}_with_secret_${ process.env.SECRET_KEY}`); 
-    });
+        expect(token).toBe(`mocked_token_for_${user._id}_with_secret_secret`); 
+      });
     
-    it('should generate a refresh token', () => {
-      const refreshToken = generateRefreshToken(user);
-      expect(jwt.sign).toHaveBeenCalledWith(
-        { userId: user._id, username: user.username },
-        process.env.REFRESH_SECRET_KEY,
-        { expiresIn: process.env.REFRESH_TOKEN_EXP },
-      );
-      expect(refreshToken).toBe(`mocked_token_for_${user._id}_with_secret_${process.env.REFRESH_SECRET_KEY}`);
-  });
+      it('should generate a refresh token', () => {
+        const refreshToken = generateRefreshToken(user);
+        expect(jwt.sign).toHaveBeenCalledWith(
+          { userId: user._id, username: user.username },
+          'refresh-secret',
+          { expiresIn: '7d' },
+        );
+        expect(refreshToken).toBe(`mocked_token_for_${user._id}_with_secret_refresh-secret`);
+      });
 });
