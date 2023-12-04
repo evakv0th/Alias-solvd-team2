@@ -107,7 +107,6 @@ class GameService {
     const game = await this.getById(id);
     let teamIndex = game.teams.findIndex((team) => team.teamId === round.teamId);
     game.teams[teamIndex].score += this.getScoreFromRound(round);
-    console.log(game.teams[teamIndex].score, 'game service!!!')
     teamIndex = (teamIndex + 1) % game.teams.length;
     game.currentTeam = game.teams[teamIndex].teamId;
     await this.update(game);

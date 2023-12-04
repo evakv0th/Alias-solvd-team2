@@ -60,31 +60,38 @@ export const setupSocket = (io: Server) => {
 
     eventEmitter.on('start round', async () => {
       const game = await gameService.getById(gameId);
-      setTimeout(async () => {
-        try {
-          const round = await roundService.getById(currentRoundId);
-          console.log(round.words, 'WORDS OBJECT!!!!');
-          const game = await gameService.getById(gameId);
-          const team1 = await teamService.getById(game.teams[0].teamId);
-          const team2 = await teamService.getById(game.teams[1].teamId);
-          await gameService.handleFinishedRound(gameId, round);
-          console.log(game.teams[0].score, game.teams[1].score, `team scores`);
-          if (game.teams[0].score >= game.options.goal) {
-            socket.to(currentChatId).emit('Round end', `${team1.name} WON!!!`);
-          } else if (game.teams[1].score >= game.options.goal) {
-            socket.to(currentChatId).emit('Round end', `${team2.name} WON!!!`);
-          } else {
-            const { chatId, randomWord } = await gameService.start(gameId);
-            console.log('Emitting "start round" event:', { chatId, randomWord, id: gameId });
-            const currentTeam = await teamService.getById(game.currentTeam);
-            socket
-              .to(currentChatId)
-              .emit('Round end', `Round ended! Now its time to guess for team ${currentTeam.name}. Link to the next chatId: ${chatId}`);
-          }
-        } catch (error) {
-          console.error('Error starting round:', error);
-        }
-      }, game.options.roundTime * 300);
+      setTimeout(() => {
+        roundService
+          .getById(currentRoundId)
+          .then(async (round) => {
+            console.log(round.words, 'WORDS OBJECT!!!!');
+            return gameService.handleFinishedRound(gameId, round);
+          })
+          .then(async () => {
+            const game = await gameService.getById(gameId);
+            const team1 = await teamService.getById(game.teams[0].teamId);
+            const team2 = await teamService.getById(game.teams[1].teamId);
+            console.log(team1.name, game.teams[0].score, team2.name, game.teams[1].score, `team scores`);
+
+            if (game.teams[0].score >= game.options.goal && game.teams[1].score >= game.options.goal) {
+              socket.to(currentChatId).emit('Round end', `${game.teams[0].score > game.teams[1].score ? team1.name : team2.name} WON in Clutch`);
+            } else if (game.teams[0].score >= game.options.goal) {
+              socket.to(currentChatId).emit('Round end', `${team1.name} WON`);
+            } else if (game.teams[1].score >= game.options.goal) {
+              socket.to(currentChatId).emit('Round end', `${team2.name} WON!!!`);
+            } else {
+              const { chatId, randomWord } = await gameService.start(gameId);
+              console.log('Emitting "start round" event:', { chatId, randomWord, id: gameId });
+              const currentTeam = await teamService.getById(game.currentTeam);
+              socket
+                .to(currentChatId)
+                .emit('Round end', `Round ended! Now its time to guess for team ${currentTeam.name}. Link to the next chatId: ${chatId}`);
+            }
+          })
+          .catch((error) => {
+            console.error('Error starting round:', error);
+          });
+      }, game.options.roundTime * 1000);
     });
 
     socket.on('chat message', async (msg, chatId) => {
