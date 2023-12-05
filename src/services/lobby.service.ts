@@ -156,12 +156,19 @@ class LobbyService
         throw new HttpException(HttpStatusCode.NOT_FOUND, 'Lobby not found.');
       }
 
+      let isUserInAnyTeam = false;
       this.teamMembers.forEach((members) => {
         if (members.has(userId)) 
         {
           members.delete(userId);
+          isUserInAnyTeam = true;
         }
       });
+
+      if (!isUserInAnyTeam) 
+      {
+        throw new HttpException(HttpStatusCode.BAD_REQUEST, 'User is not in any team.');
+      }
 
       return gameRepository.update(game);
     } 

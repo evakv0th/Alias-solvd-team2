@@ -77,6 +77,7 @@ class ChatController {
     const chatId = req.params.id;
 
     try {
+
       if (!(await chatService.exists(chatId))) {
         res.status(HttpStatusCode.NOT_FOUND).send('Chat not found, please check your id');
         return;

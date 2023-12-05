@@ -15,7 +15,7 @@ class Vocabulary implements IVocabulary {
   }
 }
 
-class VocabularyRepository {
+export class VocabularyRepository {
   async getById(id: string): Promise<Vocabulary> {
     try {
       return await vocabulariesDb.get(id);

@@ -29,7 +29,7 @@ class Game implements IGame {
   }
 }
 
-class GameRepository {
+export class GameRepository {
   async getById(id: string): Promise<IGame> {
     try {
       return await gamesDb.get(id);
