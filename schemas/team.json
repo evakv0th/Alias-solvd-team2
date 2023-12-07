@@ -1,0 +1,10 @@
+{
+  "_id": "teamId1",
+  "hostId": "userId",
+  "name": "Curious bears",
+  "members": [
+    "userId1",
+    "userId2",
+    "userId3"
+  ]
+}

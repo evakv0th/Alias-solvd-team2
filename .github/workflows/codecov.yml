@@ -1,0 +1,31 @@
+name: Code Coverage
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: secret
+      REFRESH_SECRET_KEY: refresh-secret
+      ACCESS_TOKEN_EXP: 1h
+      REFRESH_TOKEN_EXP: 7d
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' 
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests with coverage
+        run: npm test
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage/lcov.info 
+          flags: unittests 
+          name: codecov-umbrella 
+          fail_ci_if_error: true
